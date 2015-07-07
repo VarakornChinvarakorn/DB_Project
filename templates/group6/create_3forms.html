@@ -16,6 +16,9 @@
 <div class="container-fluid">
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
     <style>
+    table,tr,td{
+        border-collapse: collapse;
+    }
     body{
        background-color:white;
    }
@@ -89,13 +92,20 @@
 function yearselect(){
 	var year = new Date();
 	var list = document.getElementById("yearselect");
+        var list2 = document.getElementById("yearSTART");
+        var list3 = document.getElementById("monthSTART");
 	var i;
 	for (i=0;i<list.length;i++){
 		list.options[i].text = year.getFullYear()-i+543;
 		list.options[i].value = year.getFullYear()-i+543;
+		list2.options[i].text = year.getFullYear()-i+543;
+		list2.options[i].value = year.getFullYear()-i+543;
   }
         var sel = document.getElementById("stdnumber");
         sel.value = {{ numOP }}
+        list.value = {{ yearOE }}
+        list2.value = {{ yearST }}
+        list3.value = "{{ monthST }}"
 }
 var oldnum=0;
 function addMoreStd(){
@@ -104,10 +114,19 @@ function addMoreStd(){
 	var txts = "";
 	if (oldnum!=stdnum){
 		oldnum=stdnum;
-		for (i = 1; i < stdnum; i++) { 
-			txts += "<H>"+e1.options[i].text+". "+"</H><input id='studentNAME" + (i) +"' type='text' name='studentNAME" + (i) +"'><H>เลขประจำตัว :</H><input type='text' name='studentID" + (i) + "' maxlength='13' id='studentID" + (i) + "'><br>";
+		for (i = 1; i < 5; i++) { 
+			var e2 = document.getElementById("studentElement"+i);
+                        if(i < stdnum){
+				if(e2 == null){
+					txts += "<div id='studentElement" + i + "'><H>"+e1.options[i].text+". "+"</H><input id='studentNAME" + (i) +"' type='text' name='studentNAME" + (i) +"'><H>เลขประจำตัว :</H><input type='text' name='studentID" + (i) + "' maxlength='13' id='studentID" + (i) + "'></div>";
+				}
+			}else{
+				if(e2 != null){
+					e2.remove();
+				}
+			}
 		}
-	document.getElementById("namestd").innerHTML = txts;
+	document.getElementById("namestd").innerHTML += txts;
 	}
 }
 function checkSUBMIT(){  //by jupiter ------------ A function to check the studentID and the rest of the number type input before submit ---- please use it  before perform any action in next step
@@ -238,7 +257,11 @@ adviser
 p_adviser
 -->
 <body onLoad="yearselect();">
+    {% ifequal edit '1' %}
     <form action = "{% url 'group6:project_docs_create_3forms_add' %}" method = "post">
+    {% else %}
+    <form action = "{% url 'group6:project_docs_edit_update' project_id %}" method = "post">
+    {% endifequal %}
         {% csrf_token %}
         <div class="page" onMouseMove="return addMoreStd();">
             <center>
@@ -273,20 +296,24 @@ p_adviser
             {% if student_list %}
                 {% for student in student_list %}
                     {% if forloop.counter == 1 %}
-                        <H>{{ forloop.counter }}. {{ student.userprofile.firstname_th }} {{ student.userprofile.lastname_th }} เลขประจำตัว : {{ student.std_id }}</H><br>
+                        <H>{{ forloop.counter }}. {{ student.userprofile.firstname_th }} {{ student.userprofile.lastname_th }} เลขประจำตัว : {{ student.std_id }}</H><br> <div class="namestd" id="namestd">
                     {% else %}
-                        {% ifequal error_student|get_at_index:forloop.counter0 '' %}
-                        <H>{{ forloop.counter }}. </H><input type='text' name='studentNAME{{ forloop.counter0 }}' id="studentNAME{{ forloop.counter0 }}" value="{{ student.userprofile.firstname_th }} {{ student.userprofile.lastname_th }}"><H>เลขประจำตัว :</H><input type='text' name='studentID{{ forloop.counter0 }}' maxlength='13' id="studentID{{ forloop.counter0 }}" value="{{ student.std_id }}"><br>
+                        {% ifequal edit '1' %}
+                            {% ifequal error_student|get_at_index:forloop.counter0 '' %}
+                            <div id='studentElement{{ forloop.counter0 }}'><H>{{ forloop.counter }}. </H><input type='text' name='studentNAME{{ forloop.counter0 }}' id="studentNAME{{ forloop.counter0 }}" value="{{ student.userprofile.firstname_th }} {{ student.userprofile.lastname_th }}"><H>เลขประจำตัว :</H><input type='text' name='studentID{{ forloop.counter0 }}' maxlength='13' id="studentID{{ forloop.counter0 }}" value="{{ student.std_id }}"></div>
+                            {% else %}
+                            <div id='studentElement{{ forloop.counter0 }}'><H>{{ forloop.counter }}. </H><input type='text' name='studentNAME{{ forloop.counter0 }}' id="studentNAME{{ forloop.counter0 }}"><H>เลขประจำตัว :</H><input type='text' name='studentID{{ forloop.counter0 }}' maxlength='13' id="studentID{{ forloop.counter0 }}"> <font color = "FF0000" name="message">{{ error_student|get_at_index:forloop.counter0 }}</font></div>
+                            {% endifequal %}
                         {% else %}
-                        <H>{{ forloop.counter }}. </H><input type='text' name='studentNAME{{ forloop.counter0 }}' id="studentNAME{{ forloop.counter0 }}"><H>เลขประจำตัว :</H><input type='text' name='studentID{{ forloop.counter0 }}' maxlength='13' id="studentID{{ forloop.counter0 }}"> <font color = "FF0000" name="message">{{ error_student|get_at_index:forloop.counter0 }}</font><br>
+                            <div id='studentElement{{ forloop.counter0 }}'><H>{{ forloop.counter }}. </H><input type='text' name='studentNAME{{ forloop.counter0 }}' id="studentNAME{{ forloop.counter0 }}" value="{{ student.userprofile.firstname_th }} {{ student.userprofile.lastname_th }}"><H>เลขประจำตัว :</H><input type='text' name='studentID{{ forloop.counter0 }}' maxlength='13' id="studentID{{ forloop.counter0 }}" value="{{ student.std_id }}"></div>
                         {% endifequal %}
                     {% endif %}
                 {% endfor %}
             {% else %}
-            <H>1. {{ student.userprofile.firstname_th }} {{ student.userprofile.lastname_th }} <!--</H><input type='text' name='studentNAME0' id="studentNAME0"><H>-->เลขประจำตัว : {{ student.std_id }}</H><!--<input type='text' name='studentID0' maxlength='13' id="studentID0">--><br>
+            <H>1. {{ student.userprofile.firstname_th }} {{ student.userprofile.lastname_th }} <!--</H><input type='text' name='studentNAME0' id="studentNAME0"><H>-->เลขประจำตัว : {{ student.std_id }}</H><!--<input type='text' name='studentID0' maxlength='13' id="studentID0">--><br> <div class="namestd" id="namestd">
             {% endif %}
 
-            <div class="namestd" id="namestd">
+            
                 
             </div>
             <H>ชื่ออาจารย์ที่ปรึกษา  :</H>
@@ -375,14 +402,366 @@ p_adviser
          <CENTER><table border="1">
          <tr><td><CENTER><H>ความเห็นของอาจารย์ที่ปรึกษา</H></br><textarea rows="10" cols="60"></textarea></br><H>(ลงนาม)</H><input type="text" name="text"></br><input type="date" name="date"></td>
            <td><CENTER><H>ความเห็นของหัวหน้าภาค</H></br><textarea rows="10" cols="60"></textarea></br><H>(ลงนาม)</H><input type="text" name="text"></br><input type="date" name="date"></td></tr> -->
-       </label>
+       </label><br>
+<H>
+<p align="center">ขั้นตอนการดำเนินงานแนวคิดกับแผนที่วางไว้</p>
+             		<table border="1" cellpadding="0" cellspacing="0" width="100%" height="208"> 
+             			<tr border="0">
+             				<td width="20%" height="40" align=CENTER valign=MIDDLE>ขั้นตอนที่</td> 
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE>
+             					รายละเอียดขั้นตอนการดำเนินงาน</br>เริ่มทำปริญญานิพนธ์เมื่อ <input type="text" name="dateSTART" size="1" maxlength="2" value="{{ dateST }}"> เดือน <select id="monthSTART" name="monthSTART">
+             						<option value="มกราคม">มกราคม</option>
+             						<option value="กุมภาพันธ์">กุมภาพันธ์</option>
+             						<option value="มีนาคม">มีนาคม</option>
+             						<option value="เมษายน">เมษายน</option>
+             						<option value="พฤษภาคม">พฤษพาคม</option>
+             						<option value="มิถุนายน">มิถุนายน</option>
+             						<option value="กรกฎาคม">กรกฎาคม</option>
+             						<option value="สิงหาคม">สิงหาคม</option>
+             						<option value="กันยายน">กันยายน</option>
+             						<option value="ตุลาคม">ตุลาคม</option>
+             						<option value="พฤษจิกายน">พฤษจิกายน</option>
+             						<option value="ธันวาคม">ธันวาคม</option>
+             					</select> พ.ศ. <select id="yearSTART" name="yearSTART">
+							<option>test1</option>
+							<option>test2</option>
+							<option>test3</option>
+							<option>test4</option>
+							<option>test5</option>
+							<option>test6</option>
+							<option>test7</option>
+							<option>test8</option>
+							<option>test9</option></select></td>
+
+             				<td width="40%" height="40" align=CENTER valign=MIDDLE>
+             					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
+             						<tr border="1">
+             							<td width="40%" height="40" align=CENTER valign=MIDDLE>เดือนที่</td>
+             						</tr>
+             					</table>
+             					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >	
+
+             						<td width="8%" height="40" align=CENTER valign=MIDDLE>1</td> 
+             						<td width="8%" height="40" align=CENTER valign=MIDDLE>2</td> 
+             						<td width="8%" height="40" align=CENTER valign=MIDDLE>3</td> 
+             						<td width="8%" height="40" align=CENTER valign=MIDDLE>4</td> 
+             						<td width="8%" height="40" align=CENTER valign=MIDDLE>5</td> 
+             						<td width="8%" height="40" align=CENTER valign=MIDDLE>6</td> 
+             						<td width="8%" height="40" align=CENTER valign=MIDDLE>7</td> 
+             						<td width="8%" height="40" align=CENTER valign=MIDDLE>8</td> 
+             						<td width="8%" height="40" align=CENTER valign=MIDDLE>9</td> 
+             						<td width="8%" height="40" align=CENTER valign=MIDDLE>10</td> 
+             						<td width="8%" height="40" align=CENTER valign=MIDDLE>11</td> 
+             						<td width="8%" height="40" align=CENTER valign=MIDDLE>12</td>
+
+             					</table>
+             				</td>
+             			</tr> 
+             			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
+             			<tr border="0">
+             				<td width="20%" height="40" align=CENTER valign=MIDDLE>1</td> 
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process1" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process1 }}"></td>
+             				<td width="40%" height="40" align=CENTER valign=MIDDLE>
+             					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >	
+                                                        {% if checkList1 %}
+             						        {% for check in checkList1 %}
+                                                                        {% if check %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/{{ forloop.counter }}" name="myCheck1/{{ forloop.counter }}" checked></td>
+                                                                        {% else %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/{{ forloop.counter }}" name="myCheck1/{{ forloop.counter }}"></td>
+                                                                        {% endif %}
+                                                                {% endfor %}
+                                                        {% else %}
+                                                        <tr>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/1" name="myCheck1/1"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/2" name="myCheck1/2"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/3" name="myCheck1/3"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/4" name="myCheck1/4"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/5" name="myCheck1/5"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/6" name="myCheck1/6"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/7" name="myCheck1/7"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/8" name="myCheck1/8"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/9" name="myCheck1/9"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/10" name="myCheck1/10"></td>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/11" name="myCheck1/11"></td>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck1/12" name="myCheck1/12"></td>
+             						</tr>
+                                                        {% endif %}
+             					</table>
+             				</td>
+             			</tr> 
+             			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
+             			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
+             			<tr border="0">
+             				<td width="20%" height="40" align=CENTER valign=MIDDLE>2</td> 
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process2" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process2 }}"></td>
+             				<td width="40%" height="40" align=CENTER valign=MIDDLE>
+             					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
+                                                        {% if checkList2 %}
+             						        {% for check in checkList2 %}
+                                                                        {% if check %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/{{ forloop.counter }}" name="myCheck2/{{ forloop.counter }}" checked></td>
+                                                                        {% else %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/{{ forloop.counter }}" name="myCheck2/{{ forloop.counter }}"></td>
+                                                                        {% endif %}
+                                                                {% endfor %}
+                                                        {% else %}
+             						<tr>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/1" name="myCheck2/1"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/2" name="myCheck2/2"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/3" name="myCheck2/3"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/4" name="myCheck2/4"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/5" name="myCheck2/5"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/6" name="myCheck2/6"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/7" name="myCheck2/7"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/8" name="myCheck2/8"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/9" name="myCheck2/9"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/10" name="myCheck2/10"></td>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/11" name="myCheck2/11"></td>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck2/12" name="myCheck2/12"></td>
+             						</tr>
+                                                        {% endif %}
+             					</table>
+             				</td>
+             			</tr> 
+             			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
+             			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
+             			<tr border="0">
+             				<td width="20%" height="40" align=CENTER valign=MIDDLE>3</td> 
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process3" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process3 }}"></td>
+             				<td width="40%" height="40" align=CENTER valign=MIDDLE>
+             					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
+                                                        {% if checkList3 %}
+             						        {% for check in checkList3 %}
+                                                                        {% if check %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/{{ forloop.counter }}" name="myCheck3/{{ forloop.counter }}" checked></td>
+                                                                        {% else %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/{{ forloop.counter }}" name="myCheck3/{{ forloop.counter }}"></td>
+                                                                        {% endif %}
+                                                                {% endfor %}
+                                                        {% else %}
+             						<tr>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/1" name="myCheck3/1"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/2" name="myCheck3/2"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/3" name="myCheck3/3"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/4" name="myCheck3/4"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/5" name="myCheck3/5"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/6" name="myCheck3/6"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/7" name="myCheck3/7"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/8" name="myCheck3/8"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/9" name="myCheck3/9"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/10" name="myCheck3/10"></td>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/11" name="myCheck3/11"></td>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck3/12" name="myCheck3/12"></td>
+             						</tr>
+                                                        {% endif %}
+             					</table>
+             				</td>
+             			</tr> 
+             			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
+             			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
+             			<tr border="0">
+             				<td width="20%" height="40" align=CENTER valign=MIDDLE>4</td> 
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process4" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process4 }}"></td>
+             				<td width="40%" height="40" align=CENTER valign=MIDDLE>
+             					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
+                                                        {% if checkList4 %}
+             						        {% for check in checkList4 %}
+                                                                        {% if check %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/{{ forloop.counter }}" name="myCheck4/{{ forloop.counter }}" checked></td>
+                                                                        {% else %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/{{ forloop.counter }}" name="myCheck4/{{ forloop.counter }}"></td>
+                                                                        {% endif %}
+                                                                {% endfor %}
+                                                        {% else %}
+             						<tr>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/1" name="myCheck4/1"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/2" name="myCheck4/2"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/3" name="myCheck4/3"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/4" name="myCheck4/4"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/5" name="myCheck4/5"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/6" name="myCheck4/6"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/7" name="myCheck4/7"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/8" name="myCheck4/8"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/9" name="myCheck4/9"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/10" name="myCheck4/10"></td>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/11" name="myCheck4/11"></td>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck4/12" name="myCheck4/12"></td>
+             						</tr>
+                                                        {% endif %}
+             					</table>
+             				</td>
+             			</tr> 
+             			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
+             			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
+             			<tr border="0">
+             				<td width="20%" height="40" align=CENTER valign=MIDDLE>5</td> 
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process5" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process5 }}"></td>
+             				<td width="40%" height="40" align=CENTER valign=MIDDLE>
+             					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
+                                                        {% if checkList5 %}
+             						        {% for check in checkList5 %}
+                                                                        {% if check %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/{{ forloop.counter }}" name="myCheck5/{{ forloop.counter }}" checked></td>
+                                                                        {% else %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/{{ forloop.counter }}" name="myCheck5/{{ forloop.counter }}"></td>
+                                                                        {% endif %}
+                                                                {% endfor %}
+                                                        {% else %}
+             						<tr>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/1" name="myCheck5/1"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/2" name="myCheck5/2"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/3" name="myCheck5/3"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/4" name="myCheck5/4"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/5" name="myCheck5/5"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/6" name="myCheck5/6"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/7" name="myCheck5/7"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/8" name="myCheck5/8"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/9" name="myCheck5/9"></td> 
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/10" name="myCheck5/10"></td>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/11" name="myCheck5/11"></td>
+             							<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck5/12" name="myCheck5/12"></td>
+             						</tr>
+                                                        {% endif %}
+             					</table>
+             				</td>
+             			</tr> 
+             			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
+             			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
+             			<tr border="0">
+             				<td width="20%" height="40" align=CENTER valign=MIDDLE>6</td> 
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process6" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process6 }}"></td>
+             				<td width="40%" height="40" align=CENTER valign=MIDDLE>
+             					<table border="1"  cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
+                                                        {% if checkList6 %}
+             						        {% for check in checkList6 %}
+                                                                        {% if check %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/{{ forloop.counter }}" name="myCheck6/{{ forloop.counter }}" checked></td>
+                                                                        {% else %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/{{ forloop.counter }}" name="myCheck6/{{ forloop.counter }}"></td>
+                                                                        {% endif %}
+                                                                {% endfor %}
+                                                        {% else %}
+     <!--</table>
+	 <table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >	
+	 -->
+	 <tr>
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/1" name="myCheck6/1"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/2" name="myCheck6/2"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/3" name="myCheck6/3"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/4" name="myCheck6/4"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/5" name="myCheck6/5"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/6" name="myCheck6/6"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/7" name="myCheck6/7"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/8" name="myCheck6/8"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/9" name="myCheck6/9"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/10" name="myCheck6/10"></td>
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/11" name="myCheck6/11"></td>
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/12" name="myCheck6/12"></td>
+	 </tr>
+                                                        {% endif %}
+	</table>
+</td>
+</tr> 
+<tr border="0">
+             				<td width="20%" height="40" align=CENTER valign=MIDDLE>7</td> 
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process7" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process7 }}"></td>
+             				<td width="40%" height="40" align=CENTER valign=MIDDLE>
+             					<table border="1"  cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
+                                                        {% if checkList7 %}
+             						        {% for check in checkList7 %}
+                                                                        {% if check %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/{{ forloop.counter }}" name="myCheck7/{{ forloop.counter }}" checked></td>
+                                                                        {% else %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/{{ forloop.counter }}" name="myCheck7/{{ forloop.counter }}"></td>
+                                                                        {% endif %}
+                                                                {% endfor %}
+                                                        {% else %}
+     <!--</table>
+	 <table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >	
+	 -->
+	 <tr>
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/1" name="myCheck7/1"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/2" name="myCheck7/2"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/3" name="myCheck7/3"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/4" name="myCheck7/4"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/5" name="myCheck7/5"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/6" name="myCheck7/6"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/7" name="myCheck7/7"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/8" name="myCheck7/8"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/9" name="myCheck7/9"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/10" name="myCheck7/10"></td>
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/11" name="myCheck7/11"></td>
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck7/12" name="myCheck7/12"></td>
+	 </tr>
+                                                        {% endif %}
+	</table>
+</td>
+</tr> 
+<tr border="0">
+             				<td width="20%" height="40" align=CENTER valign=MIDDLE>8</td> 
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process8" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process8 }}"></td>
+             				<td width="40%" height="40" align=CENTER valign=MIDDLE>
+             					<table border="1"  cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
+                                                        {% if checkList8 %}
+             						        {% for check in checkList8 %}
+                                                                        {% if check %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/{{ forloop.counter }}" name="myCheck8/{{ forloop.counter }}" checked></td>
+                                                                        {% else %}
+                                                                                <td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/{{ forloop.counter }}" name="myCheck8/{{ forloop.counter }}"></td>
+                                                                        {% endif %}
+                                                                {% endfor %}
+                                                        {% else %}
+     <!--</table>
+	 <table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >	
+	 -->
+	 <tr>
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/1" name="myCheck8/1"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/2" name="myCheck8/2"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/3" name="myCheck8/3"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/4" name="myCheck8/4"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/5" name="myCheck8/5"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/6" name="myCheck8/6"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/7" name="myCheck8/7"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/8" name="myCheck8/8"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/9" name="myCheck8/9"></td> 
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/10" name="myCheck8/10"></td>
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/11" name="myCheck8/11"></td>
+	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck8/12" name="myCheck8/12"></td>
+	 </tr>
+                                                        {% endif %}
+	</table>
+</td>
+</tr> 
+
+<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
+
+
+
+
+<!-- input getname 'dateSTART','monthSTART','yearSTART' and textfield in each process is 'process1' - 'process8' and checkbox is 'myCheckY/X' while Y is row and X is col 
+
+and last is note is 'notation'
+-->
+
+
+
+</table></H>
+<font color = "FF0000" name="message">{{ error_dateST }}</font> 
+<font color = "FF0000" name="message">{{ error_monthST }}</font> 
+<font color = "FF0000" name="message">{{ error_yearST }}</font>
+<font color = "FF0000" name="message">{{ error_process }}</font></br>
+<div class="row">
+<h4 class='col-sm-offset-1'>หมายเหตุ:</h4><textarea class="col-sm-offset-1 col-sm-10" name="notation" rows="10" maxlength='2000'>{{ note }}</textarea>
+</div>
+
    </div>
    <center><br>
     <input class="btn btn-primary" type="submit" value="บันทึก" name='save' />
     <a href="{% url 'group6:project_docs_index' %}"><input class="btn btn-danger" type="button" value="ยกเลิก" name = 'cancel' /></a>
 </center>
 </form>
-
+<br>
 
 <!--
 <H id="myTextarea">Form HTML</H>

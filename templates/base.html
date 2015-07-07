@@ -60,11 +60,13 @@
 
                     <li class="dropdown" role="presentation">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            App Group2<span class="caret"></span>
+								นักศึกษาโท, เอก<span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">App1</a> </li>
-                            <li><a href="#">App2</a> </li>
+                            <li><a href="{% url 'group2:profile' %}">ประวัตินักศึกษา</a> </li>
+                            <li><a href="{% url 'group2:registeration' %}">ลงทะเบียน</a> </li>
+							<li><a href="{% url 'group2:school_record' %}">ผลการเรียน</a> </li>
+							
                         </ul>
                     </li>
 

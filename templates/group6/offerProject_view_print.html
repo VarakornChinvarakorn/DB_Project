@@ -1,18 +1,7 @@
-﻿{% extends "base.html" %}
-
-{% block title %}ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี - แบบเสนอโครงงานปริญญานิพนธ์ - {{ offer.project.name_thai }}{% endblock %}
-
-{% block pageHeader %}
-<h2>ระบบ <small>จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี</small></h2>
-<ol class="breadcrumb">
-    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
-    <li><a href="{% url 'group6:project_docs_index' %}">ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี</a></li>
-    <li class="active">แบบเสนอโครงงานปริญญานิพนธ์ - {{ offer.project.name_thai }}</li>
-</ol>
-{% endblock %}
-
-{% block content %}
-<div class="container-fluid">
+﻿<!DOCTYPE>
+<html>
+<head>
+<title>แบบ วศ. 4-01</title>
 <meta http-equiv="content-type" content="text/html;charset=utf-8">
 <style>
 body{
@@ -27,7 +16,6 @@ body{
     border: 1px #D3D3D3 solid;
     border-radius: 5px;
     background: white;
-	word-break:break-all;
 	}
 .form > H{
 	margin-left:0;
@@ -148,7 +136,7 @@ body{
 		height:initial;
 		size:portrait auto;
 		position:absolute;
-		border:1;
+		border:0;
 		border-radius:0;
 		box-shadow: initial;
 		background: initial;
@@ -176,6 +164,10 @@ body{
 	}
 }
 </style>
+<script>
+</script>
+</head>
+<body onLoad="return window.print()">
 <div class="page">
 <H id="topright">แบบ วศ. 4-01</H><br>
 <CENTER><H>คณะวิศวกรรมศาสตร์</H><br>
@@ -225,8 +217,6 @@ body{
     </div>
 	<H>ผลประโยชน์ที่คาดว่าจะได้รับ </H><H class="text">{{ offer.project.benefit }}</H>	
 	</label>
-</div><br>
-<a href="{% url 'group6:project_docs_index' %}"><input class="btn btn-danger" type="button" value="ย้อนกลับ" name = 'cancel' /></a> 
-<a class="btn btn-default" href="{% url 'group6:project_docs_offerProject_print' offer.id %}" target = _blank><span class="glyphicon glyphicon-print"></span></a>
-</div><br>
-{% endblock %}
+</div>
+</body>
+</html>

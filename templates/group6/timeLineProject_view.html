@@ -1,0 +1,258 @@
+﻿{% extends "base.html" %}
+
+{% block title %}ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี - ขั้นตอนการดำเนินงานแนวคิดกับแผนที่วางไว้ - {{ timeLine.project.name_thai }}{% endblock %}
+
+{% block pageHeader %}
+<h2>ระบบ <small>จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="{% url 'group6:project_docs_index' %}">ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี</a></li>
+    <li class="active">ขั้นตอนการดำเนินงานแนวคิดกับแผนที่วางไว้ - {{ timeLine.project.name_thai }}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+      <meta http-equiv="content-type" content="text/html;charset=utf-8">
+      <style>
+.page{
+	font:14pt "Angsana New";
+	width:297mm;
+	height:auto;
+	margin:auto;
+	position:relative;
+    padding: 2cm;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white;
+	word-break:break-all;
+	}
+      #maintable{
+            border-collapse: collapse;
+            font: 14pt "Angsana New";
+            width: 23.4cm;
+            height: 13.5cm;
+            table-layout:fixed;
+      }
+      #lefttable{
+            border-collapse: collapse;
+            font: 14pt "Angsana New";
+            width: 1.5cm;
+            height: 1.5cm;    
+            table-layout:fixed;        
+      }
+      #middletable{
+            border-collapse: collapse;
+            font: 14pt "Angsana New";
+            width: 11cm;
+            height: 1.5cm; 
+            table-layout:fixed;           
+      }
+      #righttable{
+            border-collapse: collapse;
+            font: 14pt "Angsana New";
+            width: 10.9cm;
+            height: 1cm;
+            table-layout:fixed;
+      }
+      #righttabletop{
+            border-collapse: collapse;
+            font: 14pt "Angsana New";
+            width: 10.9cm;
+            height: 0.95cm;
+            
+      }
+      #righttabletop2{
+            border-collapse: collapse;
+            font: 14pt "Angsana New";
+            height: 0.95cm;
+            
+      }
+      #checktable{
+            border-collapse: collapse;
+            font: 14pt "Angsana New";
+            height: 1.45cm;
+           table-layout:fixed;
+      }
+      #pageset{
+            font: 14pt "Angsana New";
+            margin-top: 25mm;
+            margin-bottom: 25mm;
+            margin-right: 3.5cm;
+            margin-left: 2.3cm;
+            position: absolute;
+      }
+      #headset{
+            font: 14pt "Angsana New";
+            margin-left: 8cm; 
+
+      }
+      #notationset{
+            font: 14pt "Angsana New";
+            margin-left: 1.5cm;
+            margin-right: 2.5cm;
+            position: absolute;
+      }
+      #bottomleft{
+            font: 14pt "Angsana New";
+           
+
+      }
+      #bottomleftmid{
+            font: 14pt "Angsana New";
+           
+            width: 6.5cm;
+      }
+      #bottomright{
+            font: 14pt "Angsana New";
+            
+
+      }
+      #bottomrightmid{
+            font: 14pt "Angsana New";
+           
+            width: 5cm;
+      }
+      </style><div class="page">
+      <!--<div id='pageset'>-->
+            <span  id='headset'>ขั้นตอนการดำเนินงานแนวคิดกับแผนที่วางไว้</span>
+            <table id='maintable' border="1" cellpadding="0" cellspacing="0"> 
+                  <tr border="0">
+                        <td id='lefttable' align=CENTER valign=MIDDLE>ขั้นตอนที่</td> 
+                        <td id='middletable' align=CENTER valign=MIDDLE>
+                              <form>รายละเอียดขั้นตอนการดำเนินงาน</br>เริ่มทำปริญญานิพนธ์เมื่อ {{ timeLine.day }} เดือน {{ timeLine.month }} พ.ศ. {{ timeLine.year }}</td>
+                              </form>
+                              <td id='righttable' align=CENTER valign=MIDDLE>
+                                    <table id='righttabletop' border="1" cellpadding="0" cellspacing="0" align="center" >    
+                                          <tr border="0">
+                                                <td  align=CENTER valign=MIDDLE>เดือนที่</td>
+                                          </tr>
+                                    </table>
+                                    <table id='righttabletop' border="1" cellpadding="0" cellspacing="0" align="center" >    
+
+                                          <td id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>1</td> 
+                                          <td id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>2</td> 
+                                          <td id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>3</td> 
+                                          <td id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>4</td> 
+                                          <td id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>5</td> 
+                                          <td id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>6</td> 
+                                          <td id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>7</td> 
+                                          <td id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>8</td> 
+                                          <td id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>9</td> 
+                                          <td id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>10</td> 
+                                          <td id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>11</td> 
+                                          <td id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>12</td>
+                                    </table>
+                              </td>
+                        </tr>
+
+                        {% for process in processList %}
+                        {% if process %}
+                        <tr border="0">
+                              <td id='lefttable' align=CENTER valign=MIDDLE>{{ forloop.counter }}</td> 
+                              <td id='middletable' align=CENTER valign=MIDDLE>{{ process.processDescription }}</td>
+                              <td id='middletable'  align=CENTER valign=MIDDLE>
+                                    <table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >    
+
+                                          <tr>
+                                                {% if process.month1 %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#000000"></td>
+                                                {% else %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#FFFFFF"></td>
+                                                {% endif %}
+                                                {% if process.month2 %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#000000"></td>
+                                                {% else %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#FFFFFF"></td>
+                                                {% endif %}
+                                                {% if process.month3 %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#000000"></td>
+                                                {% else %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#FFFFFF"></td>
+                                                {% endif %}
+                                                {% if process.month4 %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#000000"></td>
+                                                {% else %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#FFFFFF"></td>
+                                                {% endif %}
+                                                {% if process.month5 %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#000000"></td>
+                                                {% else %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#FFFFFF"></td>
+                                                {% endif %}
+                                                {% if process.month6 %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#000000"></td>
+                                                {% else %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#FFFFFF"></td>
+                                                {% endif %}
+                                                {% if process.month7 %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#000000"></td>
+                                                {% else %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#FFFFFF"></td>
+                                                {% endif %}
+                                                {% if process.month8 %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#000000"></td>
+                                                {% else %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#FFFFFF"></td>
+                                                {% endif %}
+                                                {% if process.month9 %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#000000"></td>
+                                                {% else %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#FFFFFF"></td>
+                                                {% endif %}
+                                                {% if process.month10 %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#000000"></td>
+                                                {% else %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#FFFFFF"></td>
+                                                {% endif %}
+                                                {% if process.month11 %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#000000"></td>
+                                                {% else %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#FFFFFF"></td>
+                                                {% endif %}
+                                                {% if process.month12 %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#000000"></td>
+                                                {% else %}
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE bgcolor="#FFFFFF"></td>
+                                                {% endif %}
+                                          </tr>
+                                    </table>
+                              </td>
+                        </tr>
+                        {% else %}
+                        <tr border="0">
+                              <td id='lefttable' align=CENTER valign=MIDDLE>{{ forloop.counter }}</td> 
+                              <td id='middletable' align=CENTER valign=MIDDLE><!--get process1--></td>
+                              <td id='middletable'  align=CENTER valign=MIDDLE>
+                                    <table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >    
+
+                                          <tr>
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE><!--get myCheck1/1--></td> 
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE><!--get myCheck1/2--></td> 
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE><!--get myCheck1/3--></td> 
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE><!--get myCheck1/4--></td> 
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE><!--get myCheck1/5--></td> 
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE><!--get myCheck1/6--></td> 
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE><!--get myCheck1/7--></td> 
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE><!--get myCheck1/8--></td> 
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE><!--get myCheck1/9--></td> 
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE><!--get myCheck1/10--></td>
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE><!--get myCheck1/11--></td>
+                                                <td width="8%" id='checktable' align=CENTER valign=MIDDLE><!--get myCheck1/12--></td>
+                                          </tr>
+                                    </table>
+                              </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+
+</table>
+<div id='notationset'>หมายเหตุ : {{ timeLine.note }}<!--get 'notation' please do something about the line . make it remain 3 line and then delete the <br><br><br> below --></div>
+<br><br><br>
+<table id='bottomleft' align='left'><tr><td>ลงชื่อ</td><td id='bottomleftmid'>...............................................................................</td><td>(ผู้เสนอโครงงาน)</td></tr><tr><td></td><td id='bottomleftmid'>(.............................................................................)</td><td></td></tr><tr><td></td><td id='bottomleftmid'>........................./........................../..........................</td><td></td></tr></table>
+<table id='bottomright' align='right'><tr><td>ลงชื่อ</td><td id='bottomrightmid'>.......................................................................</td><td>(อาจารย์ที่ปรึกษา)</td></tr><tr><td></td><td id='bottomrightmid'>(.....................................................................)</td><td></td></tr><tr><td></td><td id='bottomrightmid'> ....................../......................./.......................</td><td></td></tr></table>
+</div>
+<a href="{% url 'group6:project_docs_index' %}"><input class="btn btn-danger" type="button" value="ย้อนกลับ" name = 'cancel' /></a> 
+<a class="btn btn-default" href="{% url 'group6:project_docs_timeLineProject_print' timeLine.id %}" target = _blank><span class="glyphicon glyphicon-print"></span></a>
+</div><br>
+{% endblock %}

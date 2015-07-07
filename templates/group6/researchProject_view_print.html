@@ -1,18 +1,7 @@
-﻿{% extends "base.html" %}
-
-{% block title %}ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี - แบบฟอร์มสำรวจหัวข้อโครงงานปริญญานิพนธ์ - {{ research.project.name_thai }}{% endblock %}
-
-{% block pageHeader %}
-<h2>ระบบ <small>จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี</small></h2>
-<ol class="breadcrumb">
-    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
-    <li><a href="{% url 'group6:project_docs_index' %}">ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี</a></li>
-    <li class="active">แบบฟอร์มสำรวจหัวข้อโครงงานปริญญานิพนธ์ - {{ research.project.name_thai }}</li>
-</ol>
-{% endblock %}
-
-{% block content %}
-<div class="container-fluid">
+﻿<!DOCTYPE>
+<html>
+<head>
+<title>ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี - แบบฟอร์มสำรวจหัวข้อโครงงานปริญญานิพนธ์</title>
 <meta http-equiv="content-type" content="text/html;charset=utf-8">
 <style>
 body{
@@ -84,6 +73,10 @@ body{
 		}
 }
 </style>
+<script>
+</script>
+</head>
+<body onLoad="return window.print()">
 <div class="page">
 <center>
 <H><b>แบบฟอร์มสำรวจหัวข้อโครงงานปริญญานิพนธ์</b></H><br>
@@ -103,8 +96,6 @@ body{
 	<div class="text">ขอบเขตของการทำโครงงาน {{ research.project.scope }}</div>
 	<div class="text">ผลประโยชน์ที่คาดว่าจะได้รับ {{ research.project.benefit }}</div>
 	</label>
-</div><br>
-<a href="{% url 'group6:project_docs_index' %}"><input class="btn btn-danger" type="button" value="ย้อนกลับ" name = 'cancel' /></a> 
-<a class="btn btn-default" href="{% url 'group6:project_docs_researchProject_print' research.id %}" target = _blank><span class="glyphicon glyphicon-print"></span></a>
-</div><br>
-{% endblock %}
+</div>
+</body>
+</html>

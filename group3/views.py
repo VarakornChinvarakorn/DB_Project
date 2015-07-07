@@ -309,6 +309,11 @@ def genpdf(request, profID): # use to generate pdf file for lend another teacher
     tell = ''
     email = ''
     
+    subjectID = ''
+    subjectName = ''
+    sec = ''
+    time = ''
+    day = ''
     try: # check all data for beware blank data.
         proID = teachObj.prof.profID
     except:
@@ -353,17 +358,56 @@ def genpdf(request, profID): # use to generate pdf file for lend another teacher
         email = teachObj.prof.email
     except:
         email = 'None'
+    
+    try:
+        subjectID = teachObj.subject.subjectID
+    except:
+        subjectID = 'None'
         
-    pdf.add_font('Kinnari-Bold', '', 'Kinnari-Bold.ttf', uni=True)  # thai font bold
-    pdf.set_font('Kinnari-Bold', '', 18)  
+    try:
+        subjectName = teachObj.subject.subjectName
+    except:
+        subjectName = 'None'
+        
+    try:
+        sec = teachObj.section.section
+    except:
+        sec = 'None'
+    
+    try:
+        time = str(teachObj.section.startTime)
+    except:
+        time = 'None'
+        
+    try:
+        day = teachObj.section.date
+        if day == 'M':
+            day = u'จันทร์'
+        elif day == 'T':
+            day = u'อังคาร'
+        elif day == 'W':
+            day = u'พุธ'
+        elif day == 'H':
+            day = u'พฤหัสบดี'
+        elif day == 'F':
+            day = u'ศุกร์'
+        elif day == 'S':
+            day = u'เสาร์'
+        else:
+            day = u'อาทิตย์'
+    except:
+        day = 'None'
+        
+    pdf.add_font('THSarabun Bold', '', 'THSarabun Bold.ttf', uni=True)  # thai font bold
+    pdf.set_font('THSarabun Bold', '', 18)  
     pdf.cell(0, 10, u'                         บันทึกข้อความ')
     pdf.ln(10)
-    pdf.add_font('Kinnari', '', 'Kinnari.ttf', uni=True)  # thai font
-    pdf.set_font('Kinnari', '', 12)
+    pdf.add_font('THSarabun', '', 'THSarabun.ttf', uni=True)  # thai font
+    pdf.set_font('THSarabun', '', 16)
     pdf.cell(0, 10, u'         ส่วนราชการ ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์ คณะวิศวกรรมศาสตร์  โทร. ๘๕๑๘')
     pdf.line(46,52,180,52)
     pdf.ln(8)
-    pdf.cell(0, 10, u'         ที่  วฟ     /๒๕๕๘                                        วันที่  ')
+    pdf.cell(0, 10, u'         ที่                                                    วันที่  ')
     pdf.line(30,60,180,60)
     pdf.ln(8)
     pdf.cell(0, 10, u'         เรื่อง การจัดการเรียนการสอนสำหรับนักศึกษาโครงการพิเศษ(สองภาษา) ')
@@ -371,77 +415,76 @@ def genpdf(request, profID): # use to generate pdf file for lend another teacher
     pdf.ln(8)
     pdf.cell(0, 10, u'         เรียน หัวหน้าภาควิชา ')
     pdf.ln(8)
-    pdf.cell(0, 10, u'                     ตามที่ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์  ได้ขอรับบริการจัดการเรียนการ')
+    pdf.cell(0, 10, u'                     ตามที่ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์  ได้ขอรับบริการจัดการเรียนการสอนจากท่านในราย')
     pdf.ln(8)
-    pdf.cell(0, 10, u'         สอนจากท่านในรายวิชา                                                      สำหรับนักศึกษา')
+    pdf.cell(20, 10, u'         วิชา                                                                 สำหรับนักศึกษาโครงการพิเศษ (สองภาษา) ')
+    pdf.cell(20, 10, u'' + subjectName + '  '  + subjectID) 
     pdf.ln(8)
-    pdf.cell(0, 10, u'         โครงการพิเศษ (สองภาษา)  ภาคเรียนที่            นั้น')
+    pdf.cell(0, 10, u'         ภาคเรียนที่ .........  นั้น')
     pdf.ln(8)
-    pdf.cell(0, 10, u'                    ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์  ขอให้ท่านยืนยันการจัดการเรียนการสอนใน')
+    pdf.cell(0, 10, u'                    ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์  ขอให้ท่านยืนยันการจัดการเรียนการสอนในรายวิชาดังกล่าว')
     pdf.ln(8)
-    pdf.cell(0, 10, u'         รายวิชาดังกล่าว ตามแบบฟอร์มด้านล่าง พร้อมตารางสอนและใบเบิกค่าสอนของอาจารย์ผู้สอนและ')
+    pdf.cell(0, 10, u'         ตามแบบฟอร์มด้านล่าง พร้อมตารางสอนและใบเบิกค่าสอนของอาจารย์ผู้สอนและส่งคืนกลับภาควิชาวิศวกรรม ')
     pdf.ln(8)
-    pdf.cell(0, 10, u'         ส่งคืนกลับภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์  เพื่อจะได้ดำเนินการในส่วนที่เกี่ยวข้องต่อไป')
+    pdf.cell(0, 10, u'         ไฟฟ้าและคอมพิวเตอร์  เพื่อจะได้ดำเนินการในส่วนที่เกี่ยวข้องต่อไป')
     pdf.ln(8)
     pdf.cell(0, 10, u'                        จึงเรียนมาเพื่อโปรดทราบ')
     pdf.ln(20)
-    pdf.cell(0, 10, u'                                                  (ดร.นภดล   วิวัชรโกเศศ)')
+    pdf.cell(100, 10, u'')
+    pdf.cell(100, 10, u'(ดร.นภดล   วิวัชรโกเศศ)')
     pdf.ln(8)
-    pdf.cell(0, 10, u'                                              หัวหน้าภาควิศวกรรมไฟฟ้าและคอมพิวเตอร์')
+    pdf.cell(90, 10, u'')
+    pdf.cell(90, 10, u'หัวหน้าภาควิศวกรรมไฟฟ้าและคอมพิวเตอร์')
     pdf.ln(14)
-    pdf.cell(0, 10, u'            ..................................................................................................................................................')
+    pdf.cell(0, 10, u'            .........................................................................................................................................................................')
     pdf.ln(8)
-    pdf.cell(0, 10, u'         ชื่อผู้สอน.................................................................... รหัสผู้สอน.................................ภาควิชา ')
+    pdf.cell(30, 10, u'         ชื่อผู้สอน                                                    รหัสผู้สอน')
+    pdf.cell(80, 10, u'' + firstname + '   '+ lastname)
+    pdf.cell(80, 10, u'' + proID)
     pdf.ln(8)
-    pdf.cell(0, 10, u'         คณะ.......................................................................รหัสวิชา...........................................ชื่อวิชา ')
+    pdf.cell(30, 10, u'         ภาควิชา')
+    pdf.cell(60, 10, u'' + department)
+    pdf.cell(20, 10, u'คณะ')
+    pdf.cell(20, 10, u'' + faculty)
     pdf.ln(8)
-    pdf.cell(0, 10, u'                        ตอนเรียน           วัน              เวลา  ')
+    pdf.cell(30, 10, u'         รหัสวิชา')
+    pdf.cell(60, 10, u'' +subjectID)
+    pdf.cell(20, 10, u'ชื่อวิชา')
+    pdf.cell(20, 10, u'' + subjectName) 
+    pdf.ln(8)
+    pdf.cell(30, 10, u'         ตอนเรียน')
+    pdf.cell(40, 10, u'' + sec)
+    pdf.cell(10, 10, u'วัน')
+    pdf.cell(40, 10, u'' + day)
+    pdf.cell(15, 10, u'เวลา')
+    pdf.cell(20, 10, u'' + time)
     pdf.ln(8)
     pdf.cell(0, 10, u'         ได้จัดการเรียนการสอนเป็น ')
     pdf.ln(8)
-    pdf.cell(0, 10, u'                    ภาษาอังกฤษ  ')
-    pdf.rect(37, 210, 3, 3)
+    pdf.cell(0, 10, u'                           ภาษาอังกฤษ  ')
+    
+    pdf.rect(37, 219, 3, 3)
     pdf.ln(8)
-    pdf.cell(0, 10, u'                    ภาษาไทย')
-    pdf.rect(37, 218, 3, 3)
+    pdf.cell(0, 10, u'                           ภาษาไทย')
+    pdf.rect(37, 227, 3, 3)
+    
     pdf.ln(8)
-    pdf.cell(0, 10, u'                                            ลงชื่อ......................................อาจารย์ผู้สอน ')
+    pdf.cell(100, 10, u'')
+    pdf.cell(100, 10, u'ลงชื่อ......................................อาจารย์ผู้สอน ')
     pdf.ln(8)
-    pdf.cell(0, 10, u'                                            (..............................................) ')
+    pdf.cell(110, 10, u'')
+    pdf.cell(110, 10, u'(..............................................) ')
     pdf.ln(8)
-    pdf.cell(0, 10, u'                                            ลงชื่อ......................................')
+    pdf.cell(110, 10, u'')
+    pdf.cell(110, 10, u'ลงชื่อ......................................')
     pdf.ln(8)
-    pdf.cell(0, 10, u'                                            (..............................................) ')
-    pdf.ln(8)   
-    pdf.cell(0, 10, u'                                            หัวหน้าภาควิชา............................................')
+    pdf.cell(110, 10, u'')
+    pdf.cell(110, 10, u'(..............................................) ')
+    pdf.ln(8)
+    pdf.cell(100, 10, u'')
+    pdf.cell(100, 10, u'หัวหน้าภาควิชา............................................')
     pdf.ln(8)
 
-    pdf.cell(0, 10, u'' + proID)
-    pdf.ln(8)
-    pdf.cell(0, 10, u'' + firstname + '   '+ lastname)
-    pdf.ln(8)
-    pdf.cell(0, 10, u'' + shortname)
-    pdf.ln(8)
-    pdf.cell(0, 10, u'' + department)
-    pdf.ln(8)
-    pdf.cell(0, 10, u'' + faculty)
-    pdf.ln(8)
-    pdf.cell(0, 10, u'' + sahakornAccount)
-    pdf.ln(8)
-    pdf.cell(0, 10, u'' + tell)
-    pdf.ln(8)
-    pdf.cell(0, 10, u'' + email)          
-    pdf.ln(20)
-    pdf.cell(0, 10, u'' + teachObj.subject.subjectID)          
-    pdf.ln(20)
-    pdf.cell(0, 10, u'' + teachObj.subject.subjectName)          
-    pdf.ln(20)
-    pdf.cell(0, 10, u'' + teachObj.section.section)          
-    pdf.ln(20)
-    pdf.cell(0, 10, u'' + str(teachObj.section.startTime))          
-    pdf.ln(20)
-    pdf.cell(0, 10, u'' + teachObj.section.date)          
-    pdf.ln(20)
     pdf.output("group3/uni.pdf", 'F')
     
     # next path will open pdf file in new tab on browser.

@@ -1,19 +1,7 @@
 ﻿<!DOCTYPE>
-{% extends "base.html" %}
-
-{% block title %}ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี - แบบเสนอขออนุมัติโครงงานปริญญานิพนธ์ - {{ approve.project.name_thai }}{% endblock %}
-
-{% block pageHeader %}
-<h2>ระบบ <small>จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี</small></h2>
-<ol class="breadcrumb">
-    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
-    <li><a href="{% url 'group6:project_docs_index' %}">ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี</a></li>
-    <li class="active">แบบเสนอขออนุมัติโครงงานปริญญานิพนธ์ - {{ approve.project.name_thai }}</li>
-</ol>
-{% endblock %}
-
-{% block content %}
-<div class="container-fluid">
+<html>
+<head>
+<title>แบบ วศ. 4-03</title>
 <meta http-equiv="content-type" content="text/html;charset=utf-8">
 <style>
 body{
@@ -25,14 +13,8 @@ body{
 	margin:auto;
 	position:relative;
     padding: 2cm;
-    border:solid;
-	border-width:thin;
-	border-top-left-radius:5px;
-	border-top-right-radius:5px;
-	border-bottom-left-radius:0px;
-	border-bottom-right-radius:0px;
-	border-bottom:hidden;
-	border-color:#D3D3D3;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
     background: white;
 	word-break:break-all;
 	}
@@ -110,22 +92,16 @@ body{
 
 /* Table for footer*/
 #footer{
-	font:16pt "Angsana New";
+	font:14pt "Angsana New";
 	width:210mm;
 	margin:auto;
 	margin-bottom:0;
 	padding-left:2cm;
 	padding-right:2cm;
 	position:relative;
+    border-radius: 5px;
     background: white;
-	border:solid;
-	border-width:thin;
-	border-bottom-left-radius:5px;
-	border-bottom-right-radius:5px;
-	border-top-left-radius:0px;
-	border-top-right-radius:0px;
-	border-top:hidden;
-	border-color:#D3D3D3;
+	border: 1px #D3D3D3 solid;
 }
 #corpdown{
 	display: table;
@@ -157,12 +133,13 @@ body{
 		height:initial;
 		size:portrait auto;
 		position:absolute;
-		border:1;
+		border:0;
 		border-radius:0;
 		box-shadow: initial;
 		background: initial;
 		page-break-after: always;
 		display:block;
+		word-break:break-all;
 		}
 	#footer{
 		font:14pt "Angsana New";
@@ -175,7 +152,7 @@ body{
 		height:initial;
 		size:portrait auto;
 		position:absolute;
-		border:1;
+		border:0;
 		border-radius:0;
 		box-shadow: initial;
 		background: initial;
@@ -209,6 +186,10 @@ body{
 	}
 }
 </style>
+<script>
+</script>
+</head>
+<body onLoad="return window.print()">
 <div class="page">
     <H id="topright">แบบ วศ. 4-03</H><br>
     <CENTER><H>คณะวิศวกรรมศาสตร์</H><br>
@@ -260,8 +241,6 @@ body{
             </div>
         </CENTER>
     </div>
-<br>
-<a href="{% url 'group6:project_docs_index' %}"><input class="btn btn-danger" type="button" value="ย้อนกลับ" name = 'cancel' /></a> 
-<a class="btn btn-default" href="{% url 'group6:project_docs_approveProject_print' approve.id %}" target = _blank><span class="glyphicon glyphicon-print"></span></a>
-</div><br>
-{% endblock %}
+    
+</body>
+</html>
