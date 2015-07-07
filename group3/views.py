@@ -1196,3 +1196,4 @@ def add_hour_date2(request, employeeID):
     workObj.endTime = endTime=time.strftime("%H:%M")
     workObj.save()
     return HttpResponseRedirect(reverse('group3:returnsearch', args=[employeeID]))
+

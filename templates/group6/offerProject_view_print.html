@@ -1,14 +1,14 @@
-﻿<!DOCTYPE>
+<!DOCTYPE>
 <html>
 <head>
-<title>แบบ วศ. 4-01</title>
+<title>ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี - แบบฟอร์มสำรวจหัวข้อโครงงานปริญญานิพนธ์</title>
 <meta http-equiv="content-type" content="text/html;charset=utf-8">
 <style>
 body{
 	}
 .page{
 	font:14pt "Angsana New";
-	width:210mm;
+	width:170mm;
 	height:auto;
 	margin:auto;
 	position:relative;
@@ -16,6 +16,7 @@ body{
     border: 1px #D3D3D3 solid;
     border-radius: 5px;
     background: white;
+	word-break:break-all;
 	}
 .form > H{
 	margin-left:0;
@@ -25,9 +26,11 @@ body{
 	resize:none;
 	margin-left:0;
 	float:none;
+	
 	}
 #nameeng{
 	padding-left:20mm;
+	word-break:break-all;
 	}
 #yearspace{
 	display:block;
@@ -35,96 +38,8 @@ body{
 	 }
 #nameth{
 	padding-left:2mm;
+	word-break:break-all;
 	}
-#topright{
-	float:right;
-	padding:0;
-	margin:0;
-	}
-	
-/* Table for list Student*/
-#corpname{
-	display: table;
-	margin-bottom:10px;
-	}
-.Title{
-	display: table-caption;
-	text-align: center;
-	font-weight: bold;
-	font-size: larger;
-}
-.Heading{
-	display: table-row;
-	font-weight: bold;
-	text-align: center;
-}
-.row{
-	display:table-row;
-	}
-
-#namestd,#numstd,#headerproject,#present{
-	display: table-cell;
-	border:none;
-	border-width: thin;
-	padding-left: 5px;
-}
-.Cell{
-	display: table-cell;
-	border: solid;
-	border-width: thin;
-	padding-left: 5px;
-	padding-right: 5px;
-}
-
-
-/* Class for hide somethings*/
-.hide{
-	display:none;
-}
-
-/* Table for money*/
-#corpmoney{
-	display: table;
-	margin-bottom:10px;
-}
-
-#moneywant{
-	display: table-cell;
-	border: none;
-	border-width: thin;
-	padding-left: 5px;
-}
-
-#moneyitems{
-	display: table-cell;
-	border:none;
-	border-width: thin;
-	padding-left: 5px;
-}
-
-#moneyothers{
-	display: table-cell;
-	border:none;
-	border-width: thin;
-	padding-left: 5px;
-}
-
-#moneytotal{
-	display: table-cell;
-	border:none;
-	border-width: thin;
-	padding-left: 5px;
-}
-
-#moneytails{
-	display: table-cell;
-	border:none;
-	border-width: thin;
-	padding-left: 5px;
-}
-
-
-/* For set print*/
 @media print {
 	.page {
 		font:14pt "Angsana New";
@@ -134,13 +49,12 @@ body{
 		padding:0;
 		width:initial;
 		height:initial;
-		size:portrait auto;
+		size:portrait;
 		position:absolute;
 		border:0;
 		border-radius:0;
 		box-shadow: initial;
 		background: initial;
-		word-break:break-all;
 		page-break-after: always;
 		display:block;
 		}
@@ -148,8 +62,6 @@ body{
 		padding-left:18mm;
 		}
 	.text{
-		border:none; /* Use for change border width*/
-		resize:none;
 		margin-left:0;
 	}
 	#yearspace{
@@ -159,9 +71,6 @@ body{
 	#nameth{
 		padding-left:2mm;
 		}
-	div *{
-		font:14pt "Angsana New";
-	}
 }
 </style>
 <script>
@@ -169,53 +78,23 @@ body{
 </head>
 <body onLoad="return window.print()">
 <div class="page">
-<H id="topright">แบบ วศ. 4-01</H><br>
-<CENTER><H>คณะวิศวกรรมศาสตร์</H><br>
+<center>
+<H><b>แบบฟอร์มสำรวจหัวข้อโครงงานปริญญานิพนธ์</b></H><br>
+<H>ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์ คณะวิศวกรรมศาสตร์</H><br>
 <H>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</H><br>
-<H>แบบเสนอโครงงานปริญญานิพนธ์</H><br>
-<H>ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์ </H><br>
-<H>ปีการศึกษา {{ offer.project.yearOfEducation }}</H></CENTER>
 <br id="yearspace">
+<H>ปีการศึกษา {{ research.project.yearOfEducation }}</H><br>
+<br id="yearspace">
+</center>
 <label class="form">
-<H>ชื่อโครงการ</H><H id="nameth">(ภาษาไทย) {{ offer.project.name_thai }}</H><br>
-<H id="nameeng">(อังกฤษ) {{ offer.project.name_eng }}</H><br>
-<div id="corpname">
-    <div class="row">
-        <div id="present">เสนอโดย</div>
-        <div class="hide">
-        {% for student in offer.project.student.all %}
-        </div>
-        <div class="row">
-            <div id="namestd">
-            {{ forloop.counter }}. {{ student.userprofile.firstname_th }} {{ student.userprofile.lastname_th }}
-            </div>
-            <div id="numstd">เลขประจำตัว {{ student.std_id }}</div>
-        </div>
-        <div class="hide">
-        {% endfor %}
-        </div>
-        <div id="headerproject">หัวหน้าโครงการ</div>
-    </div>
-</div>
-<H>ชื่ออาจารย์ที่ปรึกษา {{ offer.project.teacher.userprofile.firstname_th }} {{ offer.project.teacher.userprofile.lastname_th }} ({{ offer.project.teacher.shortname }})</H><br>
-	<H>วัตถุประสงค์ </H><H class="text">{{ offer.project.objective }}</H><br>
-	<H>แนวเหตุผล ทฤฏีสำคัญหรือสมมุติฐาน </H><H class="text">{{ offer.project.reason }}</H><br>
-	<H>ขอบเขตของการทำโครงงาน </H><H class="text">{{ offer.project.scope }}</H><br>
-    <div id="corpmoney">
-    	<div class="row">
-            <div id="moneywant">ประมาณการค่าใช้จ่ายในโครงการ </H></div>
-            <div class="row">
-            	<div id="moneyitems">ค่าวัสดุ {{ offer.priceOfMaterial }}</div><div id="moneytails"> บาท</div>
-            </div>
-            <div class="row">
-            	<div id="moneyothers">ค่าใช้จ่ายเบ็ดเตล็ด {{ offer.priceOfOther }}</div><div id="moneytails"> บาท</div>
-            </div>
-            <div class="row">
-            	<div id="moneytotal">รวมค่าใช้จ่ายในโครงการ {{ priceOfTotal }}</div><div id="moneytails"> บาท (ดังรายระเอียดที่แนบมา)</div>
-            </div>
-        </div>
-    </div>
-	<H>ผลประโยชน์ที่คาดว่าจะได้รับ </H><H class="text">{{ offer.project.benefit }}</H>	
+<H>ชื่อโครงการ</H><H id="nameth">(ภาษาไทย) {{ research.project.name_thai }}</H><br>
+<H id="nameeng">(ภาษาอังกฤษ) {{ research.project.name_eng }}</H><br>
+<H>จำนวนนักศึกษา {{ research.numberOfPeople }} คน </H><br>
+<H>ชื่ออาจารย์ที่ปรึกษา {{ research.project.teacher.userprofile.firstname_th }} {{ research.project.teacher.userprofile.lastname_th }} ({{ research.project.teacher.shortname }})</H>
+	<div class="text">วัตถุประสงค์ {{ research.project.objective }}</div>
+	<div class="text">แนวเหตุผล ทฤฏีสำคัญหรือสมมุติฐาน {{ research.project.reason }}</div>
+	<div class="text">ขอบเขตของการทำโครงงาน {{ research.project.scope }}</div>
+	<div class="text">ผลประโยชน์ที่คาดว่าจะได้รับ {{ research.project.benefit }}</div>
 	</label>
 </div>
 </body>

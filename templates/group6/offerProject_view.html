@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block title %}ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี - แบบเสนอโครงงานปริญญานิพนธ์ - {{ offer.project.name_thai }}{% endblock %}
 
@@ -230,3 +230,4 @@ body{
 <a class="btn btn-default" href="{% url 'group6:project_docs_offerProject_print' offer.id %}" target = _blank><span class="glyphicon glyphicon-print"></span></a>
 </div><br>
 {% endblock %}
+

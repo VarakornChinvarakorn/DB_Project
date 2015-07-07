@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load custom_function %}
+{% block title %}ลงทะเบียน{% endblock %}
+
+{% block pageHeader %}
+
+<h2>ลงทะเบียน</h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li class="active">ลงทะเบียน</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<h2>ลงทะเบียน</h2>
+<p class='norm'> รหัสนักศึกษา : &nbsp {{ studentObj.std_id }}</p>
+<p class='norm'> ชื่อ-สกุล นักศึกษา : &nbsp {{ studentObj.userprofile }}</p>
+<br>
+<p class='norm'> สาขาวิชา:  &nbsp
+<script>
+x = {{ studentObj.main }}
+if (x == 0) {
+    document.write('Cpr.E')
+}
+else if (x == 1){
+    document.write('G')
+}
+else if (x == 2){
+    document.write('U')
+}
+else if (x == 3){
+    document.write('C')
+}
+</script></p>
+<p class='norm'> ปีการศึกษาที่  </p>	<p class='info' id='semester'></p>
+<br><br>
+<table id="tab" width="400" border="1" align="center">
+  <tr>
+    <td></td>
+    <td>รหัสวิชา</td>
+    <td>รายวิชา</td>
+    <td>หน่วยกิต</td>
+    <td>ห้องและเวลาเรียน</td>
+  </tr>
+  <tr>
+  <td><input type="checkbox" name="chk"></td>
+            <td><input type="text" id="courseid"></td>
+            <td><p id="coursename"> </p></td>
+            <td><p id="credit"> </p></td>
+            <td>
+                <select name="sec" id="sec">
+                	<option value="s1">S1 Mon 9:00-12:00</option>
+  					<option value="s2">S2 Wed 9:00-12:00</option>
+  					<option value="s3">S3 Fri 9:00-12:00</option>
+  					<option value="s4">S4 Fri 13:00-16:00</option>
+                </select>
+            </td>
+  </tr>
+</table>
+<br><br>
+<center>
+<a class="btn btn-primary" onclick="addRow('tab')">เพิ่มจำนวนรายวิชา + </a>
+<a class="btn btn-primary" onclick="deleteRow('tab')">ลบจำนวนรายวิชา - </a>
+
+<br><br>
+<input class="btn btn-primary" name="sub" type="submit" value="ยืนยัน" href="/group2regis_result/"/>
+<input class="btn btn-danger" name="cancle" type="button" value="ยกเลิก" href="/group2regis_result/"/>
+</center>
+
+<script language="javascript">function addRow(tableID){var table=document.getElementById(tableID);var rowCount=table.rows.length;var row=table.insertRow(rowCount);var colCount=table.rows[1].cells.length;for(var i=0;i<colCount;i++){var newcell=row.insertCell(i);newcell.innerHTML=table.rows[1].cells[i].innerHTML;switch(newcell.childNodes[0].type){case"text":newcell.childNodes[0].value="";break;case"checkbox":newcell.childNodes[0].checked=false;break;case"select-one":newcell.childNodes[0].selectedIndex=0;break;}}}
+function deleteRow(tableID){try{var table=document.getElementById(tableID);var rowCount=table.rows.length;for(var i=0;i<rowCount;i++){var row=table.rows[i];var chkbox=row.cells[0].childNodes[0];if(null!=chkbox&&true==chkbox.checked){if(rowCount<=1){alert("Cannot delete all the rows.");break;}
+table.deleteRow(i);rowCount--;i--;}}}catch(e){alert(e);}}</script>
+ 
+ <script language="javascript">
+var cn = document.getElementById("coursename");
+var cd = document.getElementById("credit");
+if(document.getElementById("courseid")== "01"){ 
+	cn.innerHTML = "Math";
+	cd.innerHTML = "3(3-0-0)";}
+if(document.getElementById("courseid")== "02"){ 
+	cn.innerHTML = "English";
+	cd.innerHTML = "3(1-1-1)";}
+if(document.getElementById("courseid")== "03"){ 
+	cn.innerHTML = "Physic";
+	cd.innerHTML = "3(3-0-0)";}
+if(document.getElementById("courseid")== "04"){ 
+	cn.innerHTML = "Circuit";
+	cd.innerHTML = "1(0-0-2)";}
+	
+
+var semester="1/2558";
+document.getElementById("semester").innerHTML =semester;
+</script>
+
+{% endblock %}

@@ -836,3 +836,4 @@ def timeLineProjectPrintCheck(request, tlID):
         return render(request, 'group6/timeLineProject_view_print_check.html', {'timeLine': timeLine, 'processList': processList},)
     else:
         return render(request, 'base.html')
+

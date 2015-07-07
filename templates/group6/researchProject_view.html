@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block title %}ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี - แบบฟอร์มสำรวจหัวข้อโครงงานปริญญานิพนธ์ - {{ research.project.name_thai }}{% endblock %}
 
@@ -108,3 +108,4 @@ body{
 <a class="btn btn-default" href="{% url 'group6:project_docs_researchProject_print' research.id %}" target = _blank><span class="glyphicon glyphicon-print"></span></a>
 </div><br>
 {% endblock %}
+

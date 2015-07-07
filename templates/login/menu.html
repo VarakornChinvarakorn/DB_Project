@@ -21,10 +21,12 @@
         <div class="col-md-4">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h4>App <small>group2</small></h4>
+                    <h4>ระบบ <small>นักศึกษาปริญญาโท, ปริญญาเอก</small></h4>
                 </div>
                 <div class="panel-body">
-                    ...
+                    <a href="{% url 'group2:profile' %}">ประวัตินักศึกษา</a><br>
+                    <a href="{% url 'group2:registeration' %}">ลงทะเบียน</a><br>
+					<a href="{% url 'group2:school_record' %}">ผลการเรียน</a>
                 </div>
             </div>
         </div>

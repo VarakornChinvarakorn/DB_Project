@@ -1,0 +1,90 @@
+
+{% extends "base.html" %}
+
+{% block head %}
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block title %}ประวัตินักศึกษา{% endblock %}
+
+{% block pageHeader %}
+
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li class="active">ประวัตินักศึกษา</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<style>
+
+#bod{
+	white-space:nowrap;
+	margin:  0px 0% 0%;
+	padding: 0px 340px 0px;
+	background-color:#FFFFFF;
+	}
+
+	
+
+
+
+.botton1{
+    position: absolute;
+    left: 346px;
+    padding: 10px 10px;
+    background-color: #A8D9E8;
+    text-decoration: none;
+    color: #117777;
+    border-radius: 10px;
+}
+
+.botton2{
+    position: absolute;
+    left: 442px;
+    padding: 10px 10px;
+    background-color: #A8D9E8;
+    text-decoration: none;
+    color: #117777;
+    border-radius: 10px;
+}
+
+.botton3{
+    position: absolute;
+    left: 546px;
+    padding: 10px 10px;
+    background-color: #00B3EE;
+    text-decoration: none;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.botton4{
+    position: absolute;
+    left: 665px;
+    padding: 10px 10px;
+    background-color: #A8D9E8;
+    text-decoration: none;
+    color: #117777;
+    border-radius: 10px;
+}
+</style>
+
+<a href="{% url 'group2:profile' %}" class="botton1">ประวัติส่วนตัว</a>
+<a href="{% url 'group2:data_student' %}" class="botton2">ข้อมูลนักศึกษา</a>
+<a href="{% url 'group2:regis_result' %}" class="botton3">ผลการลงทะเบียน</a>
+<a href="{% url 'group2:viyanipon' %}" class="botton4">การทำวิทยานิพนธ์เเละการสอบวิทยานิพนธ์</a>
+
+
+
+<br>
+<br>
+<center>
+<h1>Register Result</h1>
+
+</center>
+
+
+{% endblock %}
