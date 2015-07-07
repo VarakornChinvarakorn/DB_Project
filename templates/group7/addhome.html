@@ -1,0 +1,17 @@
+<h1>เพิ่มเติมรายชื่อโครงงานภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์</h1>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<form action="/group7addhome/" method="post"> <!-- Call URL /group7addhome, Call views.addhome  -->
+{% csrf_token %}
+	<table border=0>
+    	<b><h3>เพิ่มโครงงาน</h3></b>
+    	<tr><td> ชื่อโครงงาน(Thai) : </td><td><input type="text" name="name_thai_home"></td></tr>
+	<tr><td> ชื่อโครงงาน(English) : </td><td><input type="text" name="name_eng_home"></td></tr>
+    	<tr><td> รายชื่อสมาชิก : </td><td><input type="text" name="stu_home"></td></tr>
+	<tr><td> รหัสประจำตัว : </td><td><input type="text" name="stuid_home"></td></tr>
+    	<tr><td> ภาควิชา : </td><td><input type="text" name="dept_home"></td></tr>
+	<tr><td> อาจารย์ที่ปรึกษา : </td><td><input type="text" name="advisor_home"></td></tr>
+	</table>
+<input type="submit" value="ยืนยัน" /><a href="/group7Project_Docs/" style="text-decoration:none"><input type="button" value="ยกเลิก" ></a>
+</form>
+
+

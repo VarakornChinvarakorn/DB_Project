@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% block head %}
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block title %}ระบบอาจารย์สองภาษา{% endblock %}
+
+{% block pageHeader %}
+<h2>ระบบ <small>อาจารย์สองภาษา</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="{% url 'group3:prof2lang_index' %}">ระบบอาจารย์สองภาษา</a></li>
+    <li><a href="{% url 'group3:prof_index' %}">อาจารย์ผู้สอนทั้งหมด</a></li>
+    {% if prof %}
+    <li><a href="{% url 'group3:prof_view' prof.profID %}">{{ prof.firstName }} {{ prof.lastName }}</a></li>
+    {% endif %}
+    <li class="active">{{ menuName }}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<script>
+    $(function(){
+        $('#out a:first').tab('show') // Select first tab
+    });
+</script>
+<!----------------------------------------------------- Nav Tabs ------------------------------------------------------>
+    <div class="row">
+        <div class="container">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="{{ prof_out }}" role="presentation"><a href="#out" aria-controls="out" role="tab" data-toggle="tab">อาจารย์นอกภาควิชา</a></li>
+                <li class="{{ prof_special }}" role="presentation"><a href="#special" aria-controls="special" role="tab" data-toggle="tab">อาจารย์พิเศษ</a></li>
+            </ul>
+        </div><!-- /container -->
+    </div><!-- /row -->
+
+<!----------------------------------------------------- Tab panes ----------------------------------------------------->
+    <div class="tab-content">
+        <!----------------------------------------------- อาจารย์นอกภาค ------------------------------------------------>
+        <div role="tabpanel" class="tab-pane {{ prof_out }}" id="out">
+            <br>
+            <div class="row">
+                <div class="container-fluid">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+
+                        {% if prof_out_successMessage %}
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <strong>สำเร็จ!</strong> {{ prof_out_successMessage }}
+                            <a href="{% url 'group3:prof_index' %}" class="alert-link">กลับไปยังอาจารย์ผู้สอนทั้งหมด</a>
+                        </div>
+                        {% endif %}
+
+                        {% for error in prof_out_errorMessage %}
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <strong>ล้มเหลว!</strong> {{ error }}
+                        </div>
+                        {% endfor %}
+
+                        <form class="form-horizontal" method="post"
+                              {% if prof_out_formAction == '0' %}
+                        action="{% url 'group3:prof_add_out' %}"
+                        {% endif %}
+                        {% if prof_out_formAction == '1' %}
+                        action="{% url 'group3:prof_update' prof.profID %}"
+                        {% endif %}
+                        ><!-- form -->
+
+                        {% csrf_token %}
+
+                        <!-- 1. รหัสอาจารย์ -->
+                        <!--div class="form-group">
+                            <label class="col-sm-3 control-label"><font color="red">*</font> รหัสอาจารย์: </label>
+                            <div class="col-sm-9">
+                                {% if update %}
+                                <p class="form-control-static">{{ prof.profID }}</p>
+                                {% else %}
+                                <input type="text" name="profID" value="{{ profID }}" maxlength="10" class="form-control" placeholder="รหัสอาจารย์" title="รหัสอาจารย์" required>
+                                {% endif %}
+                            </div>
+                        </div-->
+
+                        <!-- 12. ตำแหน่งวิชาการ -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><font color="red">*</font> ตำแหน่งวิชาการ: </label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="academic_position" title="ตำแหน่งวิชาการ" required>
+                                    <option value="">กรุณาเลือก</option>
+                                    <option value="0">ไม่มี</option>
+                                    <option value="1">ผู้ช่วยศาสตราจารย์</option>
+                                    <option value="2">รองศาสตราจารย์</option>
+                                    <option value="3">ศาสตราจารย์</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 11. คำนำหน้าชื่อ -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><font color="red">*</font> คำนำหน้าชื่อ: </label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="prefix_name" title="คำนำหน้าชื่อ" required>
+                                    <option value="">กรุณาเลือก</option>
+                                    <option value="0">นาย</option>
+                                    <option value="1">นาง</option>
+                                    <option value="2">นางสาว</option>
+                                    <option value="3">ดร.</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 2. 3. 4. ชื่อ นามกุล ตัวย่อชื่อ -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><font color="red">*</font> ชื่อ-นามสกุล: </label>
+                            <div class="col-sm-3">
+                                <input type="text" name="firstName" value="{{ firstName }}" maxlength="50" class="form-control" placeholder="ชื่อ" title="ชื่อ" required>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="text" name="lastName"  value="{{ lastName }}" maxlength="80" class="form-control" placeholder="นามสกุล" title="นามสกุล" required>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="text" name="shortName"  value="{{ shortName }}" maxlength="3" class="form-control" placeholder="ตัวย่อชื่อ" title="ตัวย่อชื่อ" required>
+                            </div>
+                        </div>
+
+                        <!-- 5. เบอร์โทร -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">เบอร์โทรศัพท์: </label>
+                            <div class="col-sm-9">
+                                <input type="tel" name="tell"  value="{{ tell }}" maxlength="15" class="form-control" placeholder="เบอร์โทรศัพท์" title="เบอร์โทรศัพท์">
+                            </div>
+                        </div>
+
+                        <!-- 6. email -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">E-mail: </label>
+                            <div class="col-sm-9">
+                                <input type="email" name="email"  value="{{ email }}" class="form-control" placeholder="E-mail" title="E-mail">
+                            </div>
+                        </div>
+
+                        <!-- 7. เลขบัญชีสหกรณ์ -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">เลขที่บัญชีสหกรณ์: </label>
+                            <div class="col-sm-9">
+                                <input type="text" name="sahakornAccount"  value="{{ sahakornAccount }}" maxlength="100" class="form-control" placeholder="เลขที่บัญชีสหกรณ์" title="เลขที่บัญชีสหกรณ์">
+                            </div>
+                        </div>
+
+                        <!-- 8. department -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><font color="red">*</font> ภาควิชา: </label>
+                            <div class="col-sm-9">
+                                <input type="text" name="department"  value="{{ department }}" maxlength="200" class="form-control" placeholder="ภาควิชา" title="ภาควิชา" required>
+                            </div>
+                        </div>
+
+                        <!-- 9. faculty -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><font color="red">*</font> คณะ: </label>
+                            <div class="col-sm-9">
+                                <input type="text" name="faculty"  value="{{ faculty }}" maxlength="200" class="form-control" placeholder="คณะ" title="คณะ" required>
+                            </div>
+                        </div>
+
+                        <!-- บันทึก -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">บันทึก: </label>
+                            <div class="col-sm-9">
+                                <input type="submit" class="btn btn-success" value="บันทึก">
+                            </div>
+                        </div>
+
+                        </form>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div><!-- /container-fluid -->
+            </div><!-- /row -->
+        </div>
+        <!----------------------------------------------- อาจารย์ในภาค ------------------------------------------------->
+        <div role="tabpanel" class="tab-pane {{ prof_special }}" id="special">
+            <br>
+            <div class="row">
+                <div class="container-fluid">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        {% if prof_special_successMessage %}
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <strong>สำเร็จ!</strong> {{ prof_special_successMessage }}
+                            <a href="{% url 'group3:prof_index' %}" class="alert-link">กลับไปยังอาจารย์ผู้สอนทั้งหมด</a>
+                        </div>
+                        {% endif %}
+
+                        {% for error in prof_special_errorMessage %}
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <strong>ล้มเหลว!</strong> {{ error }}
+                        </div>
+                        {% endfor %}
+
+                        <form class="form-horizontal" method="post"
+                            {% if prof_special_formAction == '0' %}
+                                action="{% url 'group3:prof_add_special' %}"
+                            {% endif %}
+                        ><!-- form -->
+
+                        {% csrf_token %}
+
+                        <!-- 1. รหัสอาจารย์ -->
+                        <!--div class="form-group">
+                            <label class="col-sm-3 control-label"><font color="red">*</font> รหัสอาจารย์: </label>
+                            <div class="col-sm-9">
+                                {% if update %}
+                                <p class="form-control-static">{{ prof.profID }}</p>
+                                {% else %}
+                                <input type="text" name="profID" value="{{ profID }}" maxlength="10" class="form-control" placeholder="รหัสอาจารย์" title="รหัสอาจารย์" required>
+                                {% endif %}
+                            </div>
+                        </div-->
+
+                        <!-- 12. ตำแหน่งวิชาการ -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><font color="red">*</font> ตำแหน่งวิชาการ: </label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="academic_position" title="ตำแหน่งวิชาการ" required>
+                                    <option value="">กรุณาเลือก</option>
+                                    <option value="0">ไม่มี</option>
+                                    <option value="1">ผู้ช่วยศาสตราจารย์</option>
+                                    <option value="2">รองศาสตราจารย์</option>
+                                    <option value="3">ศาสตราจารย์</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 11. คำนำหน้าชื่อ -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><font color="red">*</font> คำนำหน้าชื่อ: </label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="prefix_name" title="คำนำหน้าชื่อ" required>
+                                    <option value="">กรุณาเลือก</option>
+                                    <option value="0">นาย</option>
+                                    <option value="1">นาง</option>
+                                    <option value="2">นางสาว</option>
+                                    <option value="3">ดร.</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 2. 3. 4. ชื่อ นามกุล ตัวย่อชื่อ -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><font color="red">*</font> ชื่อ-นามสกุล: </label>
+                            <div class="col-sm-3">
+                                <input type="text" name="firstName" value="{{ firstName }}" maxlength="50" class="form-control" placeholder="ชื่อ" title="ชื่อ" required>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="text" name="lastName"  value="{{ lastName }}" maxlength="80" class="form-control" placeholder="นามสกุล" title="นามสกุล" required>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="text" name="shortName"  value="{{ shortName }}" maxlength="3" class="form-control" placeholder="ตัวย่อชื่อ" title="ตัวย่อชื่อ" required>
+                            </div>
+                        </div>
+
+                        <!-- 5. เบอร์โทร -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">เบอร์โทรศัพท์: </label>
+                            <div class="col-sm-9">
+                                <input type="tel" name="tell"  value="{{ tell }}" maxlength="15" class="form-control" placeholder="เบอร์โทรศัพท์" title="เบอร์โทรศัพท์">
+                            </div>
+                        </div>
+
+                        <!-- 6. email -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">E-mail: </label>
+                            <div class="col-sm-9">
+                                <input type="email" name="email"  value="{{ email }}" class="form-control" placeholder="E-mail" title="E-mail">
+                            </div>
+                        </div>
+
+                        <!-- 7. เลขบัญชีสหกรณ์ -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">เลขที่บัญชีสหกรณ์: </label>
+                            <div class="col-sm-9">
+                                <input type="text" name="sahakornAccount"  value="{{ sahakornAccount }}" maxlength="100" class="form-control" placeholder="เลขที่บัญชีสหกรณ์" title="เลขที่บัญชีสหกรณ์">
+                            </div>
+                        </div>
+
+                        <!-- บันทึก -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">บันทึก: </label>
+                            <div class="col-sm-9">
+                                <input type="submit" class="btn btn-success" value="บันทึก">
+                            </div>
+                        </div>
+
+                        </form>
+                    </div><!-- /col-md-8 -->
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

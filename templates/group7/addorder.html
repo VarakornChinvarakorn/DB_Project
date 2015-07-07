@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Group7{% endblock %}
+
+{% block pageHeader %}
+<h2>กระบวน <small>การเบิกจ่ายค่าวัสดุในการทำโครงงาน</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="/group7Project_Docs/">รายชื่อโครงงาน</a></li>
+     <li><a href="/group7/{{projectg6.id}}/">รายการใบสั่งซื้อวัสดุ</a></li>
+    <li class="active">เพิ่มรายการใบสั่งซื้อวัสดุ</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+	<script>
+	function validateForm(form) {
+	    var x = document.forms["dateForm"]["date_order"].value;
+		re = /^\d{4}\-\d{1,2}\-\d{1,2}$/;
+		if(x != '' && !x.match(re)) {
+	      alert("Invalid date format: " + x);
+	      document.dateForm.focus();
+	      return false;
+	    }
+	    if (x == null || x == "") {
+	        alert("date invalid!");
+	        return false;
+	    }
+	    
+		if(regs = x.match(re)) {
+		
+	        // day value between 1 and 31
+	    if(regs[3] < 1 || regs[3] > 31) {
+	    	alert("Invalid value for day: " + regs[3]);
+	        document.dateForm.focus();
+	        return false;
+	    }
+	        // month value between 1 and 12
+	    if(regs[2] < 1 || regs[2] > 12) {
+	        alert("Invalid value for month: " + regs[2]);
+	        document.dateForm.focus();
+	        return false;
+	    }
+			// year value between 1902 and 2015
+		if(regs[1] < 1902 || regs[1] > (new Date()).getFullYear()) {
+		    alert("Invalid value for year: " + regs[1] + " - must be between 1902 and " + (new Date()).getFullYear());
+		    document.dateForm.focus();
+		    return false;
+		}
+	}
+		        
+   }
+	
+	function checkDate(form)
+	  {
+	    var allowBlank = true;
+	    var minYear = 1902;
+	    var maxYear = (new Date()).getFullYear();
+
+	    var errorMsg = "";
+
+	    // regular expression to match required date format
+	    re = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+
+	    if(form.value != '') {
+	      if(regs = form.value.match(re)) {
+	        if(regs[1] < 1 || regs[1] > 31) {
+	          errorMsg = "Invalid value for day: " + regs[1];
+	        } else if(regs[2] < 1 || regs[2] > 12) {
+	          errorMsg = "Invalid value for month: " + regs[2];
+	        } else if(regs[3] < minYear || regs[3] > maxYear) {
+	          errorMsg = "Invalid value for year: " + regs[3] + " - must be between " + minYear + " and " + maxYear;
+	        }
+	      } else {
+	        errorMsg = "Invalid date format: " + field.value;
+	      }
+	    } else if(!allowBlank) {
+	      errorMsg = "Empty date not allowed!";
+	    }
+
+	    if(errorMsg != "") {
+	      alert(errorMsg);
+	      form.focus();
+	      return false;
+	    }
+
+	    return true;
+	  }
+	</script>  
+<h3>เพิ่มเติมรายการใบสั่งซื้อวัสดุภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์ {{projectg7.id}}</h3>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<!-- <form action="/group7addorderview/" method="post"> -->
+<form name="dateForm" action="/group7/{{projectg6.id}}/addorderview/"  onsubmit="return validateForm(this)" method="post">
+{% csrf_token %}
+	<table border=0>
+    	<tr><td> วัน/เดือน/ปี : </td><td><input type="text" name="date_order"></td></tr>
+        <tr><td> ชื่อผู้สั่งซื้อ: </td><td><input type="text" name="name"></td></tr>
+</table>
+<input type="submit" value="ยืนยัน" /><a href="/group7/{{projectg6.id}}/" style="text-decoration:none"><input type="button" value="ยกเลิก" ></a>
+</form>
+{% endblock %}

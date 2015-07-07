@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block pageHeader %}
+
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="{% url 'group5:status' %}">ตรวจสอบสถานะการฝึกงาน</a></li>
+    <li class="active">รายชื่อนักศึกษาที่รอกรตรวจสอบใบคำร้องขอล่าสุด</li>
+</ol>
+		
+{% endblock %}
+{% block content %}
+{% if Pro %}
+    <center>
+    <u>รายชื่อนักศึกษาที่รอการตรวจสอบใบคำร้องขอล่าสุด</u></br></br>
+    <table style='width:85%' border=1>
+        <tr>
+            <td><b><center>รหัสนักศึกษา</td>
+            <td><b><center>ชื่อ-สกุล</td>
+            <td><b><center>สถานที่ประกอบการ</td>
+            <td><b><center>สถานะ</td>
+            <td><b><center>ตรวจสอบสถานะ</td>
+        </tr>
+        {% for item in state %}
+        <tr>
+            <td>{{item.studentG5_id}}</td>
+            <td>
+                {% for item2 in Pro %}
+                    {% for item3 in stu %}
+                        {% if item2.id = item3.userprofile_id and item.studentG5_id = item3.std_id%}
+                            {{item2.firstname_th}} {{item2.lastname_th}}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </td>
+            <td>{{item.Internship_id}}</td>
+            <td>{{item.StatusPetition}}</td>
+            <td><center><button>ตรวจสอบสถานะ</button><center></td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}    
+หมายเหตุ
+{% endif %}
+{% endblock %}

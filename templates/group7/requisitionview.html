@@ -1,0 +1,81 @@
+<div class="container-fluid">
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<style>
+.page{
+	font:14pt "Angsana New";
+	width:297mm;
+	height:auto;
+	margin:auto;
+	position:relative;
+    	padding: 1cm;
+    	border: 1px #D3D3D3 solid;
+   	border-radius: 5px;
+    	background: white;
+}
+	
+@media print {
+	.page {
+		font:14pt "Angsana New";
+		margin:auto;
+		padding:0cm;
+		width:297mm;
+		height:210mm;
+		size:portrait auto;
+		position:relative;
+		border:0;
+		border-radius:0;
+		box-shadow: initial;
+		background: initial;
+		word-break:break-all;
+		page-break-after: always;
+		display:block;
+	}
+}
+</style>
+<script>
+</script>
+</head>
+<body onLoad="return window.print()">
+<div class="page">
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<h3><center>ใบเบิกวัสดุ ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์</center></h3>
+<h3><center>คณะวิศวกรรมศาสตร์มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</center></h3>
+<center>
+<table border ="1"  width="100%"><font color="BLACK">
+	<tr>
+		<th><center>วัน/เดือน/ปี</center></th>
+		<th><center>ชื่อโครงงาน/สถานที่นำของไปใช้</center></th>
+		<th><center>ใบเบิกเลขที่ตามใบส่งของ</center></th>
+		<th><center>หมายเหตุ</center></th>
+	</tr>
+	<tr>
+		<td><center>{{date}}</center></td> <!-- reference from "Date" of  requisition-->
+		<td><center>{{project.name_thai}}/{{project.name_eng}}</center></td> <!-- reference from "Project_name" of  Order-->
+		<td><center><!--{{ pay.Requisition_id }}--><center></td> <!-- reference from "Requisition_id" of  requisition-->
+		<td><center><!--{{ pay.Moreabout }}--></center></td> <!-- reference from "Moreabout" of  requisition-->
+	</tr>
+	<tr>
+		<th><center>จำนวนตัว</center></th>
+		<th><center>รายการวัสดุ</center></th>
+		<th><center></center></th>
+		<th><center></center></th>
+	</tr>
+	{%for s in order.orderinfo_set.all%}
+		<tr>
+			<td><center>{{s.Amount}}<center></td>
+			<td><center>{{ s.Item_name}}</center></td> <!-- reference from "Project_name" of  Order-->
+			<td><center><!--{{ pay.Moreabout }}--></center></td>
+			<td><center><!--{{ pay.Moreabout }}--></center></td>
+		</tr>
+	{%endfor%}
+</table>
+&nbsp
+<table border ="0"  width="100%"><font color="BLACK">
+	<tr>
+		<td><center>ลายเซ็นต์ผู้เบิก<br>ลงชื่อ.................................<br>(.....................................)</center></td>
+		<td><center>ลายเซ็นต์ผู้รับของ<br>ลงชื่อ.................................<br>(.....................................)</center></td>
+		<td><center>ลายเซ็นต์ผู้อนุญาติ/อ.ที่ปรึกษาโปรเจค<br>ลงชื่อ.................................<br>(.....................................)</center></td>	
+	</tr>
+</table>
+</center>
+</div>

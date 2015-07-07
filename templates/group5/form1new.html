@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block pageHeader %}
+
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="{% url 'group5:status' %}">ตรวจสอบสถานะการฝึกงาน</a></li>
+    <li class="active">แบบคำร้องขอหนังสือขอความอนุเคราะห์ฝึกงาน</li>
+</ol>
+		
+{% endblock %}
+{% block content %}
+    {% if currentUser and stu and stat%}
+    <center>
+    <u>แบบคำร้องขอหนังสือขอความอนุเคราะห์ฝึกงาน</u></br></br>
+    </center>
+    <form action="">
+        <br>ข้าพเจ้า
+        <input type="radio" name="sex" value="male">นาย
+        <input type="radio" name="sex" value="female">นางสาว
+        <input type='text' name='name' style='width:400px;' value='{{currentUser.firstname_th}} {{currentUser.lastname_th}}'/>
+        </br></br>รหัสนักศึกษา   <input type='text' name='id_student' style='width:200px;'value = '{{stu.std_id}}'/>
+        </br></br>นักศึกษาชั้นปีที่ <input type='text' name='stu_year' style='width:30px;'/>&nbspมีความประสงค์ขอให้ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์ ออกหนังสือขอความอนุเคราะห์ฝึกงานตามรายละเอียดดังต่อไปนี้
+        </br></br>
+        <table style='width:100%'>
+            <tr>
+                <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspเรียน</td>
+                <td>ฝ่ายทรัพยากรบุคคล</td>
+            </tr>
+            <tr>
+                <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspสถานที่ฝึกงาน</td>
+                <td><input type='text' name='office' style='width:800px;'/></td>
+            </tr>
+            <tr>
+                <td rowspan=2>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspที่อยู่</td>
+            </tr>
+            <tr>
+                <td><textarea style="width: 800px;"name="address" id="address" cols="45" rows="5"></textarea></td>
+            </tr>
+            <tr>
+                <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspโทรศัพท์</td>
+                <td><input type='text' name='tel' style='width:800px;'/></td>
+            </tr>
+            <tr>
+                <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspโทรสาร(FAX)</td>
+                <td><input type='text' name='fax' style='width:800px;'/></td>
+            </tr>
+        </table>
+        </br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspระยะเวลาการฝึกงาน  ตั้งแต่&nbsp
+                <select name = 'date1'>
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                    <option value='4'>4</option>
+                    <option value='5'>5</option>
+                    <option value='6'>6</option>
+                    <option value='7'>7</option>
+                    <option value='8'>8</option>
+                    <option value='9'>9</option>
+                    <option value='10'>10</option>
+                    <option value='11'>11</option>
+                    <option value='12'>12</option>
+                    <option value='13'>13</option>
+                    <option value='14'>14</option>
+                    <option value='15'>15</option>
+                    <option value='16'>16</option>
+                    <option value='17'>17</option>
+                    <option value='18'>18</option>
+                    <option value='19'>19</option>
+                    <option value='20'>20</option>
+                    <option value='21'>21</option>
+                    <option value='22'>22</option>
+                    <option value='23'>23</option>
+                    <option value='24'>24</option>
+                    <option value='25'>25</option>
+                    <option value='26'>26</option>
+                    <option value='27'>27</option>
+                    <option value='28'>28</option>
+                    <option value='29'>29</option>
+                    <option value='30'>30</option>
+                    <option value='31'>31</option>
+                </select>
+                <select name = 'month1'>
+                    <option value='01'>ม.ค.</option>
+                    <option value='02'>ก.พ.</option>
+                    <option value='03'>มี.ค.</option>
+                    <option value='04'>เม.ย.</option>
+                    <option value='05'>พ.ค.</option>
+                    <option value='06'>มิ.ย.</option>
+                    <option value='07'>ก.ค.</option>
+                    <option value='08'>ส.ค.</option>
+                    <option value='09'>ก.ย.</option>
+                    <option value='10'>ต.ค.</option>
+                    <option value='11'>พ.ย.</option>
+                    <option value='12'>ธ.ค.</option>
+                </select>
+                <select name = 'year1'>
+                    <option value='2558'>2558</option>
+                    <option value='2559'>2559</option>
+                    <option value='2560'>2560</option>
+                    <option value='2560'>2561</option>
+                    <option value='2560'>2562</option>
+                    <option value='2560'>2563</option>
+                    <option value='2560'>2564</option>
+                    <option value='2560'>2565</option>
+                    <option value='2560'>2566</option>
+                    <option value='2560'>2567</option>
+                    <option value='2560'>2568</option>
+                </select>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspถึงวันที่&nbsp
+                <select name = 'date2'>
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                    <option value='4'>4</option>
+                    <option value='5'>5</option>
+                    <option value='6'>6</option>
+                    <option value='7'>7</option>
+                    <option value='8'>8</option>
+                    <option value='9'>9</option>
+                    <option value='10'>10</option>
+                    <option value='11'>11</option>
+                    <option value='12'>12</option>
+                    <option value='13'>13</option>
+                    <option value='14'>14</option>
+                    <option value='15'>15</option>
+                    <option value='16'>16</option>
+                    <option value='17'>17</option>
+                    <option value='18'>18</option>
+                    <option value='19'>19</option>
+                    <option value='20'>20</option>
+                    <option value='21'>21</option>
+                    <option value='22'>22</option>
+                    <option value='23'>23</option>
+                    <option value='24'>24</option>
+                    <option value='25'>25</option>
+                    <option value='26'>26</option>
+                    <option value='27'>27</option>
+                    <option value='28'>28</option>
+                    <option value='29'>29</option>
+                    <option value='30'>30</option>
+                    <option value='31'>31</option>
+                </select>
+                <select name = 'month2'>
+                    <option value='01'>ม.ค.</option>
+                    <option value='02'>ก.พ.</option>
+                    <option value='03'>มี.ค.</option>
+                    <option value='04'>เม.ย.</option>
+                    <option value='05'>พ.ค.</option>
+                    <option value='06'>มิ.ย.</option>
+                    <option value='07'>ก.ค.</option>
+                    <option value='08'>ส.ค.</option>
+                    <option value='09'>ก.ย.</option>
+                    <option value='10'>ต.ค.</option>
+                    <option value='11'>พ.ย.</option>
+                    <option value='12'>ธ.ค.</option>
+                </select>
+                <select name = 'year2'>
+                    <option value='2558'>2558</option>
+                    <option value='2559'>2559</option>
+                    <option value='2560'>2560</option>
+                    <option value='2561'>2561</option>
+                    <option value='2562'>2562</option>
+                    <option value='2563'>2563</option>
+                    <option value='2564'>2564</option>
+                    <option value='2565'>2565</option>
+                    <option value='2566'>2566</option>
+                    <option value='2567'>2567</option>
+                    <option value='2568'>2568</option>
+                </select>
+            </br></br>
+            <u>ทั้งนี้ข้าพเจ้ามีความประสงค์</u>
+            </br>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="radio" name="send" value="send by department">ขอให้ภาควิชาฯ จัดส่งหนังสือขอความอนุเคราะห์ฝึกงานไปตามที่อยู่ข้างบนนี้
+            </br>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="radio" name="send" value="send by srudent">ขอรับหนังสืออนุเคราะห์ฝึกงานไปยื่นด้วยตนเอง
+            <br>
+                <input type ="submit" name="Submit" value="Submit">
+            </br>
+    </form>           
+{% else %}    
+หมายเหตุ
+{% endif %}
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Group7{% endblock %}
+
+{% block pageHeader %}
+<h2>กระบวน <small>การเบิกจ่ายค่าวัสดุในการทำโครงงาน</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="/group7Project_Docs/">รายชื่อโครงงาน</a></li>
+    <li><a href="/group7/{{order.id}}/">รายการใบสั่งซื้อวัสดุ</a></li>
+    <li><a href="/group7/{{ order.id }}/statusof/">รายละเอียดใบสั่งซื้อวัสดุ</a></li>
+    <li class="active">อัพเดทสถานะใบสั่งซื้อวัสดุ</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+		<script>
+	function validateForm(form) {
+	    var x = document.forms["statusForm"]["date_status"].value;
+		var y = document.forms["statusForm"]["date_requi"].value;
+		var ma_st = document.forms["statusForm"]["more"].value;  
+		re = /^\d{4}\-\d{1,2}\-\d{1,2}$/;
+		if(x != '' && !x.match(re) || y != '' && !y.match(re)) {
+	      alert("Invalid date format: " + x + "and" + y);
+	      return false;
+	    }
+	    if (x == null || x == "" || y == null || y == "" ) {
+	        alert("date invalid!");
+	        return false;
+	    }
+		if ( ma_st == null || ma_st == "") {
+	        alert("ต้องมีหมายเหตุ");
+	        return false;
+	    }
+		var ma_re = /^\d+/g$/;
+		var reqID_re = /^\S+/g$/;     
+		var reqIDreq = document.forms["statusForm"]["requi_id_requi"].value
+		var reqIDreqCon = reqIDreq.match(reqID_re) ;
+		if (ma_st .match(ma_re) ) {
+		    alert('ma invalid' + ma_st ); 
+			return false;
+		}
+		if (matches != null || matches2 != null) {
+		    alert('number'); 
+			return false;
+		}
+		if (reqIDreqCon != null) {
+			alert('reqID is numbers only');
+			return false;
+		}
+	}
+	</script>
+<h3>เพิ่มเติมสถานะรายการใบสั่งวัสดุภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์</h3>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<form action="/group7/{{ order.id }}/addstatusof/" >
+<table border=0>
+    	<b><h4>อัพเดทสถานะปัจจุบัน</h4></b>
+    	<tr><td> วัน/เดือน/ปี : </td><td><input type="text" name="date_status"></td></tr>
+    	<tr><td> ขั้นตอน : </td><td><select name="state_status">
+		<option  type="text" value="วันที่ในการซื้อวัสดุ">วันที่ในการซื้อวัสดุ</option>
+		<option  type="text" value="ตรวจสอบวัสดุและใบเสร็จ">ตรวจสอบวัสดุและใบเสร็จ</option>
+		<option  type="text" value="complete">ใบเบิกวัสดุ</option>
+	</select></td></tr>
+	<tr><td> หมายเหตุ: </td><td><input type="text" name="more"></td></tr>
+	
+    	
+
+
+</table>
+
+<input type="submit" value="ยืนยัน" /><a href="/group7/{{ order.id }}/statusof/" style="text-decoration:none"><input type="button" value="ยกเลิก" ></a>
+</form>
+{% endblock %}
+

@@ -4,7 +4,7 @@ from group3.models import *
 
 # Register your models here.
 class Prof2LangAdmin(admin.ModelAdmin):
-    list_display = ('profID', 'firstName', 'lastName', 'shortName', 'sahakornAccount', 'department', 'faculty', 'tell', 'email')
+    list_display = ('profID', 'academic_position', 'prefix_name', 'firstName', 'lastName', 'shortName', 'department', 'faculty', 'type')
 
 class SectionInline(admin.StackedInline):
     model = Section

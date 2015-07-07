@@ -1,0 +1,91 @@
+<div class="container-fluid">
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<style>
+.page{
+	font:14pt "Angsana New";
+	width:297mm;
+	height:auto;
+	margin:auto;
+	position:relative;
+    	padding: 1cm;
+    	border: 1px #D3D3D3 solid;
+   	border-radius: 5px;
+    	background: white;
+}
+	
+@media print {
+	.page {
+		font:14pt "Angsana New";
+		margin:auto;
+		padding:0cm;
+		width:297mm;
+		height:210mm;
+		size:portrait auto;
+		position:relative;
+		border:0;
+		border-radius:0;
+		box-shadow: initial;
+		background: initial;
+		word-break:break-all;
+		page-break-after: always;
+		display:block;
+	}
+}
+</style>
+<script>
+</script>
+</head>
+<body onLoad="return window.print()">
+<div class="page">
+<center><h3>ใบสั่งของภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์</h3></center>
+<center>
+<table border ="1" width="100%"><font color="BLACK">
+	<tr>
+		<th><center>วันเดือนปี</center></th>
+		<th><center>ชื่อโครงงาน/ห้องปฎิบัติการ/สำนักงานภาควิชาฯ</center></th>
+		<th><center>ชื่อนักศึกษา/อาจารย์/เจ้าหน้าที่</center></th>
+		<th><center>หัวหน้าห้องประลอง/อาจารย์ที่ปรึกษา</center></th>		
+	</tr>
+
+	<tr>
+		<td><center>{{order.Date}}</center></td> <!-- reference from "Date" of  Order-->
+		<td><center>{{project.name_thai}}</center></td> <!-- reference from "Project_name" of  Order-->
+		<td><center>{{order.name}}</center></td> <!-- reference from "Member" of  Order-->
+		{% for name in teacher %}
+			{%if name.id == project.teacher_id%}
+				<td><center>{{ name }}</center></td> <!--pull Value from Group6 -->
+			{%endif%}
+		{%endfor%}
+	</tr>
+
+	<tr>
+		<th><center>ลำดับที่</center></th>
+		<th><center>รายการวัสดุ</center></th>
+		<th><center>จำนวน</center></th>
+		<th><center>ราคา</center></th>
+	</tr>
+	
+
+
+		{%for s in order.orderinfo_set.all%}
+		<tr>
+				<td><center>{{ forloop.counter }}</center></td> <!-- reference from "Date" of  requisition-->
+				<td><center>{{ s.Item_name}}</center></td> <!-- reference from "Project_name" of  Order-->
+				<td><center>{{s.Amount}}<center></td>
+				<td><center>{{s.Cost}}</center></td>
+		</tr>
+		{%endfor%}
+
+	
+		
+	</table>
+	&nbsp
+	<table border ="0"  width="100%"><font color="BLACK">
+		<tr>
+			<td><center>อาจารย์ที่ปรึกษา<br>ลงชื่อ.................................<br>(.....................................)</center></td>
+			<td><center>หัวหน้าภาครับทราบ(......../......../........)<br>ลงชื่อ.................................<br>(.....................................)</center></td>
+			<td><center>วันที่ไปซื้อวัสดุ(......../......../........)<br>ลงชื่อ.................................<br>(.....................................)</center></td>	
+		</tr>
+	</table>
+	</div>
+	</html>

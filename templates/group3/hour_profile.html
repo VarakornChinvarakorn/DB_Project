@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Menu เมนู{% endblock %}
+{% block pageHeader %}<h1>ระบบ<small> พนักงานรายชั่วโมง</small></h1>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="{% url 'group3:hour_index' %}">ค้นหา</a></li>
+    <li class="active">ระบบพนักงานรายชั่วโมง</li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="container-fluid">
+        <div class="col-md-3">
+            <!--a class="btn btn-primary btn-block {{status_on}}" href="{% url 'group3:add_hour_date' employObj.id %}" ><span class="glyphicon glyphicon-plus"></span> บันทึกเเวลาเข้าทำงาน </a>
+            <a class="btn btn-primary btn-block {{status_off}}" href="{% url 'group3:add_hour_date2' employObj.id %}"><span class="glyphicon glyphicon-plus"></span> บันทึกเเวลาออกทำงาน </a-->
+            <a class="btn btn-primary btn-block" href="{% url 'group3:add_work' employObj.id %}"><span class="glyphicon glyphicon-plus"></span> บันทึกเเวลาทำงาน </a>
+            <a class="btn btn-default btn-block" href="{% url 'group3:hourpdf' employObj.id %}" target = _blank><span class="glyphicon glyphicon-print"></span> พิมพ์ข้อมูล </a>
+            <a class="btn btn-default btn-block" href="{% url 'group3:hour_index' %}" ><span class="glyphicon glyphicon-arrow-left"> ย้อนกลับ</span></a>
+
+        </div> <p>{{check}}</p>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <tr>
+                            <th>ชื่อ-นามสกุล</th>
+                            <td>{{name_th}} {{last_th}}</td>
+                        </tr>
+                        <tr>
+                            <th>Name</th>
+                            <td>{{name_en}} {{last_en}}</td>
+                        </tr>
+                        <tr>
+                            <th>ภาควิชา</th>
+                            <td>{{department}}</td>
+                        </tr>
+                        <tr>
+                            <th>คณะ</th>
+                            <td>{{faculty}}</td>
+                        </tr>
+                        <tr>
+                            <th>เบอร์โทรศัพท์</th>
+                            <td>{{tel}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            {% if ListWork %}
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered" id="no-more-tables">
+                            <thead>
+                            <tr>
+                                <th>วัน</th>
+                                <th>วันที่ เดือน ปี</th>
+                                <th>เวลาทำงาน</th>
+                                <th>รวมชั่วโมง</th>
+                                <th>หมายเหตุ</th>
+                                <th>เมนู</th>
+                            </tr>
+                            </thead>
+                            {% for working in ListWork %}
+                            <tbody>
+                            <tr>
+                                <td data-title="วัน">
+                                    {% ifequal working.day|date:"l" "Monday" %}จันทร์{%endifequal%}
+                                    {% ifequal working.day|date:"l" "Tuesday" %}อังคาร{%endifequal%}
+                                    {% ifequal working.day|date:"l" "Wednesday" %}พุธ{%endifequal%}
+                                    {% ifequal working.day|date:"l" "Thursday" %}พฤหัสบดี{%endifequal%}
+                                    {% ifequal working.day|date:"l" "Friday" %}ศุกร์{%endifequal%}
+                                    {% ifequal working.day|date:"l" "Saturday" %}เสาร์{%endifequal%}
+                                    {% ifequal working.day|date:"l" "Sunday" %}อาทิตย์{%endifequal%}
+                                </td>
+                                <td data-title="วันที่ เดือน ปี">{{working.releaseDate|date:"j"}}
+                                
+                                    {% ifequal working.releaseDate|date:"F" "January" %} มกราคม {%endifequal%}
+                                    {% ifequal working.releaseDate|date:"F" "February" %} กุมภาพันธ์ {%endifequal%}
+                                    {% ifequal working.releaseDate|date:"F" "March" %} มีนาคม {%endifequal%}
+                                    {% ifequal working.releaseDate|date:"F" "April" %} เมษายน {%endifequal%}
+                                    {% ifequal working.releaseDate|date:"F" "May" %} พฤษภาคม {%endifequal%}
+                                    {% ifequal working.releaseDate|date:"F" "June" %} มิถุนายน {%endifequal%}
+                                    {% ifequal working.releaseDate|date:"F" "July" %} กรกฎาคม {%endifequal%}
+                                    {% ifequal working.releaseDate|date:"F" "August" %} สิงหาคม {%endifequal%}
+                                    {% ifequal working.releaseDate|date:"F" "September" %} กันยายน {%endifequal%}
+                                    {% ifequal working.releaseDate|date:"F" "October" %} ตุลาคม {%endifequal%}
+                                    {% ifequal working.releaseDate|date:"F" "November" %} พฤศจิกายน {%endifequal%}
+                                    {% ifequal working.releaseDate|date:"F" "December" %} ธันวาคม {%endifequal%}
+                                    
+                                                                                                พ.ศ. {{working.releaseDate|date:"Y"|add:"543" }}
+                        
+                                </td>
+                                <td data-title="เวลาทำงาน">{{working.startTime|time:"H.i"}} น.{% if working.endTime|time:"H.i" != '00.00' %} - {{working.endTime|time:"H.i"}} น.{% endif %}</td>
+                                <td data-title="รวมชั่วโมง">{{working.get_time_diff}}</td>
+                                <td data-title="หมายเหตุ">{{working.note}}</td>
+                                <td data-title="เมนู">
+                                    <a class="btn btn-info btn-xs" href="{% url 'group3:add_hour_page' working.id%}">เพิ่ม/แก้ไขหมายเหตุ </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-warning" role="alert">ไม่มีข้อมูลสำหรับรายการนี้</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block head %}
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block title %}ระบบอาจารย์สองภาษา{% endblock %}
+
+{% block pageHeader %}
+<h2>ระบบ <small>อาจารย์สองภาษา</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="{% url 'group3:prof2lang_index' %}">ระบบอาจารย์สองภาษา</a></li>
+    <li><a href="{% url 'group3:prof_index' %}">อาจารย์ผู้สอนทั้งหมด</a></li>
+    <li class="active">{{ prof.firstName }} {{ prof.lastName }}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+    <!-- check has Prof2Lang object -->
+        <div class="row">
+            <div class="container-fluid">
+                {% if prof %}
+                    <div class="col-md-3">
+                        <a class="btn btn-default btn-block" href="{% url 'group3:prof_update' prof.profID %}"><span class="glyphicon glyphicon-cog"></span> แก้ไข</a>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+
+                                <!-- 1. profID -->
+                                <tr>
+                                    <th>รหัสอาจารย์</th>
+                                    <td>{{ prof.profID }}</td>
+                                </tr>
+
+                                <!-- 2. firstName, 3. lastName -->
+                                <tr>
+                                    <th>ชื่อ - นามสกุล</th>
+                                    <td>{{ prof.firstName }}  {{ prof.lastName }}</td>
+                                </tr>
+
+                                <!-- 4. shortName -->
+                                <tr>
+                                    <th>ตัวย่อชื่อ</th>
+                                    <td>{{ prof.shortName }}</td>
+                                </tr>
+
+                                <!-- 5. shortName -->
+                                <tr>
+                                    <th>เบอร์โทรศัพท์</th>
+                                    <td>{{ prof.tell }}</td>
+                                </tr>
+
+                                <!-- 6. email -->
+                                <tr>
+                                    <th>E-mail</th>
+                                    <td>{{ prof.email }}</td>
+                                </tr>
+
+                                <!-- 7. sahakornAccount -->
+                                <tr>
+                                    <th>เลขที่บัญชีสหกรณ์</th>
+                                    <td>{{ prof.sahakornAccount }}</td>
+                                </tr>
+
+                                <!-- 8. department -->
+                                <tr>
+                                    <th>ภาควิชา</th>
+                                    <td>{{ prof.department }}</td>
+                                </tr>
+
+                                <!-- 9. faculty -->
+                                <tr>
+                                    <th>คณะ</th>
+                                    <td>{{ prof.faculty }}</td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <div class="alert alert-warning" role="alert">
+                            ไม่พบข้อมูล
+                            <a href="{% url 'group3:prof_index' %}" class="alert-link">ย้อนกลับ</a>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="col-md-3"></div>
+            </div><!-- /container-fluid -->
+        </div><!-- /row -->
+
+{% endblock %}

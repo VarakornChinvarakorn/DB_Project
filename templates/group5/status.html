@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block pageHeader %}
+
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li class="active">ตรวจสอบสถานะการฝึกงาน</li>
+    <li><a href="{% url 'group5:company' %}">รายชื่อบริษัทฝึกงาน</a></li>
+</ol>
+		
+{% endblock %}
+{% block content %}
+
+{% if currentUser and stu and pet%}
+<table width = 100%>
+    <tr>
+	<td width = 10%></td>
+	<td width = 5%>รหัสนักศึกษา</td>
+	<td width = 10%>{{stu.std_id}}</td>
+	<td></td>
+    </tr>
+    <tr>
+	<td width = 10%></td>
+	<td width = 5%>ชื่อ-สกุล </td>
+	<td width = 10%>{{currentUser.firstname_th}} {{currentUser.lastname_th}}</td>
+	<td></td>
+    </tr>
+</table><br><br>
+<br><center><table border = '1' width= 80%>
+    <tr>
+	<td>
+	    สถานที่ฝึกงาน
+	</td>
+	<td>
+	    วันที่ยื่นใบคำร้องขอ
+	</td>
+	<td>
+	    สถานะ
+	</td>
+    </tr>
+    {% for item in pet %}
+	{% if stu.std_id =  item.studentG5_id%}
+	<tr>
+	    <td>
+		{{item.Internship_id}}
+	    </td>
+	    <td>
+		{{item.Date}}
+	    </td>
+	    <td>
+		{{item.StatusPetition}}
+	    </td>
+	</tr>
+	{% endif %}
+    {% endfor %}
+
+</table></center><br>    
+{% else %}    
+หมายเหตุ
+{% endif %}
+
+{% endblock %}
+

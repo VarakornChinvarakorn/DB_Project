@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Group7{% endblock %}
+
+{% block pageHeader %}
+<h2>กระบวน <small>การเบิกจ่ายค่าวัสดุในการทำโครงงาน</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="/group7Project_Docs/">รายชื่อโครงงาน</a></li>
+    <li><a href="/group7Project_Docs/">รายการวัสดุ</a></li>
+    <li class="active">รายนามบริษัท</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<h3>เพิ่มรายนามบริษัท{{order.id}}</h3>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<form action="/group7/{{ order.id }}/addcompanyinfo/" enctype="multipart/form-data"  method="post" >
+{% csrf_token %}
+<table border=0>
+	
+    	<tr><td> เลขที่ใบเสนอราคา : </td><td><input type="text" name="id"></td></tr>
+    	<tr><td> บริษัท: </td><td><input type="text" name="company"></td></tr>
+
+</table>
+<input type="submit" value="ยืนยัน" /><a href="/group7/{{order.id}}/orderinfo/" style="text-decoration:none"><input type="button" value="ยกเลิก" ></a>
+</form>
+{% endblock %}

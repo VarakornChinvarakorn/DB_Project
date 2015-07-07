@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block head %}
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block title %}ระบบอาจารย์สองภาษา{% endblock %}
+
+{% block pageHeader %}
+<h2>ระบบ <small>อาจารย์สองภาษา</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="{% url 'group3:prof2lang_index' %}">ระบบอาจารย์สองภาษา</a></li>
+    <li class="active">อาจารย์ผู้สอนทั้งหมด</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+    <!-- check has Prof2Lang object -->
+        <div class="row">
+            <div class="container-fluid">
+                <div class="col-md-2">
+                    <a class="btn btn-primary btn-block" href="{% url 'group3:prof_add' %}"><span class="glyphicon glyphicon-plus"></span> เพิ่มข้อมูล</a>
+                </div>
+                <div class="col-md-10">
+                    {% if profList %}
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                <tr class="success">
+                                    <th>รหัสอาจารย์</th><!-- 1. -->
+                                    <th>ชื่อ-สกุล</th><!-- 2. -->
+                                    <th>ตัวย่อชื่อ</th><!-- 3. -->
+                                    <th>เบอร์โทรศัพท์</th><!-- 4. -->
+                                    <th>E-mail</th><!-- 5. -->
+                                    <th>บ/ช สหกรณ์</th><!-- 6. -->
+                                    <th>ภาควิชา</th><!-- 7. -->
+                                    <th>คณะ</th><!-- 8. -->
+                                    <th>เมนู</th><!-- 9. -->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for prof in profList %}
+                                <tr>
+                                    <td data-title="รหัสอาจารย์">{{ prof.profID }}</td>
+                                    <td data-title="ชื่อ-สกุล">
+                                        {% ifequal prof.academic_position "0"%}
+                                            {% ifequal prof.prefix_name "0" %}อ.{% endifequal %}
+                                            {% ifequal prof.prefix_name "1" %}อ.{% endifequal %}
+                                            {% ifequal prof.prefix_name "2" %}อ.{% endifequal %}    
+                                        {% endifequal %}
+                                        {% ifequal prof.academic_position "1"%}ผู้ช่วยศาสตราจารย์{% ifequal prof.prefix_name "3" %} ดร.{% endifequal %}{% endifequal %}
+                                        {% ifequal prof.academic_position "2"%}รองศาสตราจารย์{% ifequal prof.prefix_name "3" %} ดร.{% endifequal %}{% endifequal %}
+                                        {% ifequal prof.academic_position "3"%}ศาสตราจารย์{% ifequal prof.prefix_name "3" %} ดร.{% endifequal %}{% endifequal %}            
+                                    
+                                        {{ prof.firstName }}  {{ prof.lastName }}</td>
+                                    <td data-title="ตัวย่อชื่อ">{{ prof.shortName }}</td>
+                                    <td data-title="เบอร์โทรศัพท์">{{ prof.tell }}</td>
+                                    <td data-title=">E-mail">{{ prof.email }}</td>
+                                    <td data-title="บ/ช สหกรณ์">{{ prof.sahakornAccount }}</td>
+                                    <td data-title="ภาควิชา">{{ prof.department }}</td>
+                                    <td data-title=คณะ">{{ prof.faculty }}</td>
+                                    <td data-title="เมนู">
+                                        <a class="btn btn-info btn-xs" href="{% url 'group3:prof_view' prof.profID %}">ดูข้อมูล</a>
+                                        <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delModal{{prof.profID}}" >ลบ</a>
+                                    </td>
+                                </tr>
+                                <!-- Modal -->
+                                <div class="modal fade" id="delModal{{prof.profID}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">ลบข้อมูล</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                คุณแน่ใจหรือว่าต้องการลบข้อมูลของ
+                                                อาจารย์ {{ prof.firstName }}  {{ prof.lastName }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">ยกเลิก</button>
+                                                <a href="{% url 'group3:prof_delete' prof.profID %}" class="btn btn-success" >ตกลง</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div><!-- /table-responsive -->
+                    {% else %}
+                        <div class="alert alert-warning" role="alert">
+                            <strong>ยังไม่มีข้อมูล!</strong> กรุณา
+                            <a class="alert-link" href="{% url 'group3:prof2lang_add' 0 %}">เพิ่มข้อมูล</a>
+                        </div>
+                    {% endif %}
+                </div><!-- /col-md-9 -->
+            </div><!-- /container-fluid -->
+        </div><!-- /row -->
+
+{% endblock %}

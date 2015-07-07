@@ -4,13 +4,76 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
+
 from login.models import UserProfile
 import django.shortcuts
-
+import time, datetime
 from group3.models import *
 from django.http import HttpResponse
 from fpdf import FPDF
+
+from django.contrib.auth.models import User
 # Create your views here.
+def genProfID():
+    profList = Prof2Lang.objects.all().order_by('profID')
+    if len(profList) > 0:
+        lastProf = profList[len(profList)-1]
+        id = int(lastProf.profID) + 1
+        return str(id)
+    else:
+        return '1'
+
+def prof_add_in():
+    teachers = Teacher.objects.all()
+    if len(teachers) > 0:
+        for teacher in teachers:
+            profID      = genProfID()                       # 1. profID
+            firstName   = teacher.userprofile.firstname_th  # 2. firstName
+            lastName    = teacher.userprofile.lastname_th   # 3. lastName
+            shortName   = str(teacher.shortname).upper()    # 4. shortName
+            tell        = teacher.userprofile.tel           # 5. tell
+            email       = teacher.userprofile.user.email    # 6. email
+            sahakornAccount = ''                            # 7. sahakornAccount
+            department  = 'วิศวกรรมไฟฟ้าและคอมพิวเตอร์'     # 8. department
+            faculty     = 'วิศวกรรมศาสตร์'                  # 9. faculty
+            type        = '0'                               # 10. type 0 is อาจารย์ในภาค
+            prefix_name = teacher.userprofile.prefix_name   # 11. prefix_name
+            academic_position = teacher.academic_position   # 12. academic_position
+
+            # check prof is duplicate
+            try:
+                prof = Prof2Lang.objects.get(shortName = shortName)
+                # update prof
+                prof.firstName      = firstName         # 2. firstName
+                prof.lastName       = lastName          # 3. lastName
+                prof.shortName      = shortName         # 4. shortName
+                prof.tell           = tell              # 5. tell
+                prof.email          = email             # 6. email
+                prof.sahakornAccount= sahakornAccount   # 7. sahakornAccount
+                prof.department     = department        # 8. department
+                prof.faculty        = faculty           # 9. faculty
+                prof.type           = type              # 10 .type
+                prof.prefix_name    = prefix_name       # 11. prefix_name
+                prof.academic_position=academic_position# 12. academic_position
+                prof.save()
+            except:
+                # add new prof
+                newProf = Prof2Lang(
+                    profID          = profID,           # 1. profID
+                    firstName       = firstName,        # 2. firstName
+                    lastName        = lastName,         # 3. lastName
+                    shortName       = shortName,        # 4, shortName
+                    tell            = tell,             # 5. tell
+                    email           = email,            # 6. email
+                    sahakornAccount = sahakornAccount,  # 7. sahakornAccount
+                    department      = department,       # 8. department
+                    faculty         = faculty,          # 9. faculty
+                    type            = type,             # 10. type
+                    prefix_name     = prefix_name,      # 11. prefix_name
+                    academic_position=academic_position # 12. academic_position
+                )
+                newProf.save()
+
 def getUserType(request):
     user = request.user
     try:
@@ -20,6 +83,7 @@ def getUserType(request):
         return 'admin'
 
 def prof2lang_index(request):
+    prof_add_in()   # add Teacher to Prof2Lang
     template = 'group3/prof2lang_index.html'    # get template
     context = {}
     teachList = Teach.objects.all()     # get all Prof2Lang objects
@@ -38,6 +102,7 @@ def prof2lang_index(request):
     )
 
 def prof2lang_view(request, profID):
+    prof_add_in()   # add Teacher to Prof2Lang
     template = 'group3/prof2lang_view.html'             # get view template
 
     # get current user type
@@ -72,6 +137,7 @@ def prof2lang_view(request, profID):
     )
 
 def prof2lang_add(request, option = '0'):
+    prof_add_in()   # add Teacher to Prof2Lang
     template = 'group3/prof2lang_add.html'
     # get all Prof2Lang objects
     prof2langObj = Prof2Lang.objects.all().order_by('shortName')
@@ -208,6 +274,13 @@ def addProf(request):
         department  = request.POST['department']
         faculty     = request.POST['faculty']
 
+        # check profID is duplicate
+        try:
+            prof = Prof2Lang.objects.get(profID = profID)
+            return HttpResponseRedirect(reverse('group3:prof2lang_add', args=['2']))
+        except:
+            pass
+
         try:
             # create new Prof2Lang object
             newProf = Prof2Lang(
@@ -296,7 +369,7 @@ def genpdf(request, profID): # use to generate pdf file for lend another teacher
     pdf.add_font('DejaVu', '', 'DejaVuSansCondensed.ttf', uni=True)  # add font
     pdf.set_font('DejaVu', '', 14)              # set font and font size
     
-    pdf.image('group3/trarachakarn.png',20,20,20)   # insert image
+    pdf.image('group3/trarachakarn.png',30,25,15)   # insert image
     pdf.ln(25)    # new line
     
     proID = ''
@@ -314,8 +387,57 @@ def genpdf(request, profID): # use to generate pdf file for lend another teacher
     sec = ''
     time = ''
     day = ''
+    
+    try: # prefix_name and academic_name
+        academicPosition = teachObj.prof.academic_position
+        if (academicPosition == '0'):
+            academicPosition = u''
+            try:
+                pre_name = teachObj.prof.prefix_name
+                if (pre_name == '0') or (pre_name == '1') or (pre_name == '2'):
+                    pre_name = u'อ. '
+                else:
+                    pre_name = u'ดร. '
+            except:
+                pre_name = u'อ. '
+        elif academicPosition == '1':
+            academicPosition = u'ผู้ช่วยศาสตราจารย์ '
+            short_academicPosition = u'ผศ.'
+            try:
+                pre_name = teachObj.prof.prefix_name
+                if pre_name == '3':
+                    pre_name = u'ดร.'
+                else:
+                    pre_name = ''
+            except:
+                pre_name =''
+        elif academicPosition == '2':
+            academicPosition =  u'รองศาสตราจารย์ '
+            short_academicPosition =  u'รศ.'
+            try:
+                pre_name = teachObj.prof.prefix_name
+                if pre_name == '3':
+                    pre_name = u'ดร.'
+                else:
+                    pre_name = ''
+            except:
+                pre_name =''
+        else:
+            academicPosition = u'ศาสตราจารย์ '
+            short_academicPosition = u'ศ.'
+            try:
+                pre_name = teachObj.prof.prefix_name
+                if pre_name == '3':
+                    pre_name = u'ดร.'
+                else:
+                    pre_name = ''
+            except:
+                pre_name =''
+    except:
+        academicPosition = ''
+    
     try: # check all data for beware blank data.
-        proID = teachObj.prof.profID
+        proID = teachObj.prof.shortName
     except:
         proID = 'None'
 
@@ -399,90 +521,127 @@ def genpdf(request, profID): # use to generate pdf file for lend another teacher
         day = 'None'
         
     pdf.add_font('THSarabun Bold', '', 'THSarabun Bold.ttf', uni=True)  # thai font bold
-    pdf.set_font('THSarabun Bold', '', 18)  
-    pdf.cell(0, 10, u'                         บันทึกข้อความ')
+    pdf.set_font('THSarabun Bold', '', 29)
+    pdf.cell(72, 10, u'')
+    pdf.cell(0, 10, u' บันทึกข้อความ')
     pdf.ln(10)
-    pdf.add_font('THSarabun', '', 'THSarabun.ttf', uni=True)  # thai font
+    pdf.add_font('THSarabun Bold', '', 'THSarabun Bold.ttf', uni=True)  # thai font
+    pdf.set_font('THSarabun Bold', '', 20)
+    pdf.cell(19, 10, u'')
+    pdf.cell(22, 10, u'ส่วนราชการ')
+    pdf.add_font('THSarabun', '', 'THSarabun.ttf', uni=True)
     pdf.set_font('THSarabun', '', 16)
-    pdf.cell(0, 10, u'         ส่วนราชการ ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์ คณะวิศวกรรมศาสตร์  โทร. ๘๕๑๘')
-    pdf.line(46,52,180,52)
+    pdf.cell(0, 11, u'  ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์ คณะวิศวกรรมศาสตร์  โทร. ๘๕๑๘')
+    pdf.line(55,52.5,180,52.5)
     pdf.ln(8)
-    pdf.cell(0, 10, u'         ที่                                                    วันที่  ')
-    pdf.line(30,60,180,60)
+    pdf.add_font('THSarabun Bold', '', 'THSarabun Bold.ttf', uni=True)
+    pdf.set_font('THSarabun Bold','', 20)
+    pdf.cell(19, 10, u'')
+    pdf.cell(5, 10, u'ที่')
+    pdf.add_font('THSarabun', '', 'THSarabun.ttf', uni=True)
+    pdf.set_font('THSarabun', '', 16)
+    pdf.cell(70, 10, u'   วฟ')
+    pdf.add_font('THSarabun Bold', '', 'THSarabun Bold.ttf', uni=True)
+    pdf.set_font('THSarabun Bold','', 20)
+    pdf.cell(0, 10, u'วันที่')
+    pdf.line(34,60.5,180,60.5)
     pdf.ln(8)
-    pdf.cell(0, 10, u'         เรื่อง การจัดการเรียนการสอนสำหรับนักศึกษาโครงการพิเศษ(สองภาษา) ')
-    pdf.line(30,68,180,68)
+    pdf.cell(19, 10, u'')
+    pdf.cell(11, 10, u'เรื่อง')
+    pdf.add_font('THSarabun', '', 'THSarabun.ttf', uni=True)
+    pdf.set_font('THSarabun', '', 16)
+    pdf.cell(0, 11, u'การจัดการเรียนการสอนสำหรับนักศึกษาโครงการพิเศษ(สองภาษา)')
+    pdf.line(40,68.5,180,68.5)
     pdf.ln(8)
-    pdf.cell(0, 10, u'         เรียน หัวหน้าภาควิชา ')
+    pdf.add_font('THSarabun Bold', '', 'THSarabun Bold.ttf', uni=True)
+    pdf.set_font('THSarabun Bold','', 20)
+    pdf.cell(19, 10, u'')
+    pdf.cell(10, 10, u'เรียน')
+    pdf.add_font('THSarabun', '', 'THSarabun.ttf', uni=True)
+    pdf.set_font('THSarabun', '', 16)
+    pdf.cell(24, 11, u'หัวหน้าภาควิชา' + department)
     pdf.ln(8)
-    pdf.cell(0, 10, u'                     ตามที่ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์  ได้ขอรับบริการจัดการเรียนการสอนจากท่านในราย')
+    pdf.cell(45, 10, u'')
+    pdf.cell(0, 10, u'ตามที่ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์  ได้ขอรับบริการจัดการเรียนการสอนจาก')
     pdf.ln(8)
-    pdf.cell(20, 10, u'         วิชา                                                                 สำหรับนักศึกษาโครงการพิเศษ (สองภาษา) ')
+    pdf.cell(19, 10, u'')
+    pdf.cell(23, 10, u'ท่านในรายวิชา                                                              สำหรับนักศึกษาโครงการพิเศษ (สองภาษา) ')
     pdf.cell(20, 10, u'' + subjectName + '  '  + subjectID) 
     pdf.ln(8)
-    pdf.cell(0, 10, u'         ภาคเรียนที่ .........  นั้น')
+    pdf.cell(19, 10, u'')
+    pdf.cell(0, 10, u'ภาคเรียนที่ .........  นั้น')
     pdf.ln(8)
-    pdf.cell(0, 10, u'                    ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์  ขอให้ท่านยืนยันการจัดการเรียนการสอนในรายวิชาดังกล่าว')
+    pdf.cell(45, 10, u'')
+    pdf.cell(0, 10, u'ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์  ขอให้ท่านยืนยันการจัดการเรียนการสอนในราย')
     pdf.ln(8)
-    pdf.cell(0, 10, u'         ตามแบบฟอร์มด้านล่าง พร้อมตารางสอนและใบเบิกค่าสอนของอาจารย์ผู้สอนและส่งคืนกลับภาควิชาวิศวกรรม ')
+    pdf.cell(19, 0, u'')
+    pdf.cell(0, 10, u'วิชาดังกล่าว  ตามแบบฟอร์มด้านล่าง พร้อมตารางสอนและใบเบิกค่าสอนของอาจารย์ผู้สอน  และส่งคืนกลับ ')
     pdf.ln(8)
-    pdf.cell(0, 10, u'         ไฟฟ้าและคอมพิวเตอร์  เพื่อจะได้ดำเนินการในส่วนที่เกี่ยวข้องต่อไป')
+    pdf.cell(19, 0, u'')
+    pdf.cell(0, 10, u'วิภาคชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์  เพื่อจะได้ดำเนินการในส่วนที่เกี่ยวข้องต่อไป')
     pdf.ln(8)
-    pdf.cell(0, 10, u'                        จึงเรียนมาเพื่อโปรดทราบ')
+    pdf.cell(45, 10, u'')
+    pdf.cell(0, 10, u'จึงเรียนมาเพื่อโปรดทราบ')
     pdf.ln(20)
-    pdf.cell(100, 10, u'')
-    pdf.cell(100, 10, u'(ดร.นภดล   วิวัชรโกเศศ)')
+    pdf.cell(94, 10, u'')
+    pdf.cell(100, 10, u'(ผู้ช่วยศาสตราจารย์ ดร.นภดล   วิวัชรโกเศศ)')
     pdf.ln(8)
-    pdf.cell(90, 10, u'')
+    pdf.cell(94, 10, u'')
     pdf.cell(90, 10, u'หัวหน้าภาควิศวกรรมไฟฟ้าและคอมพิวเตอร์')
     pdf.ln(14)
-    pdf.cell(0, 10, u'            .........................................................................................................................................................................')
+    pdf.cell(21, 10, u'')
+    pdf.cell(0, 10, u'.........................................................................................................................................................................')
     pdf.ln(8)
-    pdf.cell(30, 10, u'         ชื่อผู้สอน                                                    รหัสผู้สอน')
-    pdf.cell(80, 10, u'' + firstname + '   '+ lastname)
-    pdf.cell(80, 10, u'' + proID)
+    pdf.cell(8, 10,u'')
+    pdf.cell(30, 10, u'         ชื่อผู้สอน ' + academicPosition + pre_name + firstname + '   '+ lastname + u'            รหัสผู้สอน ' + proID )
+    #pdf.cell(80, 10, u'' + academicPosition +pre_name+ firstname + '   '+ lastname)
+    #pdf.cell(80, 10, u'' + proID)
     pdf.ln(8)
+    pdf.cell(8, 10,u'')
     pdf.cell(30, 10, u'         ภาควิชา')
     pdf.cell(60, 10, u'' + department)
     pdf.cell(20, 10, u'คณะ')
     pdf.cell(20, 10, u'' + faculty)
     pdf.ln(8)
+    pdf.cell(8, 10,u'')
     pdf.cell(30, 10, u'         รหัสวิชา')
     pdf.cell(60, 10, u'' +subjectID)
     pdf.cell(20, 10, u'ชื่อวิชา')
     pdf.cell(20, 10, u'' + subjectName) 
     pdf.ln(8)
+    pdf.cell(8, 10,u'')
     pdf.cell(30, 10, u'         ตอนเรียน')
     pdf.cell(40, 10, u'' + sec)
     pdf.cell(10, 10, u'วัน')
     pdf.cell(40, 10, u'' + day)
     pdf.cell(15, 10, u'เวลา')
-    pdf.cell(20, 10, u'' + time)
+    pdf.cell(20, 10, u'' + str(time)[:5] + u' น.')
     pdf.ln(8)
-    pdf.cell(0, 10, u'         ได้จัดการเรียนการสอนเป็น ')
+    pdf.cell(8, 10,u'')
+    pdf.cell(0, 10, u'         ได้ดำเนินการจัดการเรียนการสอนเป็น ')
     pdf.ln(8)
-    pdf.cell(0, 10, u'                           ภาษาอังกฤษ  ')
+    pdf.cell(0, 10, u'                                      ภาษาอังกฤษ  ')
     
-    pdf.rect(37, 219, 3, 3)
+    pdf.rect(52, 219, 3, 3)
     pdf.ln(8)
-    pdf.cell(0, 10, u'                           ภาษาไทย')
-    pdf.rect(37, 227, 3, 3)
+    pdf.cell(0, 10, u'                                      ภาษาไทย')
+    pdf.rect(52, 227, 3, 3)
     
+    pdf.ln(8)
+    pdf.cell(94, 10, u'')
+    pdf.cell(100, 10, u'ลงชื่อ................................................อาจารย์ผู้สอน ')
     pdf.ln(8)
     pdf.cell(100, 10, u'')
-    pdf.cell(100, 10, u'ลงชื่อ......................................อาจารย์ผู้สอน ')
+    pdf.cell(110, 10, u''+u'( ' +short_academicPosition + pre_name + firstname +'   '+ lastname+u' )' )
     pdf.ln(8)
-    pdf.cell(110, 10, u'')
-    pdf.cell(110, 10, u'(..............................................) ')
-    pdf.ln(8)
-    pdf.cell(110, 10, u'')
-    pdf.cell(110, 10, u'ลงชื่อ......................................')
-    pdf.ln(8)
-    pdf.cell(110, 10, u'')
-    pdf.cell(110, 10, u'(..............................................) ')
+    pdf.cell(94, 10, u'')
+    pdf.cell(100, 10, u'ลงชื่อ................................................')
     pdf.ln(8)
     pdf.cell(100, 10, u'')
-    pdf.cell(100, 10, u'หัวหน้าภาควิชา............................................')
+    pdf.cell(110, 10, u'(..............................................) ')
+    pdf.ln(8)
+    pdf.cell(94, 10, u'')
+    pdf.cell(100, 10, u'หัวหน้าภาควิชา' + department)
     pdf.ln(8)
 
     pdf.output("group3/uni.pdf", 'F')
@@ -527,10 +686,10 @@ def drawAttr2(pdf, start, end, attr=False): # draw  table for houfpdf()
     pdf.line(10, Y[0], 10, Y[1])
     pdf.line(30, Y[0], 30, Y[1])
     pdf.line(75, Y[0], 75, Y[1])
-    pdf.line(105, Y[0], 105, Y[1])
+    pdf.line(94, Y[0], 94, Y[1])
     
-    pdf.line(130, Y[0], 130, Y[1])
-    pdf.line(163,Y[0], 163, Y[1])
+    pdf.line(112, Y[0], 112, Y[1])
+    pdf.line(150,Y[0], 150, Y[1])
     pdf.line(198, Y[0], 198, Y[1])
 
 def genallpdf(request): # grnerate pdf for show all section data.
@@ -564,6 +723,7 @@ def genallpdf(request): # grnerate pdf for show all section data.
         # write no.
         for Prof in sec: # access all teacher in each section
             cnt_line += 1
+            
             try:
                 first_name = Prof.prof.firstName
                 last_name = Prof.prof.lastName
@@ -622,13 +782,13 @@ def genallpdf(request): # grnerate pdf for show all section data.
                 sahakorn = 'None'
                 
             pdf.cell(8, 18, no)
-            pdf.cell(45, 18, full_name)
+            pdf.cell(45, 18,full_name)
             pdf.cell(8, 18, shortname)
             pdf.cell(17, 18, subjectID)
             pdf.cell(45, 18, subject)
             pdf.cell(12, 18, section)
             pdf.cell(7, 18, day)
-            pdf.cell(17, 18, str(starttime))
+            pdf.cell(16, 18, str(starttime))
             pdf.cell(12, 18, room)
             pdf.cell(19, 18, phone_num)
             pdf.cell(43, 18, email)
@@ -661,29 +821,108 @@ def gen_single_text(pdf, position, text=""): # use to create a single text for o
     pdf.cell(position, 18, u'' + text)
     pdf.ln(8)
 
-def hourpdf(request): # use to see working of temporary employee.
+def hourpdf(request, employeeID): # use to see working of temporary employee.
     pdf = FPDF('P', 'mm', 'A4')
     pdf.add_page()
     ganY = [46, 54]  # line bettwen collumn.
     
-    pdf.add_font('Kinnari', '', 'Kinnari.ttf', uni=True)
-    pdf.set_font('Kinnari', '', 12)
+    employeeObj = HourlyEmployee.objects.get(pk=int(employeeID))
+    ListWork = employeeObj.work_set.all()
     
-    gen_single_text(pdf, 60, u'ใบลงเวลาทำงานลูกจ้างชั่วคราวรายชั่วโมง')
-    gen_single_text(pdf, 45, u'มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ')
-    gen_single_text(pdf, 70, u'ชื่อ')
+    pdf.add_font('THSarabun', '', 'THSarabun.ttf', uni=True)
+    pdf.set_font('THSarabun', '', 16)
+    
+    gen_single_text(pdf, 65, u'ใบลงเวลาทำงานลูกจ้างชั่วคราวรายชั่วโมง')
+    gen_single_text(pdf, 57, u'มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ')
+    gen_single_text(pdf, 75, u'ชื่อ' + employeeObj.user.firstname_th + '   '+employeeObj.user.lastname_th)
     
     pdf.ln(8)
-    pdf.cell(0, 18, u'    วัน           วันที่ เดือน ปี          เวลาทำงาน      รวมชั่วโมง       ลายมือชื่อ          หมายเหตุ')
+    pdf.cell(0, 18, u'      วัน                 วันที่ เดือน ปี           เวลาทำงาน  รวมชั่วโมง          ลายมือชื่อ                       หมายเหตุ')
     drawAttr2(pdf, ganY[0], ganY[1], True)
+    pdf.ln(12)
+
+    numLine = 0
+    payment = 0
+    show_payment = 0
+    for working in ListWork:
+        numLine += 1
+        drawAttr2(pdf, ganY[0] + (numLine*8), ganY[1] + (numLine*8))
+        if working.day.weekday() == 0:  # geting day to pdf
+            pdf.cell(20, 10, u'วันจันทร์')
+        elif working.day.weekday() == 1:
+            pdf.cell(20, 10, u'วันอังคาร')
+        elif working.day.weekday() == 2:
+            pdf.cell(20, 10, u'วันพุธ')
+        elif working.day.weekday() == 3:
+            pdf.cell(20, 10, u'วันพฤหัสบดี')
+        elif working.day.weekday() == 4:
+            pdf.cell(20, 10, u'วันศุกร์')
+        elif working.day.weekday() == 5:
+            pdf.cell(20, 10, u'วันเสาร์')
+        else:
+            pdf.cell(20, 10, u'วันอาทิตย์')
+        
+        space = 26
+        pdf.cell(5, 10, u''+ str(working.releaseDate.day)) # get day
+        if working.releaseDate.month == 1:  # get month
+            pdf.cell(space, 10, u' มกราคม พ.ศ. ' )
+        elif working.releaseDate.month == 2:
+            pdf.cell(space, 10, u' กุมภาพันธ์ พ.ศ. ' )
+        elif working.releaseDate.month == 3:
+            pdf.cell(space, 10, u' มีนาคม พ.ศ. ' )
+        elif working.releaseDate.month == 4:
+            pdf.cell(space, 10, u' เมษายน พ.ศ. ' )
+        elif working.releaseDate.month == 5:
+            pdf.cell(space, 10, u' พฤษภาคม พ.ศ. ' )
+        elif working.releaseDate.month == 6:
+            pdf.cell(space, 10, u' มิถุนายน พ.ศ. ' )
+        elif working.releaseDate.month == 7:
+            pdf.cell(space, 10, u' กรกฏาคม พ.ศ. ' )
+        elif working.releaseDate.month == 8:
+            pdf.cell(space, 10, u' สิงหาคม พ.ศ. ' )
+        elif working.releaseDate.month == 9:
+            pdf.cell(space, 10, u' กันยายน พ.ศ. ' )
+        elif working.releaseDate.month == 10:
+            pdf.cell(space, 10, u' ตุลาคม พ.ศ. ' )
+        elif working.releaseDate.month == 11:
+            pdf.cell(space, 10, u' พฤศจิกายน พ.ศ. ' )
+        else:
+            pdf.cell(space, 10, u' ธันวาคม พ.ศ. ' )
+        
+        pdf.cell(17, 10, u''+ str(543+int(str(working.releaseDate.year))) )
+        pdf.cell(20, 10, u''+ str(working.startTime.hour)+':'+str(working.startTime.minute))
+        come_time = str(working.startTime.hour)+':'+str(working.startTime.minute) # time that employee come to work.
+        back_time = str(working.endTime.hour)+':'+str(working.endTime.minute) # time that employee go home
+        diff_min = int(back_time.split(':')[1]) - int(come_time.split(':')[1])    # calculate differ value of come_time
+        diff_hour = int(back_time.split(':')[0]) - int(come_time.split(':')[0])  # calculate differ value of back_time
+        if diff_min < 0:
+            diff_min = 60 - diff_min
+        diff_min_100 = float(str(diff_min))/60
+        
+        show_payment = show_payment + ( float(diff_hour)+ (float(diff_min)/100) ) 
+        pdf.cell(52, 10, u''+ str(diff_hour)+'.'+str(diff_min))
+        pdf.cell(90, 10, u''+working.note)
+        pdf.ln(8)
+        payment = payment + (float(str(diff_min_100)[:4]) + float(diff_hour))
+        
     
-    gen_single_text(pdf, 90, u'รวมจำนวนชั่วโมง ' + u'ชั่วโมง') # call spacial funtion to write a text per line.
+    index_str = 0
+    show_complete_pay = ''
+    for i in str(payment)[:4][::-1]:
+        index_str = index_str + 1
+        if (index_str % 3) == 0:
+            show_complete_pay = ',' + i + show_complete_pay 
+        else:
+            show_complete_pay = i + show_complete_pay 
+    
+    gen_single_text(pdf, 90, u'รวมจำนวนชั่วโมง ' +str(show_payment)+ u' ชั่วโมง') # call spacial funtion to write a text per line.
     gen_single_text(pdf, 90, u'อัตรา 45.45 บาท ชั่วโมง')
-    gen_single_text(pdf, 90, u'รวมเป็นเงินทั้งสิ้น' + u'บาท')
-    gen_single_text(pdf, 90, u'(                   )')
+    payment = payment * 45.45
+    gen_single_text(pdf, 85, u'รวมเป็นเงินทั้งสิ้น ' + str(payment)[:4] +u' บาท')
+    gen_single_text(pdf, 85, u'(                                     )')
     gen_single_text(pdf, 90, u'ได้ตรวจสอบถูกต้องแล้ว')
-    gen_single_text(pdf, 75, u'ลงชื่อ.......................................................')
-    gen_single_text(pdf, 80, u'(...................................................)')
+    gen_single_text(pdf, 65, u'ลงชื่อ........................................................................................')
+    gen_single_text(pdf, 70, u'(.....................................................................................)')
     
     pdf.output("group3/hour.pdf", 'F')
     
@@ -774,7 +1013,6 @@ def updateSection(request, teachID):
 def prof2lang_delete(request, profID): # delete teacher data from index page.
     teachObj = Teach.objects.get(pk= int(profID))
     teachObj.delete()
-    
     teachList = Teach.objects.all()
     template = 'group3/prof2lang_index.html'
     return render(
@@ -785,8 +1023,16 @@ def prof2lang_delete(request, profID): # delete teacher data from index page.
 
 def hour_index(request):
     template = 'group3/hour_index.html'
-    return render(request, template)
 
+    return render(request, template,
+                      {}
+                      )
+    
+def add_hour_page(request, workID):
+    workObj = Work.objects.get(pk=int(workID))
+    template = 'group3/add_hour.html'
+    return render(request, template, {'work_obj':workObj})
+    
 def shiftProf(request, teachID):
     if request.method == 'POST':
         # get Teach Object
@@ -844,3 +1090,110 @@ def shiftSection(request, teachID):
         currentTeach.save()
 
     return HttpResponseRedirect(reverse('group3:prof2lang_view', args=[teachID]))
+
+def search_hour_worker(request):
+    if request.method == 'POST':
+        name = request.POST["username"]
+        try:
+            template = "group3/hour_profile.html"
+            context = {}
+            user = User.objects.get(username=name)
+            profile = UserProfile.objects.get(user=user)
+            try:    
+                worker = HourlyEmployee.objects.get(user=profile)
+            except:
+                worker = HourlyEmployee(user=profile, employmentRate=45.45)
+                worker.save()
+            return HttpResponseRedirect(reverse("group3:returnsearch", args=[worker.id]))
+        except:
+            template = "group3/hour_index.html"
+            context = {}
+            context["error"] = "โปรดตรวจสอบ username ใหม่อีกครั้ง"
+            
+        return render(
+            request,
+            template,
+            context
+        )
+
+def returnsearch(request, id):
+    template = "group3/hour_profile.html"
+    context = {}
+    worker = HourlyEmployee.objects.get(id=int(id))
+    ListWork = worker.work_set.all().order_by('id')
+    print ListWork[0].releaseDate
+    try:
+        profile = worker.user
+
+        context['name_th'] = profile.firstname_th
+        context['last_th'] = profile.lastname_th
+        context['name_en'] = profile.firstname_en
+        context['last_en'] = profile.lastname_en
+
+        if profile.department == '0':
+            department = ''
+        elif profile.department == '1':
+            department = 'วิศวกรรมไฟฟ้าและคอมพิวเตอร์'
+
+        context['department'] = department
+
+        if profile.faculty == '0':
+            faculty = ''
+        elif profile.faculty == '1':
+            faculty = 'วิศวกรรมศาสตร์'
+
+        context['faculty'] = faculty
+        context['tel'] = profile.tel
+        context['worker'] = worker
+
+        if str(ListWork[len(ListWork)-1].endTime) == time.strftime("00:00:01"):
+            status_on = 'disabled'
+            status_off = 'active'
+        else:
+            status_on = 'active'
+            status_off = 'disabled'
+
+        context['ListWork'] = ListWork
+        context['employObj'] = worker
+        context['status_on'] = status_on
+        context['status_off'] = status_off
+
+    except:
+        print "Except"
+        context['ListWork'] = ListWork
+        context['employObj'] = worker
+        context['status_on'] = 'active'
+        context['status_off'] = 'disabled'
+
+    return render(
+        request,
+        template,
+        context
+    )
+
+def add_hour_note(request, workID):
+    if request.method == 'POST':
+        workObj = Work.objects.get(id=int(workID))
+        workObj.note = request.POST['input_note_hour']
+        workObj.save()
+        employee = workObj.employee
+        return HttpResponseRedirect(reverse('group3:returnsearch', args=[employee.id]))
+
+def add_hour_date(request, employeeID):
+    employee = HourlyEmployee.objects.get(id=employeeID)
+    userprofile = employee.user
+    emploeeObj = HourlyEmployee.objects.get(user=userprofile)
+    workObj = Work(employee=emploeeObj, startTime=time.strftime("%H:%M"), endTime=time.strftime("00:00:01"))
+    workObj.save()
+    return HttpResponseRedirect(reverse('group3:returnsearch', args=[employeeID]))
+
+def add_hour_date2(request, employeeID):
+    employee = HourlyEmployee.objects.get(id=employeeID)
+    userprofile = employee.user
+    emploeeObj = HourlyEmployee.objects.get(user=userprofile)
+    lenworkObj = len(Work.objects.filter(employee=emploeeObj)) - 1
+    workObj = Work.objects.filter(employee=emploeeObj)[lenworkObj]
+    workObj.endTime = endTime=time.strftime("%H:%M")
+    workObj.save()
+    return HttpResponseRedirect(reverse('group3:returnsearch', args=[employeeID]))
+

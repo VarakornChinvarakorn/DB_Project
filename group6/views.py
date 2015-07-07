@@ -8,21 +8,49 @@ from group6.models import *
 from login.models import *
 from datetime import datetime
 
+month = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม']
+
 def index(request):
     if request.user.is_authenticated():
         u = UserProfile.objects.get(user=request.user)
-        s = Student.objects.get(userprofile=u)
-        project = s.projectg6_set.all()
-        research = []
-        offer = []
-        approve = []
-        timeLine = []
-        for p in project:
-            research.append(ResearchProjectForm.objects.get(project=p))
-            offer.append(OfferProjectForm.objects.get(project=p))
-            approve.append(ApproveProjectForm.objects.get(project=p))
-            timeLine.append(TimeLineForm.objects.get(project=p))
-        return render(request, 'group6/index.html', {'project_list': project, 'research': research, 'offer': offer, 'approve': approve, 'timeLine': timeLine},)
+        if u.type == '0':
+            s = Student.objects.get(userprofile=u)
+            project = s.projectg6_set.all()
+            research = []
+            offer = []
+            approve = []
+            timeLine = []
+            for p in project:
+                research.append(ResearchProjectForm.objects.get(project=p))
+                offer.append(OfferProjectForm.objects.get(project=p))
+                approve.append(ApproveProjectForm.objects.get(project=p))
+                timeLine.append(TimeLineForm.objects.get(project=p))
+            return render(request, 'group6/index.html', {'project_list': project, 'research': research, 'offer': offer, 'approve': approve, 'timeLine': timeLine},)
+        elif u.type == '1':
+            t = Teacher.objects.get(userprofile=u)
+            project = ProjectG6.objects.filter(teacher=t)
+            research = []
+            offer = []
+            approve = []
+            timeLine = []
+            for p in project:
+                research.append(ResearchProjectForm.objects.get(project=p))
+                offer.append(OfferProjectForm.objects.get(project=p))
+                approve.append(ApproveProjectForm.objects.get(project=p))
+                timeLine.append(TimeLineForm.objects.get(project=p))
+            return render(request, 'group6/index_teacher_officer.html', {'project_list': project, 'research': research, 'offer': offer, 'approve': approve, 'timeLine': timeLine},)
+        elif u.type == '2':
+            project = ProjectG6.objects.all()
+            research = []
+            offer = []
+            approve = []
+            timeLine = []
+            for p in project:
+                research.append(ResearchProjectForm.objects.get(project=p))
+                offer.append(OfferProjectForm.objects.get(project=p))
+                approve.append(ApproveProjectForm.objects.get(project=p))
+                timeLine.append(TimeLineForm.objects.get(project=p))
+            return render(request, 'group6/index_teacher_officer.html', {'project_list': project, 'research': research, 'offer': offer, 'approve': approve, 'timeLine': timeLine},)
     else:
         return render(request, 'base.html')
 
@@ -35,7 +63,7 @@ def create_3forms(request):
         else:
             s = Student.objects.get(userprofile=u)
             teachers = Teacher.objects.all()
-            return render(request, 'group6/create_3forms.html', {'teachers': teachers, 'student': s, 'numOP': 1, 'yearOE': int(datetime.now().year + 543), 'edit': '1', 'monthST': 'มกราคม', 'yearST': int(datetime.now().year + 543)},)
+            return render(request, 'group6/create_3forms.html', {'teachers': teachers, 'student': s, 'numOP': 1, 'yearOE': int(datetime.now().year + 543), 'edit': '1'},)
     else:
         return render(request, 'base.html')
 
@@ -46,13 +74,13 @@ def create_3forms_add(request):
         s = Student.objects.get(userprofile=u)
         s_list, myCheck, process, myCheck1, myCheck2, myCheck3, myCheck4, myCheck5, myCheck6, myCheck7, myCheck8 = [], [], [], [], [], [], [], [], [], [], []
         s_list.append(s)
-        yearOE, nameTH, nameEN, numOP, adv, obj, scopes, benefits, reasons, priceOM, priceOO, credits, courses, semester, yearEN, dateST, monthST, yearST, process1, process2, process3, process4, process5, process6, process7, process8, note = "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
-        error_yearOE, error_nameTH, error_nameEN, error_numOP, error_adv, error_obj, error_scopes, error_benefits, error_reasons, error_priceOM, error_priceOO, error_credits, error_courses, error_semester, error_yearEN, error_dateST, error_yearST, error_monthST, error_process = "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
-        error_student = []
+        yearOE, nameTH, nameEN, numOP, adv, obj, scopes, benefits, reasons, priceOM, priceOO, credits, courses, semester, yearEN, dateST, process1, process2, process3, process4, process5, process6, process7, process8, note = "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+        error_yearOE, error_nameTH, error_nameEN, error_numOP, error_adv, error_obj, error_scopes, error_benefits, error_reasons, error_priceOM, error_priceOO, error_credits, error_courses, error_semester, error_yearEN, error_process, error_dateST = "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+        error_student, date = [], []
         error_student.append("")
         error = False
         try:
-            if 'yearOfEducation' and 'name_thai' and 'name_eng' and 'numberOfPeople' and 'adviser' and 'objective' and 'scope' and 'benefit' and 'reason' and 'priceOfMaterial' and 'priceOfOther' and 'credit' and 'course' and 'semesterEnd' and 'yearEnd' and 'dateSTART' and 'monthSTART' and 'yearSTART' and 'process1' and 'process2' and 'process3' and 'process4' and 'process5' and 'process6' and 'process7' and 'process8' and 'notation' in request.POST: #Check key in POST
+            if 'yearOfEducation' and 'name_thai' and 'name_eng' and 'numberOfPeople' and 'adviser' and 'objective' and 'scope' and 'benefit' and 'reason' and 'priceOfMaterial' and 'priceOfOther' and 'credit' and 'course' and 'semesterEnd' and 'yearEnd' and 'startDate' and 'process1' and 'process2' and 'process3' and 'process4' and 'process5' and 'process6' and 'process7' and 'process8' and 'notation' in request.POST: #Check key in POST
                 yearOE = request.POST['yearOfEducation'] #Get Value from key
                 nameTH = request.POST['name_thai']
                 nameEN = request.POST['name_eng']
@@ -68,9 +96,7 @@ def create_3forms_add(request):
                 courses = request.POST['course']
                 semester = request.POST['semesterEnd']
                 yearEN = request.POST['yearEnd']
-                dateST = request.POST['dateSTART']
-                monthST = request.POST['monthSTART']
-                yearST = request.POST['yearSTART']
+                dateST = request.POST['startDate']
                 process1 = request.POST['process1']
                 process2 = request.POST['process2']
                 process3 = request.POST['process3']
@@ -213,46 +239,17 @@ def create_3forms_add(request):
                         else:
                             error_student.append(("*เลขประจำตัว "+str(studentID)+" มีอยู่แล้ว"))
                         error = True
-                if numOP != len(s_list):
-                    error == True
-                if int(yearST) > int(datetime.now().year + 543) or int(yearST) < int(datetime.now().year + 535) or yearST == "":
-                    error_yearST = "*กรุณาเลือกปีที่ทำปริญญานิพนธ์ใหม่" #If user_name is in use set error message and error to true
+                if int(numOP) != len(s_list):
                     error = True
-                if monthST == "" or monthST not in [u"มกราคม",u"กุมภาพันธ์",u"มีนาคม",u"เมษายน",u"พฤษภาคม",u"มิถุนายน",u"กรกฎาคม",u"สิงหาคม",u"กันยายน",u"ตุลาคม",u"พฤษจิกายน",u"ธันวาคม"]:
-                    error_monthST = "*กรุณาเลือกเดือนที่ทำปริญญานิพนธ์ใหม่"
+                    error_dateST = str(len(s_list)) + "   " + str(numOP)
+                if dateST == "":
+                    error = True
+                    error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
                 else:
-                    if dateST != "":
-                        if int(dateST) > 0:
-                            if monthST[-2:] == u"คม":
-                                if int(dateST) > 31:
-                                    error = True
-                                    error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                            elif monthST[-2:] == u"ยน":
-                                if int(dateST) > 30:
-                                    error = True
-                                    error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                            elif monthST[-2:] == u"ธ์":
-                                if (int(yearST)-543) % 400 == 0:
-                                    if int(dateST) > 29:
-                                        error = True
-                                        error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                                elif (int(yearST)-543) % 4 == 0:
-                                    if int(dateST) > 29:
-                                        error = True
-                                        error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                                elif (int(yearST)-543) % 100 == 0:
-                                    if int(dateST) > 28:
-                                        error = True
-                                        error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                                elif int(dateST) > 28:
-                                    error = True
-                                    error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                        else:
-                            error = True
-                            error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                    else:
+                    date = dateST.split("-")
+                    if len(date) != 3:
                         error = True
-                        error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
+                        error_dateST = "*กรุณาตรวจสอบวันที่ใหม่2"
                 if process1 == "":
                     error_process = "*กรุณาระบุขั้นตอนการดำเนินงาน อย่างน้อย 1 ขั้นตอน" #If empty set error message and error to true
                     error = True
@@ -326,7 +323,7 @@ def create_3forms_add(request):
                 raise KeyError 
         except (KeyError, ValueError): #When exception render form with error message
             teachers = Teacher.objects.all()
-            return render(request, 'group6/create_3forms.html', {'teachers': teachers, 'student': s, 'error_yearOE': error_yearOE, 'error_nameTH': error_nameTH, 'error_nameEN': error_nameEN, 'error_numOP': error_numOP, 'error_adv': error_adv, 'error_obj': error_obj, 'error_scopes': error_scopes, 'error_benefits': error_benefits, 'error_reasons': error_reasons, 'error_priceOM': error_priceOM, 'error_priceOO': error_priceOO, 'error_credits': error_credits, 'error_courses': error_courses, 'error_semester': error_semester, 'error_yearEN': error_yearEN, 'error_student': error_student, 'nameTH': nameTH, 'nameEN': nameEN, 'obj': obj, 'scopes': scopes, 'benefits': benefits, 'reasons': reasons, 'priceOM': priceOM, 'priceOO': priceOO, 'credits': credits, 'courses': courses, 'semester': semester, 'yearEN': yearEN, 'student_list': s_list, 'numOP': numOP, 'yearOE': yearOE, 'edit': '1', 'error_yearST': error_yearST, 'error_dateST': error_dateST, 'error_monthST': error_monthST, 'dateST': dateST, 'monthST': monthST, 'yearST': yearST, 'error_process': error_process, 'note': note, 'process1': process1, 'checkList1': myCheck1, 'process2': process2, 'checkList2': myCheck2, 'process3': process3, 'checkList3': myCheck3, 'process4': process4, 'checkList4': myCheck4, 'process5': process5, 'checkList5': myCheck5, 'process6': process6, 'checkList6': myCheck6, 'process7': process7, 'checkList7': myCheck7, 'process8': process8, 'checkList8': myCheck8},)
+            return render(request, 'group6/create_3forms.html', {'teachers': teachers, 'student': s, 'error_yearOE': error_yearOE, 'error_nameTH': error_nameTH, 'error_nameEN': error_nameEN, 'error_numOP': error_numOP, 'error_adv': error_adv, 'error_obj': error_obj, 'error_scopes': error_scopes, 'error_benefits': error_benefits, 'error_reasons': error_reasons, 'error_priceOM': error_priceOM, 'error_priceOO': error_priceOO, 'error_credits': error_credits, 'error_courses': error_courses, 'error_semester': error_semester, 'error_yearEN': error_yearEN, 'error_student': error_student, 'nameTH': nameTH, 'nameEN': nameEN, 'obj': obj, 'scopes': scopes, 'benefits': benefits, 'reasons': reasons, 'priceOM': priceOM, 'priceOO': priceOO, 'credits': credits, 'courses': courses, 'semester': semester, 'yearEN': yearEN, 'student_list': s_list, 'numOP': numOP, 'yearOE': yearOE, 'edit': '1', 'error_dateST': error_dateST, 'startDate': dateST, 'error_process': error_process, 'note': note, 'process1': process1, 'checkList1': myCheck1, 'process2': process2, 'checkList2': myCheck2, 'process3': process3, 'checkList3': myCheck3, 'process4': process4, 'checkList4': myCheck4, 'process5': process5, 'checkList5': myCheck5, 'process6': process6, 'checkList6': myCheck6, 'process7': process7, 'checkList7': myCheck7, 'process8': process8, 'checkList8': myCheck8},)
         project = ProjectG6(teacher = Teacher.objects.get(id=int(adv)), name_thai = nameTH, name_eng = nameEN, yearOfEducation = yearOE, objective = obj, reason = reasons, scope = scopes, benefit = benefits)
         project.save()
         project.student = s_list
@@ -336,7 +333,7 @@ def create_3forms_add(request):
         offer.save()
         approve = ApproveProjectForm(project = project, student = s, course = courses, semesterEnd = semester, yearEnd = yearEN, credit = credits)
         approve.save()
-        timeline = TimeLineForm(project = project, day = dateST, month = monthST, year = yearST, note = note)
+        timeline = TimeLineForm(project = project, day = date[2], month = month[int(date[1])-1], year = int(date[0])+543, note = note)
         timeline.save()
         for i in range(8):
             if process[i] != '':
@@ -357,7 +354,7 @@ def edit_3forms(request, pjID):
     if request.user.is_authenticated():
         u = UserProfile.objects.get(user=request.user)
         if u.type != '0':
-            messages.add_message(request, messages.INFO, "Only Student can create form")
+            messages.add_message(request, messages.INFO, "*นักเรียนเท่านั้นที่สามารถสร้างฟอร์มได้")
             return HttpResponseRedirect(reverse('group6:project_docs_index')) #redirect to index
         else:
             s = Student.objects.get(userprofile=u)
@@ -374,12 +371,6 @@ def edit_3forms(request, pjID):
             offer = OfferProjectForm.objects.get(project=p)
             approve = ApproveProjectForm.objects.get(project=p)
             timeLine = TimeLineForm.objects.get(project=p)
-            #for pro in timeLine.stepintimeline_set.all():
-            #    process.append(pro.processDescription)
-            #    myCheck.append([pro.month1, pro.month2, pro.month3, pro.month4, pro.month5, pro.month6, pro.month7, pro.month8, pro.month9, pro.month10, pro.month11, pro.month12])
-            #for i in range(len(process),8):
-                #process.append("")
-                #myCheck.append([])
             for i in range(8):
                 pro = StepInTimeLine.objects.filter(timeline=timeLine, numberOfProcess=i+1)
                 if len(pro) == 0:
@@ -388,7 +379,16 @@ def edit_3forms(request, pjID):
                 else:
                     process.append(pro[0].processDescription)
                     myCheck.append([pro[0].month1, pro[0].month2, pro[0].month3, pro[0].month4, pro[0].month5, pro[0].month6, pro[0].month7, pro[0].month8, pro[0].month9, pro[0].month10, pro[0].month11, pro[0].month12])
-            return render(request, 'group6/create_3forms.html', {'teachers': teachers, 'student': s, 'nameTH': p.name_thai, 'nameEN': p.name_eng, 'obj': p.objective, 'scopes': p.scope, 'benefits': p.benefit, 'reasons': p.reason, 'priceOM': offer.priceOfMaterial, 'priceOO': offer.priceOfOther, 'credits': approve.credit, 'courses': approve.course, 'semester': approve.semesterEnd, 'yearEN': approve.yearEnd, 'student_list': p.student.all(), 'numOP': research.numberOfPeople, 'yearOE': p.yearOfEducation, 'edit': '0', 'project_id': p.id, 'dateST': timeLine.day, 'monthST': timeLine.month, 'yearST': timeLine.year, 'note': timeLine.note, 'process1': process[0], 'checkList1': myCheck[0], 'process2': process[1], 'checkList2': myCheck[1], 'process3': process[2], 'checkList3': myCheck[2], 'process4': process[3], 'checkList4': myCheck[3], 'process5': process[4], 'checkList5': myCheck[4], 'process6': process[5], 'checkList6': myCheck[5], 'process7': process[6], 'checkList7': myCheck[6], 'process8': process[7], 'checkList8': myCheck[7]},)
+            startDate = str(timeLine.year-543)+'-'
+            if month.index(timeLine.month.encode("utf-8"))+1 < 10:
+                startDate += '0'+str(month.index(timeLine.month.encode("utf-8"))+1)+'-'
+            else:
+                startDate += str(month.index(timeLine.month.encode("utf-8"))+1)+'-'
+            if timeLine.day < 10:
+                startDate += '0'+str(timeLine.day)
+            else:
+                startDate += str(timeLine.day)
+            return render(request, 'group6/create_3forms.html', {'teachers': teachers, 'student': s, 'nameTH': p.name_thai, 'nameEN': p.name_eng, 'obj': p.objective, 'scopes': p.scope, 'benefits': p.benefit, 'reasons': p.reason, 'priceOM': offer.priceOfMaterial, 'priceOO': offer.priceOfOther, 'credits': approve.credit, 'courses': approve.course, 'semester': approve.semesterEnd, 'yearEN': approve.yearEnd, 'student_list': p.student.all(), 'numOP': research.numberOfPeople, 'yearOE': p.yearOfEducation, 'edit': '0', 'project_id': p.id, 'startDate': startDate, 'note': timeLine.note, 'process1': process[0], 'checkList1': myCheck[0], 'process2': process[1], 'checkList2': myCheck[1], 'process3': process[2], 'checkList3': myCheck[2], 'process4': process[3], 'checkList4': myCheck[3], 'process5': process[4], 'checkList5': myCheck[4], 'process6': process[5], 'checkList6': myCheck[5], 'process7': process[6], 'checkList7': myCheck[6], 'process8': process[7], 'checkList8': myCheck[7]},)
     else:
         return render(request, 'base.html')
 
@@ -399,13 +399,13 @@ def edit_3forms_update(request, pjID):
         p = ProjectG6.objects.get(id=pjID)
         s_list, myCheck, process, myCheck1, myCheck2, myCheck3, myCheck4, myCheck5, myCheck6, myCheck7, myCheck8 = [], [], [], [], [], [], [], [], [], [], []
         s_list.append(s)
-        yearOE, nameTH, nameEN, numOP, adv, obj, scopes, benefits, reasons, priceOM, priceOO, credits, courses, semester, yearEN, dateST, monthST, yearST, process1, process2, process3, process4, process5, process6, process7, process8, note = "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
-        error_yearOE, error_nameTH, error_nameEN, error_numOP, error_adv, error_obj, error_scopes, error_benefits, error_reasons, error_priceOM, error_priceOO, error_credits, error_courses, error_semester, error_yearEN, error_dateST, error_yearST, error_monthST, error_process = "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
-        error_student = []
+        yearOE, nameTH, nameEN, numOP, adv, obj, scopes, benefits, reasons, priceOM, priceOO, credits, courses, semester, yearEN, dateST, process1, process2, process3, process4, process5, process6, process7, process8, note = "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+        error_yearOE, error_nameTH, error_nameEN, error_numOP, error_adv, error_obj, error_scopes, error_benefits, error_reasons, error_priceOM, error_priceOO, error_credits, error_courses, error_semester, error_yearEN, error_process, error_dateST = "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+        error_student, date = [], []
         error_student.append("")
         error = False
         try:
-            if 'yearOfEducation' and 'name_thai' and 'name_eng' and 'numberOfPeople' and 'adviser' and 'objective' and 'scope' and 'benefit' and 'reason' and 'priceOfMaterial' and 'priceOfOther' and 'credit' and 'course' and 'semesterEnd' and 'yearEnd' and 'dateSTART' and 'monthSTART' and 'yearSTART' and 'process1' and 'process2' and 'process3' and 'process4' and 'process5' and 'process6' and 'process7' and 'process8' and 'notation' in request.POST: #Check key in POST
+            if 'yearOfEducation' and 'name_thai' and 'name_eng' and 'numberOfPeople' and 'adviser' and 'objective' and 'scope' and 'benefit' and 'reason' and 'priceOfMaterial' and 'priceOfOther' and 'credit' and 'course' and 'semesterEnd' and 'yearEnd' and 'startDate' and 'process1' and 'process2' and 'process3' and 'process4' and 'process5' and 'process6' and 'process7' and 'process8' and 'notation' in request.POST: #Check key in POST
                 yearOE = request.POST['yearOfEducation'] #Get Value from key
                 nameTH = request.POST['name_thai']
                 nameEN = request.POST['name_eng']
@@ -421,9 +421,7 @@ def edit_3forms_update(request, pjID):
                 courses = request.POST['course']
                 semester = request.POST['semesterEnd']
                 yearEN = request.POST['yearEnd']
-                dateST = request.POST['dateSTART']
-                monthST = request.POST['monthSTART']
-                yearST = request.POST['yearSTART']
+                dateST = request.POST['startDate']
                 process1 = request.POST['process1']
                 process2 = request.POST['process2']
                 process3 = request.POST['process3']
@@ -568,44 +566,14 @@ def edit_3forms_update(request, pjID):
                         error = True
                 if numOP != len(s_list):
                     error == True
-                if int(yearST) > int(datetime.now().year + 543) or int(yearST) < int(datetime.now().year + 535) or yearST == "":
-                    error_yearST = "*กรุณาเลือกปีที่ทำปริญญานิพนธ์ใหม่" #If user_name is in use set error message and error to true
+                if dateST == "":
                     error = True
-                if monthST == "" or monthST not in [u"มกราคม",u"กุมภาพันธ์",u"มีนาคม",u"เมษายน",u"พฤษภาคม",u"มิถุนายน",u"กรกฎาคม",u"สิงหาคม",u"กันยายน",u"ตุลาคม",u"พฤษจิกายน",u"ธันวาคม"]:
-                    error_monthST = "*กรุณาเลือกเดือนที่ทำปริญญานิพนธ์ใหม่"
+                    error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
                 else:
-                    if dateST != "":
-                        if int(dateST) > 0:
-                            if monthST[-2:] == u"คม":
-                                if int(dateST) > 31:
-                                    error = True
-                                    error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                            elif monthST[-2:] == u"ยน":
-                                if int(dateST) > 30:
-                                    error = True
-                                    error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                            elif monthST[-2:] == u"ธ์":
-                                if (int(yearST)-543) % 400 == 0:
-                                    if int(dateST) > 29:
-                                        error = True
-                                        error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                                elif (int(yearST)-543) % 4 == 0:
-                                    if int(dateST) > 29:
-                                        error = True
-                                        error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                                elif (int(yearST)-543) % 100 == 0:
-                                    if int(dateST) > 28:
-                                        error = True
-                                        error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                                elif int(dateST) > 28:
-                                    error = True
-                                    error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                        else:
-                            error = True
-                            error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
-                    else:
+                    date = dateST.split("-")
+                    if len(date) != 3:
                         error = True
-                        error_dateST = "*กรุณาตรวจสอบวันที่ใหม่"
+                        error_dateST = "*กรุณาตรวจสอบวันที่ใหม่2"
                 if process1 == "":
                     error_process = "*กรุณาระบุขั้นตอนการดำเนินงาน อย่างน้อย 1 ขั้นตอน" #If empty set error message and error to true
                     error = True
@@ -705,9 +673,9 @@ def edit_3forms_update(request, pjID):
         approve.credit = credits
         approve.save()
         timeline = TimeLineForm.objects.get(project=p)
-        timeline.day = dateST
-        timeline.month = monthST
-        timeline.year = yearST
+        timeline.day = date[2]
+        timeline.month = month[int(date[1])-1]
+        timeline.year = int(date[0])+543
         timeline.note = note
         timeline.save()
         for i in range(8):
@@ -845,9 +813,6 @@ def timeLineProjectPrint(request, tlID):
     if request.user.is_authenticated():
         timeLine = TimeLineForm.objects.get(id=tlID)
         processList = []
-        #processList = list(timeLine.stepintimeline_set.all().order_by('numberOfProcess'))
-        #while(len(processList)<8):
-        #    processList.append([])
         for i in range(8):
             pro = StepInTimeLine.objects.filter(timeline=timeLine, numberOfProcess=i+1)
             if len(pro) == 0:
@@ -857,3 +822,18 @@ def timeLineProjectPrint(request, tlID):
         return render(request, 'group6/timeLineProject_view_print.html', {'timeLine': timeLine, 'processList': processList},)
     else:
         return render(request, 'base.html')
+
+def timeLineProjectPrintCheck(request, tlID):
+    if request.user.is_authenticated():
+        timeLine = TimeLineForm.objects.get(id=tlID)
+        processList = []
+        for i in range(8):
+            pro = StepInTimeLine.objects.filter(timeline=timeLine, numberOfProcess=i+1)
+            if len(pro) == 0:
+                processList.append([])
+            else:
+                processList.append(pro[0])
+        return render(request, 'group6/timeLineProject_view_print_check.html', {'timeLine': timeLine, 'processList': processList},)
+    else:
+        return render(request, 'base.html')
+

@@ -9,6 +9,12 @@
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/application.js' %}"></script>
+
+    <!-- jquery-ui 1.11.4.custom -->
+    <link rel="stylesheet" type="text/css" href="{% static 'jquery-ui-1.10.4.custom/css/smoothness/jquery-ui-1.10.4.custom.min.css' %}">
+    <script type="text/javascript" src="{% static 'jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jqueryui_datepicker_thai.js' %}"></script>
+
     {% block head %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
 
@@ -22,7 +28,7 @@
                     <img src="{% static 'images/ece_logo_edit_2.gif' %}" class="img-responsive" alt="Cinque Terre" style="max-width:100%; height:auto;">
                 </div>
                 <div class="col-sm-10">
-                    <h1>e-Office ECE
+                    <h1>e-Office
                     <p class="lead">สำนักงานอิเล็กทรอนิกส์</p></h1>
                 </div>
             </div>
@@ -114,6 +120,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'group6:project_docs_index' %}">ฟอร์มเสนอโครงงานที่สร้างไว้</a></li>
                             <li><a href="{% url 'group6:project_docs_create_3forms' %}">สร้างฟอร์มเสนอโครงงานใหม่</a></li>
+                            <li><a href="{% static "group6/template_ECE_.docx" %}">ตัวอย่างรูปเล่มโปรเจค</a></li>
                         </ul>
                     </li>
 

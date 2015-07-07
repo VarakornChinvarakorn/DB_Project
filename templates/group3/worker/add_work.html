@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Menu เมนู{% endblock %}
+{% block pageHeader %}<h1>ระบบ<small> พนักงานรายชั่วโมง</small></h1>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="{% url 'group3:hour_index' %}">ค้นหา</a></li>
+    <li><a href="{% url 'group3:returnsearch' employee.id %}">ระบบพนักงานรายชั่วโมง</a></li>
+    <li class="active">เพิ่มข้อมูล</li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="container-fluid">
+        <div class="col-md-3"></div>
+        <form  class="form-inline" method="post" action="{% url 'group3:add_work' employee.id %}">
+            {% csrf_token %}
+            <div class="col-md-6">
+                <div class="row">
+                    <!-- เวลาเริ่ม และ สิ้นสุด -->
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-2 control-label">เริ่มงาน: </label>
+                        <!-- ชั่วโมง เริ่ม -->
+                        <div class="col-sm-2">
+                            <select name="startTime_hour" class="form-control">
+                                <script>
+                                        for(var i = 0; i < 24; i++){
+                                            document.write('<option value="' + i + '">' + i + '</option>');
+                                        }
+                                    </script>
+                            </select>
+                        </div>
+
+                        <!-- นาที เริ่ม -->
+                        <div class="col-sm-2">
+                            <select name="startTime_minute" class="form-control">
+                                <script>
+                                        for(var i = 0; i < 60; i++){
+                                            document.write('<option value="' + i + '">' + i + '</option>');
+                                        }
+                                    </script>
+                            </select>
+                        </div>
+                        <div class="col-sm-2"><center>ถึง</center></div>
+                        <!-- ชั่วโมง สิ้นสุด -->
+                        <div class="col-sm-2">
+                            <select name="endTime_hour" class="form-control">
+                                <script>
+                                        for(var i = 0; i < 24; i++){
+                                            document.write('<option value="' + i + '">' + i + '</option>');
+                                        }
+                                    </script>
+                            </select>
+                        </div>
+                        <!-- นาที สิ้นสุด -->
+                        <div class="col-sm-2">
+                            <select name="endTime_minute" class="form-control">
+                                <script>
+                                        for(var i = 0; i < 60; i++){
+                                            document.write('<option value="' + i + '">' + i + '</option>');
+                                        }
+                                    </script>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-default">ตกลง</button>
+                </div>
+            </div>
+        </form>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+{% endblock %}

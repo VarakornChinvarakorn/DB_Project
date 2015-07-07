@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Group7{% endblock %}
+
+{% block pageHeader %}
+<h2>กระบวน <small>การเบิกจ่ายค่าวัสดุในการทำโครงงาน</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="/group7Project_Docs/">รายชื่อโครงงาน</a></li>
+    <li><a href="/group7Project_Docs/">รายการวัสดุ</a></li>
+    <li class="active">รายนามบริษัท</li>
+</ol>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+<center><h3>รายนามบริษัทที่มีการสั่งวัสดุ{{order.id}}</h3></center>
+{% if order.company_set.all %}
+	<center>
+	<table border ="1" width="100%">
+	<tr>
+		<th><center>เลขที่</center></th>
+		<th><center>บริษัท</center></th>
+		<th><center>รายละเอียด</center></th>
+
+	</tr>
+	{% for pay in order.company_set.all %}
+		<tr>	
+			<td><center>{{ pay.OrderID}}</center></td>
+			<td><center>{{ pay.Company}}</center></td>
+			<td><center><a href="/group7/{{ pay.id }}/orderinfo/">รายละเอียด</a></center></td> 
+
+		</tr>
+	{% endfor %}
+{% else %}
+	<br><font color="red" size = "5"><center>There are no data available.</center></font>
+{% endif %}
+</table>
+<table border ="0"  width="100%">
+<tr><td><a href="/group7/{{ order.id }}/addcompany/" style="text-decoration:none"><input type="button" value="เพิ่มรายนามบริษัท" ></a></td></tr>
+</table>
+<center><a href="/group7/{{order.id}}" style="text-decoration:none"><input type="button" value="ย้อนกลับ" ></a></center>
+</center>
+{% endblock %}

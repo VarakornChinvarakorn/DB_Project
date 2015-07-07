@@ -1,0 +1,329 @@
+{% load staticfiles %}
+<!DOCTYPE>
+<html>
+<head>
+    <title>WorksTable</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <style>
+	#pageset{
+		margin-top: 0mm;
+		margin-bottom: 0mm;
+		margin-right: 0mm;
+		margin-left: 0mm;
+		padding-top:5mm;
+		padding-left:23mm;
+		padding-right:35mm;
+		position: absolute;
+		border:none;
+		border-width:thin;
+		border-bottom-color:#999;
+	}
+	#maintable{
+		display: table;
+		width:219mm;
+		border:solid;
+		border-collapse:collapse;
+		border-width:1px;
+		table-layout:fixed;
+	}
+	#lefttable{
+		width:14mm;
+		height:14mm;
+		text-align:center;
+		word-break:normal;
+	}
+	#middletable{
+		width:103mm;
+		height:14mm;
+		table-layout:fixed;
+	}
+	#middletablein{
+		width:103mm;
+		height:14mm;
+		table-layout:fixed;
+		text-align:left;
+		padding-left:5px;
+		margin:0;
+		padding-top:0;
+	}
+	#righttable{
+		width:102mm;
+		height:14mm;
+		table-layout:fixed;
+	}
+	#righttabletop{
+		border-top:none;
+		height:50%;
+		width:100%;
+	}
+	#righttabletop2{
+		display: table-cell;
+		border: solid;
+		border-width:1px;
+		border-right:0px;
+		border-bottom:0px;
+		padding:0;
+		margin:0;
+		table-layout:fix;
+		height:100%;
+		width:100%;
+	}
+	#checktable{
+		display: table-cell;
+		border: solid;
+		border-width:1px;
+		border-right:0px;
+		border-bottom:0px;
+		padding:0;
+		margin:0;
+		table-layout:fix;
+		height:100%;
+		width:100%;
+	}
+	img{
+		display:inline-block;
+		vertical-align:middle;
+		padding-top:5mm;
+		
+	}
+	
+	#headset{
+	}
+	#notationset{
+		vertical-align:top;
+		text-align:left;
+	}
+	#bottomleft{
+	}
+	#bottomleftmid{
+		font: 14pt "Angsana New";
+	   
+		width: 6.5cm;
+	}
+	#bottomright{
+		font: 14pt "Angsana New";
+	}
+	#bottomrightmid{
+		font: 14pt "Angsana New";
+	   
+		width: 5.7cm;
+	}
+	  /* Table for list Student*/
+	
+	.Title{
+		text-align: center;
+		font-size:14pt;
+	}
+	.Heading{
+		display: table-row;
+		font-weight: bold;
+		text-align: center;
+	}
+	.row{
+		display:table-row;
+		table-layout:fixed;
+		}
+	
+	.Cell{
+		display: table-cell;
+		border: solid;
+		border-width:1px;
+		border-right:none;
+		border-bottom:none;
+		padding:0;
+		margin:0;
+		table-layout:fix;
+	}
+	.checknulls{
+		display: table-cell;
+		border: solid;
+		border-width:1px;
+		border-right:none;
+		border-bottom:none;
+		padding:0;
+		margin:0;
+		table-layout:fix;
+	}
+	.inTable{
+		display:table;
+		margin:0;
+		padding:0;
+		table-layout:fixed;
+	}
+	*{
+		border-spacing:0;
+		word-break:break-all;
+		font: 14pt "Angsana New";
+		border-collapse:collapse;
+	}
+	
+	/* Class for hide somethings*/
+	.hide{
+		display:none;
+	}
+	
+	/* Table for footer*/
+	#footer{
+	}
+	#corpdown{
+		display: table;
+		margin-bottom:0px;
+		table-layout:fixed;
+	}
+	
+	#commentbox{
+		display: table-cell;
+		border:solid;
+		border-width: thin;
+		width:80mm;
+		height:35mm;
+		padding-left: 2px;
+	}
+	#hide{
+		  display:none;
+	}
+	@media print {
+		#checktable{
+			background-color:!important;
+			-webkit-print-color-adjust: exact; 
+		}
+	}
+      </style>
+	<script type="text/javascript">
+	elements2 = document.getElementsByClassName('checknulls');
+	elements = document.getElementsByClassName("Cellc");
+	function setBgColor() {
+		for (var i = 0; i < elements.length; i++) {
+			if(elements[i].innerHTML == "True"){
+				elements[i].innerHTML = "<img src='{% static 'group6/Checkbox2.jpg' %}' alt='Check' width='14px' height='14px'>";
+				//elements[i].innerHTML = "*";
+			}else{
+				//elements[i].style.backgroundColor="blue";
+				elements[i].innerHTML = "<font color='white'>-</font>";
+			}
+		}
+		checknulls();
+		//window.print();
+	}
+	
+	function checknulls(){
+		for (var i = 0; i < elements2.length; i++) {
+			console.log(elements2[i].innerHTML);
+		
+			//elements2[i].style.backgroundColor="red";
+			if(elements2[i].innerHTML == ""){
+				//elements2[i].innerHTML = "PADDING";
+				//elements2[i].style.backgroundColor="red";
+			}
+		}
+	}
+	
+		
+    </script>
+</head>
+<body onLoad="return setBgColor();">
+      <div id="pageset">
+            <div  class='Title'>ขั้นตอนการดำเนินงานแนวคิดกับแผนที่วางไว้</div>
+			<div id="maintable">
+                <div class="row">
+                	<div class="Cell" id='lefttable' align=CENTER valign=MIDDLE>ขั้นตอน<br>ที่</div>
+                	<div class="Cell" id='middletable' align=CENTER valign=MIDDLE>รายละเอียดขั้นตอนการดำเนินงาน
+                	<br>เริ่มทำปริญญานิพนธ์เมื่อ {{ timeLine.day }} เดือน {{ timeLine.month }} พ.ศ. {{ timeLine.year }}</div>
+                    <div class='inTable' id='righttable' align=CENTER valign=MIDDLE>
+                    	<div class="inTable" style="width:100%;">
+                        	<div class="row">
+                                <div class="Cell" id="righttabletop" align=CENTER valign=MIDDLE>เดือนที่</div>
+                            </div>
+                        </div>
+                        <div class="inTable" style="width:100%;">
+                        	<div class="row">
+                                <div class="Cell" id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>1</div>
+                                <div class="Cell" id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>2</div>
+                                <div class="Cell" id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>3</div>
+                                <div class="Cell" id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>4</div>
+                                <div class="Cell" id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>5</div>
+                                <div class="Cell" id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>6</div>
+                                <div class="Cell" id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>7</div>
+                                <div class="Cell" id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>8</div>
+                                <div class="Cell" id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>9</div>
+                                <div class="Cell" id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>10</div>
+                                <div class="Cell" id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>11</div>
+                                <div class="Cell" id='righttabletop2' width="8%" align=CENTER valign=MIDDLE>12</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- End Top Header -->   
+                <div id="hide">
+                {% for process in processList %}
+                
+                </div>
+                <div class="row">
+                	<div class="Cell" id='lefttable'>{{ forloop.counter }}</div>
+                	<div class="checknulls" id='middletablein'>{{ process.processDescription }}</div>
+                    <div class='inTable' id='righttable' align=CENTER valign=MIDDLE>
+                        <div class="inTable" style="width:100%; height:100%;">
+                        	<div class="row">
+                                <div class="Cellc" id="checktable" width="8%" align=CENTER>{{process.month1}}</div>
+                                <div class="Cellc" id="checktable" width="8%" align=CENTER>{{process.month2}}</div>
+                                <div class="Cellc" id="checktable" width="8%" align=CENTER>{{process.month3}}</div>
+                                <div class="Cellc" id="checktable" width="8%" align=CENTER>{{process.month4}}</div>
+                                <div class="Cellc" id="checktable" width="8%" align=CENTER>{{process.month5}}</div>
+                                <div class="Cellc" id="checktable" width="8%" align=CENTER>{{process.month6}}</div>
+                                <div class="Cellc" id="checktable" width="8%" align=CENTER>{{process.month7}}</div>
+                                <div class="Cellc" id="checktable" width="8%" align=CENTER>{{process.month8}}</div>
+                                <div class="Cellc" id="checktable" width="8%" align=CENTER>{{process.month9}}</div>
+                                <div class="Cellc" id="checktable" width="8%" align=CENTER>{{process.month10}}</div>
+                                <div class="Cellc" id="checktable" width="8%" align=CENTER>{{process.month11}}</div>
+                                <div class="Cellc" id="checktable" width="8%" align=CENTER>{{process.month12}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hide">
+                {% endfor %}
+                </div>
+			</div>
+            <!-- End Table -->
+            
+        <div id='notationset'>หมายเหตุ : {{ timeLine.note }}<!--get 'notation' please do something about the line . make it remain 3 line and then delete the <br><br><br> below --></div>
+        <div id="footer">
+        <table border="0" id='bottomleft' align='left'>
+        <tr>
+        <td>ลงชื่อ</td>
+        <td id='bottomleftmid'>...............................................................................</td>
+        <td>(ผู้เสนอโครงงาน)</td>
+        </tr>
+        <tr>
+        <td></td>
+        <td id='bottomleftmid'>(.............................................................................)</td>
+        <td></td>
+        </tr>
+        <tr>
+        <td></td>
+        <td id='bottomleftmid'>........................./........................../..........................</td>
+        <td></td>
+        </tr>
+        </table>
+        <table border="0" id='bottomright' align='right'>
+        <tr>
+        <td>ลงชื่อ</td>
+        <td id='bottomrightmid'>.......................................................................</td>
+        <td>(อาจารย์ที่ปรึกษา)</td>
+        </tr>
+        <tr>
+        <td></td>
+        <td id='bottomrightmid'>(.....................................................................)</td>
+        <td></td>
+        </tr>
+        <tr>
+        <td></td>
+        <td id='bottomrightmid'> ....................../......................./.......................</td>
+        <td></td>
+        </tr>
+        </table>
+		</div>
+	</div>
+</body>
+</html>
+</html>

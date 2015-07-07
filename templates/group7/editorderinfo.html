@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Group7{% endblock %}
+
+{% block pageHeader %}
+<h2>กระบวน <small>การเบิกจ่ายค่าวัสดุในการทำโครงงาน</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="/group7Project_Docs/">รายชื่อโครงงาน</a></li>
+    <li><a href="/group7/{{object.Order_id}}/">รายการใบสั่งซื้อวัสดุ</a></li>
+    <li><a href="/group7/{{object.Order_id}}/orderinfo/">รายละเอียดใบสั่งซื้อวัสดุ</a></li>
+    <li class="active">เพิ่มรายละเอียดใบสั่งซื้อวัสดุ</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<h3>เพิ่มรายละเอียดใบสั่งวัสดุภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์</h3>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<form action="/group7/{{object.id}}/editorf/" enctype="multipart/form-data" >
+{% csrf_token %}
+<table border=0>
+	<tr><td> เลขที่ใบสั่งซื้อ: </td><td><input type="text" name="id" value="{{object.OrderID}}"></td></tr>
+    	<tr><td> บริษัท: </td><td><input type="text" name="company" value="{{object.Company}}"></td></tr>
+    	<tr><td> รายการวัสดุ : </td><td><input type="text" name="itemname_orderinfo" value="{{object.Item_name}}"></td></tr>
+    	<tr><td> จำนวน : </td><td><input type="text" name="amount_orderinfo" value="{{object.Amount}}"></td></tr>
+    	<tr><td> ราคา/หน่วย : </td><td><input type="text" name="price_orderinfo" value="{{object.Cost}}"></td></tr>
+</table>
+<input type="submit" value="ยืนยัน" /><a href="/group7/{{object.Order_id}}/orderinfo/" style="text-decoration:none"><input type="button" value="ยกเลิก" ></a>
+</form>
+{% endblock %}
+

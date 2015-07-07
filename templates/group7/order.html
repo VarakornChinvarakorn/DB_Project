@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Group7{% endblock %}
+
+{% block pageHeader %}
+<h2>กระบวน <small>การเบิกจ่ายค่าวัสดุในการทำโครงงาน</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="/group7Project_Docs/">รายชื่อโครงงาน</a></li>
+    <li class="active">รายการใบสั่งซื้อวัสดุ</li>
+</ol>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+<center><h3>รายการใบสั่งวัสดุภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์</h3></center>
+{% if projectg6.order_set.all %}
+	<center>
+	<table border ="1" width="100%">
+	<tr>
+		<th><center>วัน/เดือน/ปี</center></th>
+		<th><center>ชื่อโครงงาน</center></th>
+		<th><center>ชื่อผู้สั่ง</center></th>
+		<th><center>รายละเอียด</center></th>
+		<th><center>สถานะ</center></th>
+		<th><center>ลบข้อมูล</center></th>
+	</tr>
+	{% for pay in projectg6.order_set.all %}
+		<tr>	
+			<td><center>{{ pay.Date }}</center></td>
+			<td><center>{{ projectg6.name_thai}}</center></td>
+			<td><center>{{ pay.name}}</center></td>
+			<td><center><a href="/group7/{{ pay.id }}/orderinfo/">รายละเอียดใบสั่งวัสดุ</a></center></td> 
+			<td><center><a href="/group7/{{ pay.id }}/statusof/">สถานะรายการสั่งวัสดุ</a></center></td>
+			<td><center><a href="/group7/{{ pay.id }}/remove/" style="text-decoration:none"><input type="button" value="ลบข้อมูล" ></a></center></td>
+		</tr>
+	{% endfor %}
+{% else %}
+	<br><font color="red" size = "5"><center>There are no data available.</center></font>
+{% endif %}
+</table>
+<table border ="0"  width="100%">
+<tr><td><a href="/group7/{{ projectg6.id }}/addorder/" style="text-decoration:none"><input type="button" value="เพิ่มรายการใบสั่งวัสดุ" ></a></td></tr>
+</table>
+<center><a href="/group7Project_Docs/" style="text-decoration:none"><input type="button" value="ย้อนกลับ" ></a></center>
+</center>
+{% endblock %}

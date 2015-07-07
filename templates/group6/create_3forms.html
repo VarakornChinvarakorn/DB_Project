@@ -61,6 +61,7 @@
 #nameen{
 	margin-left:18;
 	}
+
 #numbers{
 	margin-left:56;
 	}
@@ -73,11 +74,13 @@
       .page {
           margin:0;
           font-size:20px;
+
           position:absolute;
           border: initial;
           width: initial;
           height:initial;
           box-shadow: initial;
+
           background: initial;
           page-break-after: always;
       }
@@ -92,20 +95,18 @@
 function yearselect(){
 	var year = new Date();
 	var list = document.getElementById("yearselect");
-        var list2 = document.getElementById("yearSTART");
-        var list3 = document.getElementById("monthSTART");
+        //var list2 = document.getElementById("yearSTART");
+        //var list3 = document.getElementById("monthSTART");
 	var i;
 	for (i=0;i<list.length;i++){
 		list.options[i].text = year.getFullYear()-i+543;
 		list.options[i].value = year.getFullYear()-i+543;
-		list2.options[i].text = year.getFullYear()-i+543;
-		list2.options[i].value = year.getFullYear()-i+543;
   }
         var sel = document.getElementById("stdnumber");
         sel.value = {{ numOP }}
         list.value = {{ yearOE }}
-        list2.value = {{ yearST }}
-        list3.value = "{{ monthST }}"
+        //list2.value = {{ yearST }}
+        //list3.value = "{{ monthST }}"
 }
 var oldnum=0;
 function addMoreStd(){
@@ -281,8 +282,8 @@ p_adviser
                 </select></H><br><font color = "FF0000" name="message">{{ error_yearOE }}</font><br>
             </center>
             <label class="form">
-                <H>ชื่อโครงงาน (ภาษาไทย): </H><input id="nameth" type="text" name="name_thai" maxlength="20" value="{{ nameTH }}"> <font color = "FF0000" name="message">{{ error_nameTH }}</font></br>
-                <H>ชื่อโครงงาน (อังกฤษ): </H><input id="nameen" type="text" name="name_eng" maxlength="20" value="{{ nameEN }}"> <font color = "FF0000" name="message">{{ error_nameEN }}</font></br>
+                <H>ชื่อโครงงาน (ภาษาไทย): </H><input id="nameth" type="text" name="name_thai" maxlength="150" value="{{ nameTH }}"> <font color = "FF0000" name="message">{{ error_nameTH }}</font></br>
+                <H>ชื่อโครงงาน (อังกฤษ): </H><input id="nameen" type="text" name="name_eng" maxlength="150" value="{{ nameEN }}"> <font color = "FF0000" name="message">{{ error_nameEN }}</font></br>
                 <H>จำนวนนักศึกษา: </H><select id="stdnumber" name="numberOfPeople">
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -322,85 +323,138 @@ p_adviser
                 <option value="{{ teacher.id }}">{{ teacher.userprofile.firstname_th }} {{ teacher.userprofile.lastname_th }} ({{ teacher.shortname }})</option>
               {% endfor %}
               <!--<option value=”adviser1”>ดร. ศิริชัย รุจิพัฒนพงศ์ (SRU)</option>
+
               <option value=”adviser2” selected=”selected”>รศ. ดร. วรา วราวิทย์ (VRV)</option>
+
               <option value=”adviser3”>รศ.ดร. ณชล ไชยรัตนะ (NCC)</option>-->
           </select><font color = "FF0000" name="message">{{ error_adv }}</font></br>
 
 
-          <H>วัตถุประสงค์:</H> <font color = "FF0000" name="message">{{ error_obj }}</font></br><textarea rows="6" cols="60" name="objective">{{ obj }}</textarea></br>
-          <H>แนวเหตุผล ทฤษฏีสำคัญหรือสมมุติฐาน:</H> <font color = "FF0000" name="message">{{ error_reasons }}</font></br><textarea rows="6" cols="60" name="reason">{{ reasons }}</textarea></br>
-          <H>ขอบเขตของการทำโครงงาน:</H> <font color = "FF0000" name="message">{{ error_scopes }}</font></br><textarea rows="6" cols="60" name="scope">{{ scopes }}</textarea></br>
-          <H>ผลประโยชน์ที่คาดว่าจะได้รับ:</H> <font color = "FF0000" name="message">{{ error_benefits }}</font></br><textarea rows="6" cols="60" name="benefit">{{ benefits }}</textarea></br>	
+          <H>วัตถุประสงค์:</H> <font color = "FF0000" name="message">{{ error_obj }}</font></br><textarea rows="6" cols="60" name="objective" maxlength="300">{{ obj }}</textarea></br>
+          <H>แนวเหตุผล ทฤษฏีสำคัญหรือสมมุติฐาน:</H> <font color = "FF0000" name="message">{{ error_reasons }}</font></br><textarea rows="6" cols="60" name="reason" maxlength="300">{{ reasons }}</textarea></br>
+          <H>ขอบเขตของการทำโครงงาน:</H> <font color = "FF0000" name="message">{{ error_scopes }}</font></br><textarea rows="6" cols="60" name="scope" maxlength="300">{{ scopes }}</textarea></br>
+          <H>ผลประโยชน์ที่คาดว่าจะได้รับ:</H> <font color = "FF0000" name="message">{{ error_benefits }}</font></br><textarea rows="6" cols="60" name="benefit" maxlength="300">{{ benefits }}</textarea></br>	
 	<!--</label>
+
     
+
+
 
     <!--###############################Form 2################################-->
     <!--
+
     <CENTER><H>คณะวิศวกรรมศาสตร์</H><br>
+
     <H>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</H><br>
+
     <H>แบบเสนอโครงงานปริญญานิพนธ์</H><br>
+
     <H>ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์ </H><br>
+
     <H>ปีการศึกษา</H> <input type="text" name="text"></CENTER><br>
+
     <label class="form">
+
     <H>ชื่อโครงงาน (ภาษาไทย):</H> <input type="text" name="text"></br>
+
     <H>ชื่อโครงงาน (อังกฤษ):</H> <input type="text" name="text"></br>
     <label>ชื่ออาจารย์ที่ปรึกษา  :
+
         <select name=”adviser”>
+
             <option value=”adviser1”>ดร. ศิริชัย รุจิพัฒนพงศ์ (SRU)</option>
+
             <option value=”adviser2” selected=”selected”>รศ. ดร. วรา วราวิทย์ (VRV)</option>
+
             <option value=”adviser2”>รศ.ดร. ณชล ไชยรัตนะ (NCC)</option>
+
         </select></br>
+
         <br/><H>วัตถุประสงค์:</Hn> </br><textarea rows="10" cols="60"></textarea></br>
+
         <H>แนวเหตุผล ทฤฏีสำคัญหรือสมมุติฐาน:</Hn> </br><textarea rows="10" cols="60"></textarea></br>
+
             <H>ขอบเขตของการทำโครงงาน</Hn> </br><textarea rows="10" cols="60"></textarea></br>-->
                 <H>ประมาณการค่าใช้จ่ายในโครงการ </H> <br>
                 <H>ค่าวัสดุ:</H> <input id='matCOST' type="text" name="priceOfMaterial" value="{{ priceOM }}"><H>บาท</H> <font color = "FF0000" name="message">{{ error_priceOM }}</font><br>
                 <H>ค่าใช้จ่ายเบ็ดเตล็ด:</H> <input id='otherCOST' type="text" name="priceOfOther" value="{{ priceOO }}"><H>บาท</H> <font color = "FF0000" name="message">{{ error_priceOO }}</font><br>
                 <!--<H>รวมค่าใช้จ่ายในโครงการ:</H> <input id='totalCOST' type="text" name="text"><H>บาท (ดังรายระเอียดที่แนบมา)</H></br>
+
         <H>ผลประโยชน์ที่คาดว่าจะได้รับ:</Hn> </br><textarea rows="10" cols="60"></textarea></br>	
+
         </label> 
+
     </label>
     
+
     
+
     <!--#####################################Form 3 ######################################## -->
     <!--
+
     <CENTER><H>คณะวิศวกรรมศาสตร์</H></CENTER></br>
+
     <CENTER><H>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</H></CENTER></br>
     <CENTER><H>แบบเสนอขออนุมัติโครงงานปริญญานิพนธ์</H></CENTER></br>
+
     <CENTER><H>ปีการศึกษา</H> <input type="text" name="text"></CENTER></br>-->
     <!--<H>ด้วยข้าพเจ้า ชื่อและสกุล(ภาษาไทย):</H> <input id="f_name" type="text" name="text"><br>
+
     <H>ด้วยข้าพเจ้า ชื่อและสกุล(อังกฤษ):</H> <input id="l_name" type="text" name="text"><br>
+
     <H>ขณะนี้เป็นนักศึกษาปีที่:</H> <input id='stdYEAR' type="text" name="text"><H>ของหลักสูตร:</H> <input type="text" name="text"><H>วิศวกรรมศาสตร์บัณฑิต</H><br>
     <H>ในภาควิชา</H>: <input id="faculty" type="text" name="text"><H>สาขาวิชา</H>: <input id="major" type="text" name="text"><br>
+
     <H>ตำบลที่อยู่ปัจจุบันของนักศึกษา:</H><br><textarea id="c_live" rows="10" cols="60"></textarea><br>
+
     <H>โทร:</H> <input id="stdPHONE" type="text" name="text"><br>
+
     <H>สภานที่ทำงานปัจจุบันของนักศึกษา:</H><br><textarea id="c_work" rows="10" cols="60"></textarea><br>-->
     <H>มีความประสงค์ขออนุมัติทำปริญญานิพนธ์เพื่อเป็นส่วนหนึ่งของการศึกษาตามหลักสูตร</H><br>
     <H>วิศวกรรมศาสตร์บัณฑิต ภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์ จำนวน:</H><input id="unit" type="text" name="credit" value="{{ credits }}"><H>หน่วย</H> <font color = "FF0000" name="message">{{ error_credits }}</font><br>
     <H>ในวิชา:</H><input id="course" type="text" name="course" value="{{ courses }}"> <font color = "FF0000" name="message">{{ error_courses }}</font><br>
     <!--<H>ชื่อเรื่อง(ภาษาไทย):</H> <br><textarea id="p_nameth" rows="10" cols="60"></textarea><br>
+
     <H>ชื่อเรื่อง(ภาษาอังกฤษ):</H><br><textarea id="p_nameen" rows="10" cols="60"></textarea><br>
     <H>ชื่ออาจารย์ที่ปรึกษา  :</H>
     <select id="adviser" name=”adviser”>
+
         <option value=”adviser1”>ดร. ศิริชัย รุจิพัฒนพงศ์ (SRU)</option>
+
         <option value=”adviser2” selected=”selected”>รศ. ดร. วรา วราวิทย์ (VRV)</option>
+
         <option value=”adviser2”>รศ.ดร. ณชล ไชยรัตนะ (NCC)</option>
+
     </select></br>
+
     
+
     <H>หมายเลขโทรศัพท์ที่ทำงานของอาจารย์ที่ปรึกษา โทร:</H> <input id='tPHONE' type="text" name="text"></br><H>ต่อ:</H> <input id='tPHONEex' type="text" name="text"></br>-->
     <H>คาดว่าจะเขียนปริญญานิพนธ์เสร็จภายในภาคที่:</H> <input id='termEND' type="text" name="semesterEnd" value="{{ semester }}"> <font color = "FF0000" name="message">{{ error_semester }}</font></br><H>ปีการศึกษา:</H> <input id='yearEND' type="text" name="yearEnd" value="{{ yearEN }}"> <font color = "FF0000" name="message">{{ error_yearEN }}</font></br>
         <!--<H>จิงขอได้โปรดพิจารณาอนุมัติ โดยได้แนบโครงการเสนอปริญญานิพนธ์มาพร้อมนี้</H> 
+
         <H>วัตถุประสงค์:</Hn> </br><textarea rows="10" cols="60"></textarea></br>
+
         <H>แนวเหตุผล ทฤฏีสำคัญหรือสมมุติฐาน:</H> </br><textarea rows="10" cols="60"></textarea></br>
+
         <H>ขอบเขตของการทำโครงงาน</H> </br><textarea rows="10" cols="60"></textarea></br>
+
         <H>ผลประโยชน์ที่คาดว่าจะได้รับ:</H> </br><textarea rows="10" cols="60"></textarea></br>	
+
          <p align = "right"><table border="0">
+
         <tr><td><H>ลงชื่อ:</H><input type="text" name="text"><H>(ผู้ยื่นคำร้อง)</H></td></tr>
+
          <tr><td><input type="date" name="date"></p></td></tr>
+
     </table>
+
     <!--
+
          <CENTER><table border="1">
+
          <tr><td><CENTER><H>ความเห็นของอาจารย์ที่ปรึกษา</H></br><textarea rows="10" cols="60"></textarea></br><H>(ลงนาม)</H><input type="text" name="text"></br><input type="date" name="date"></td>
+
            <td><CENTER><H>ความเห็นของหัวหน้าภาค</H></br><textarea rows="10" cols="60"></textarea></br><H>(ลงนาม)</H><input type="text" name="text"></br><input type="date" name="date"></td></tr> -->
        </label><br>
 <H>
@@ -409,7 +463,7 @@ p_adviser
              			<tr border="0">
              				<td width="20%" height="40" align=CENTER valign=MIDDLE>ขั้นตอนที่</td> 
              				<td width="40%" height="40"align=CENTER valign=MIDDLE>
-             					รายละเอียดขั้นตอนการดำเนินงาน</br>เริ่มทำปริญญานิพนธ์เมื่อ <input type="text" name="dateSTART" size="1" maxlength="2" value="{{ dateST }}"> เดือน <select id="monthSTART" name="monthSTART">
+             					รายละเอียดขั้นตอนการดำเนินงาน</br>เริ่มทำปริญญานิพนธ์เมื่อ <!--<input type="text" name="dateSTART" size="1" maxlength="2" value="{{ dateST }}"> เดือน <select id="monthSTART" name="monthSTART">
              						<option value="มกราคม">มกราคม</option>
              						<option value="กุมภาพันธ์">กุมภาพันธ์</option>
              						<option value="มีนาคม">มีนาคม</option>
@@ -428,10 +482,15 @@ p_adviser
 							<option>test3</option>
 							<option>test4</option>
 							<option>test5</option>
+
 							<option>test6</option>
+
 							<option>test7</option>
 							<option>test8</option>
-							<option>test9</option></select></td>
+
+							<option>test9</option></select>--><div class="col-sm-9">
+                    <input type="date" name="startDate" value="{{ startDate }}" class="form-control" placeholder="วันเริ่ม" title="วันเริ่ม">
+                </div></td>
 
              				<td width="40%" height="40" align=CENTER valign=MIDDLE>
              					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
@@ -460,7 +519,7 @@ p_adviser
              			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
              			<tr border="0">
              				<td width="20%" height="40" align=CENTER valign=MIDDLE>1</td> 
-             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process1" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process1 }}"></td>
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process1" class='col-sm-offset-1 col-sm-10' maxlength='100' value="{{ process1 }}"></td>
              				<td width="40%" height="40" align=CENTER valign=MIDDLE>
              					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >	
                                                         {% if checkList1 %}
@@ -494,7 +553,7 @@ p_adviser
              			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
              			<tr border="0">
              				<td width="20%" height="40" align=CENTER valign=MIDDLE>2</td> 
-             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process2" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process2 }}"></td>
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process2" class='col-sm-offset-1 col-sm-10' maxlength='100' value="{{ process2 }}"></td>
              				<td width="40%" height="40" align=CENTER valign=MIDDLE>
              					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
                                                         {% if checkList2 %}
@@ -528,7 +587,7 @@ p_adviser
              			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
              			<tr border="0">
              				<td width="20%" height="40" align=CENTER valign=MIDDLE>3</td> 
-             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process3" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process3 }}"></td>
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process3" class='col-sm-offset-1 col-sm-10' maxlength='100' value="{{ process3 }}"></td>
              				<td width="40%" height="40" align=CENTER valign=MIDDLE>
              					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
                                                         {% if checkList3 %}
@@ -562,7 +621,7 @@ p_adviser
              			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
              			<tr border="0">
              				<td width="20%" height="40" align=CENTER valign=MIDDLE>4</td> 
-             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process4" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process4 }}"></td>
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process4" class='col-sm-offset-1 col-sm-10' maxlength='100' value="{{ process4 }}"></td>
              				<td width="40%" height="40" align=CENTER valign=MIDDLE>
              					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
                                                         {% if checkList4 %}
@@ -596,7 +655,7 @@ p_adviser
              			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
              			<tr border="0">
              				<td width="20%" height="40" align=CENTER valign=MIDDLE>5</td> 
-             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process5" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process5 }}"></td>
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process5" class='col-sm-offset-1 col-sm-10' maxlength='100' value="{{ process5 }}"></td>
              				<td width="40%" height="40" align=CENTER valign=MIDDLE>
              					<table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
                                                         {% if checkList5 %}
@@ -630,7 +689,7 @@ p_adviser
              			<!--..///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////.-->
              			<tr border="0">
              				<td width="20%" height="40" align=CENTER valign=MIDDLE>6</td> 
-             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process6" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process6 }}"></td>
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process6" class='col-sm-offset-1 col-sm-10' maxlength='100' value="{{ process6 }}"></td>
              				<td width="40%" height="40" align=CENTER valign=MIDDLE>
              					<table border="1"  cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
                                                         {% if checkList6 %}
@@ -643,7 +702,9 @@ p_adviser
                                                                 {% endfor %}
                                                         {% else %}
      <!--</table>
+
 	 <table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >	
+
 	 -->
 	 <tr>
 	 	<td width="8%" height="40" align=CENTER valign=MIDDLE><input type="checkbox" id="myCheck6/1" name="myCheck6/1"></td> 
@@ -665,7 +726,7 @@ p_adviser
 </tr> 
 <tr border="0">
              				<td width="20%" height="40" align=CENTER valign=MIDDLE>7</td> 
-             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process7" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process7 }}"></td>
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process7" class='col-sm-offset-1 col-sm-10' maxlength='100' value="{{ process7 }}"></td>
              				<td width="40%" height="40" align=CENTER valign=MIDDLE>
              					<table border="1"  cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
                                                         {% if checkList7 %}
@@ -700,7 +761,7 @@ p_adviser
 </tr> 
 <tr border="0">
              				<td width="20%" height="40" align=CENTER valign=MIDDLE>8</td> 
-             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process8" class='col-sm-offset-1 col-sm-10' maxlength='250' value="{{ process8 }}"></td>
+             				<td width="40%" height="40"align=CENTER valign=MIDDLE><input type="text" name="process8" class='col-sm-offset-1 col-sm-10' maxlength='100' value="{{ process8 }}"></td>
              				<td width="40%" height="40" align=CENTER valign=MIDDLE>
              					<table border="1"  cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >
                                                         {% if checkList8 %}
@@ -713,6 +774,7 @@ p_adviser
                                                                 {% endfor %}
                                                         {% else %}
      <!--</table>
+
 	 <table border="1" cellpadding="0" cellspacing="0" width="100%" height="50%" align="center" >	
 	 -->
 	 <tr>
@@ -748,11 +810,9 @@ and last is note is 'notation'
 
 </table></H>
 <font color = "FF0000" name="message">{{ error_dateST }}</font> 
-<font color = "FF0000" name="message">{{ error_monthST }}</font> 
-<font color = "FF0000" name="message">{{ error_yearST }}</font>
 <font color = "FF0000" name="message">{{ error_process }}</font></br>
 <div class="row">
-<h4 class='col-sm-offset-1'>หมายเหตุ:</h4><textarea class="col-sm-offset-1 col-sm-10" name="notation" rows="10" maxlength='2000'>{{ note }}</textarea>
+<h4 class='col-sm-offset-1'>หมายเหตุ:</h4><textarea class="col-sm-offset-1 col-sm-10" name="notation" rows="10" maxlength="450">{{ note }}</textarea>
 </div>
 
    </div>
@@ -771,3 +831,4 @@ and last is note is 'notation'
 -->
 </div>
 {% endblock %}
+

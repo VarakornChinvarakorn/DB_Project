@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load custom_function %}
+{% load staticfiles %}
+
+{% block title %}ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี{% endblock %}
+
+{% block pageHeader %}
+<h2>ระบบ <small>จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li class="active">ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<script type="type/javascript">
+function confirmLeave() {
+if(!confirm("Do you wish to continue without finishing the payment process? Your account will not be setup...")) return;
+window.open('popup.html','width=400,height=400');
+}
+</script>
+<div class="container-fluid">
+    {% for message in messages %}
+        <br><font color = "FF0000" name="message">*{{ message }}</font>
+    {% endfor %}
+    {% if project_list %}  
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered" id="no-more-tables">
+                    <thead>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>ชื่อโครงงาน (ภาษาไทย)</th>
+                            <th>ชื่อโครงงาน (ภาษาอังกฤษ)</th>
+                            <th>แบบฟอร์มสำรวจหัวข้อโครงงานปริญญานิพนธ์</th>
+                            <th>แบบเสนอโครงงานปริญญานิพนธ์</th>
+                            <th>แบบเสนอขออนุมัติโครงงานปริญญานิพนธ์</th>
+                            <th>ขั้นตอนการดำเนินงานแนวคิดกับแผนที่วางไว้</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for project in project_list %}
+                        <tr>
+                            <td data-title="ลำดับ">{{ forloop.counter }}</td>
+                            <td data-title="ชื่อโครงงาน (ภาษาไทย)">{{ project.name_thai }}</td>
+                            <td data-title="ชื่อโครงงาน (ภาษาอังกฤษ)">{{ project.name_eng }}</td>
+                            <td data-title="แบบฟอร์มสำรวจหัวข้อโครงงานปริญญานิพนธ์"><a class="btn btn-info" href="{% url 'group6:project_docs_researchProject' research|get_id_at_index:forloop.counter0 %}">ดูฟอร์ม</a></td>
+                            <td data-title="แบบเสนอโครงงานปริญญานิพนธ์"><a class="btn btn-warning" href="{% url 'group6:project_docs_offerProject' offer|get_id_at_index:forloop.counter0 %}">ดูฟอร์ม</a></td>
+                            <td data-title="แบบเสนอขออนุมัติโครงงานปริญญานิพนธ์"><a class="btn btn-success" href="{% url 'group6:project_docs_approveProject' approve|get_id_at_index:forloop.counter0 %}">ดูฟอร์ม</a></td>
+                            <td data-title="ขั้นตอนการดำเนินงานแนวคิดกับแผนที่วางไว้"><a class="btn btn-default" href="{% url 'group6:project_docs_timeLineProject' timeLine|get_id_at_index:forloop.counter0 %}">ดูฟอร์ม</a></td>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    {% else %}
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="alert alert-warning" role="alert">
+                    <strong>ยังไม่มีข้อมูล!</strong> กรุณา
+                    <a class="alert-link" href="#">เพิ่มข้อมูล</a>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    {% endif %}
+    <a class="btn btn-primary" href="{% url 'group6:project_docs_create_3forms' %}">สร้างฟอร์มเสนอโครงงานใหม่</a> 
+    <a class="btn btn-info" href="{% static "group6/template_ECE_.docx" %}">ตัวอย่างรูปเล่มโปรเจค</a><br>
+</div>
+{% endblock %}

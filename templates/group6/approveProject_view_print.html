@@ -1,4 +1,4 @@
-﻿<!DOCTYPE>
+<!DOCTYPE>
 <html>
 <head>
 <title>แบบ วศ. 4-03</title>
@@ -131,7 +131,7 @@ body{
 		padding:0mm;
 		width:initial;
 		height:initial;
-		size:portrait auto;
+		size:portrait;
 		position:absolute;
 		border:0;
 		border-radius:0;
@@ -200,7 +200,7 @@ body{
         <H>ด้วยข้าพเจ้า ชื่อและสกุล</H><H id="nameth">(ภาษาไทย) {{ approve.student.userprofile.firstname_th }} {{ approve.student.userprofile.lastname_th }}</H><br>
         <H id="namestdeng">(ภาษาอังกฤษ) {{ approve.student.userprofile.firstname_en }} {{ approve.student.userprofile.lastname_en }}</H><br>
         <H id="namestdeng">ขณะนี้เป็นนักศึกษาปีที่ {{ currentYear }}</H><H>ของหลักสูตร {{ scheme }}</H><H> วิศวกรรมศาสตร์บัณฑิต</H><br>
-        <H id="department">ในภาควิชา {{ department }}</H><H> สาขาวิชา {{ main }}</H><br>
+        <H id="department">ในภาควิชา {{ department }}</H><H> สาขาวิชา {{ main }}</H><br><br>
         <H>ตำบลที่อยู่ปัจจุบันของนักศึกษา </H><H class="text">{{ approve.student.userprofile.address }}</H>
         <H>&nbsp; โทร {{ approve.student.userprofile.tel }}</H><br>
         <H>สภานที่ทำงานปัจจุบันของนักศึกษา </H><H class="text">{{ approve.student.userprofile.office }}</H><br>
@@ -209,9 +209,9 @@ body{
         <H>ในวิชา {{ approve.course }}</H><br>
         <H>ชื่อเรื่อง (ภาษาไทย) {{ approve.project.name_thai }}</H><br>
         <H id="nameeng">(ภาษาอังกฤษ) {{ approve.project.name_eng }}</H><br>
-        <H>ชื่ออาจารย์ที่ปรึกษาปริญญานิพนธ์{{ approve.project.teacher.userprofile.firstname_th }} {{ approve.project.teacher.userprofile.lastname_th }} ({{ approve.project.teacher.shortname }})</H><br>
-        <H id="teacheng">(ภาษาอังกฤษ) Please insert DB here!</H><br>
-        <H>หมายเลขโทรศัพท์ที่ทำงานของอาจารย์ที่ปรึกษา โทร {{ approve.project.teacher.userprofile.tel }}</H><H>ต่อ -</H><br>
+        <H>ชื่ออาจารย์ที่ปรึกษาปริญญานิพนธ์ {{ approve.project.teacher.userprofile.firstname_th }} {{ approve.project.teacher.userprofile.lastname_th }} ({{ approve.project.teacher.shortname }})</H><br>
+        <H id="teacheng">(ภาษาอังกฤษ) {{ approve.project.teacher.userprofile.firstname_en }} {{ approve.project.teacher.userprofile.lastname_en }} ({{ approve.project.teacher.shortname }})</H><br>
+        <H>หมายเลขโทรศัพท์ที่ทำงานของอาจารย์ที่ปรึกษา โทร {{ approve.project.teacher.userprofile.tel }}</H><H> ต่อ {{ approve.project.teacher.userprofile.ext }}</H><br>
     </label>
 </div>
 <!-- Cut form -->
@@ -244,3 +244,4 @@ body{
     
 </body>
 </html>
+

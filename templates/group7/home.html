@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Group7{% endblock %}
+
+{% block pageHeader %}
+<h2>กระบวน <small>การเบิกจ่ายค่าวัสดุในการทำโครงงาน</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li class="active">รายชื่อโครงงาน</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+   <center><h1>กระบวนการเบิกจ่ายค่าวัสดุในการทำโครงงาน</h1></center>
+{% if object %}  
+	<center>
+	<table border ="1" width="100%">
+	<tr>
+		<th><center>ลำดับที่</center></th>
+		<th><center>ชื่อโครงงาน(Thai)</center></th>
+		<th><center>ชื่อโครงงาน(English)</center></th>
+		<th><center>อาจารย์ที่ปรึกษา</center></th>
+		<th><center>รายการสั่งซื้อวัสดุ</center></th>
+	</tr>
+	{% for project in object %}
+		<tr>
+			<td><center>{{ project.id}}</center></td> <!--pull Value from Group6 -->
+			<td><center>{{ project.name_thai }}</center></td> <!--pull Value from Group6 -->
+			<td><center>{{ project.name_eng }}</center></td> <!--pull Value from Group6 -->
+			{% for name in teacher %}
+			   {%if name.id == project.teacher_id%}
+			<td><center>{{ name }}</center></td> <!--pull Value from Group6 -->
+			{%endif%}
+			{%endfor%}
+			<td><center><a href="/group7/{{project.id}}/">รายการสั่งซื้อวัสดุ</a></center></td>
+
+		</tr>
+	{% endfor %}
+{% else %}
+	<br><font color="red" size = "5"><center>There are no data available.</center></font>
+{% endif %}
+</table>
+</center>
+{% endblock %}

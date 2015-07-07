@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Group7{% endblock %}
+
+{% block pageHeader %}
+<h2>กระบวน <small>การเบิกจ่ายค่าวัสดุในการทำโครงงาน</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="/group7Project_Docs/">รายชื่อโครงงาน</a></li>
+    <li><a href="/group7/{{order.Projectg7_id}}/">รายการใบสั่งซื้อวัสดุ</a></li>
+    <li class="active">สถานะรายการใบสั่งซื้อวัสดุ</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<center><h3>สถานะรายการใบสั่งวัสดุภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์{{order.Projectg7_id}}</h3></center>
+{% if order.status_of_set.all %}
+	<center>
+	<table border ="1"  width="100%"><font color="BLACK">
+		<tr>
+			<th><center>วัน/เดือน/ปี</center></th>
+			<th><center>ขั้นตอน</center></th>
+			<th><center>สถานะ</center></th>
+			<th><center>หมายเหตุ</center></th>
+			<th><center>แก้ไขข้อมูล</center></th>
+			<th><center>ลบข้อมูล</center></th>		
+		</tr>
+	{% for pay in order.status_of_set.all %}
+		<tr>
+			<td><center>{{ pay.Date }}</center></td>
+			<td><center>{{ pay.State }}</center></td>
+			<td><center>{{ pay.Status }}</center></td>
+			<td><center>{{ pay.Moreabout }}</center></td>
+			<td><center><a href="/group7/{{ pay.id }}/statusof/edit/" style="text-decoration:none"><input type="button" value="แก้ไข" ></a></center></td>
+			<td><center><a href="/group7/{{ pay.id }}/statusof/remove/" style="text-decoration:none"><input type="button" value="ลบข้อมูล" ></a></center></td>
+		</tr>
+	{% endfor %}
+{% else %}
+	<br><font color="red" size = "5"><center>There are no data available.</center></font>
+{% endif %}
+</table>
+
+<table border ="0"  width="100%">
+<tr><td><a href="/group7/{{order.id}}/statusof/addstatusof/" style="text-decoration:none"><input type="button" value="อัพเดทสถานะ" ></a>
+{% for pay in order.status_of_set.all %}
+	{%if pay.Status == "สมบูรณ์" %}
+		<a href="/group7/{{order.Projectg7_id}}/statusof/requisition/" style="text-decoration:none" target = _blank><input type="button" value="ดูตัวอย่างใบเบิกวัสดุ" ></a></td></tr>
+	{%endif%}
+{% endfor %}
+
+</table>
+
+<table border ="0"  width="100%"><font color="BLACK">
+	<tr>
+		<td align="right">
+			<a href="/group7/{{order.Projectg7_id}}/" style="text-decoration:none"><input type="button" value="ย้อนกลับ" ></a>		
+		</form></td>
+		<td align="left">
+			<a href="/group7Project_Docs/" style="text-decoration:none"><input type="button" value="หน้าแรก" ></a>
+		</form></td>
+	</tr>
+</table>
+</center>
+{% endblock %}
+

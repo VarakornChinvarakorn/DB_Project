@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block head %}
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block title %}ใบคำร้องขอฝึกงานล่าสุด{% endblock %}
+
+{% block pageHeader %}
+<h2><small>ใบคำร้องขอฝึกงานล่าสุด</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="{% url 'group5:department_new' %}">ใบคำร้องขอล่าสุด</a></li>
+    <li class="active">รออนุมัติผลฝึกงาน</li>
+    <li class="active">รอใบประเมินผลฝึกงาน</li>
+    <li class="active">ข้อมูลนักศึกษาที่ฝึกงาน</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+
+
+        <div class="row">
+            <div class="container-fluid">
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered" id="no-more-tables">
+                            <thead>
+                            <tr>
+                                <th>รหัสนักศึกษา</th>
+                                <th>ชื่อ-สกุล</th>
+                                <th>สถานที่ประกอบการ</th>
+                                <th>สถานะ</th>
+                                <th>เมนู</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td data-title="รหัสนักศึกษา">{{ forloop.counter }}</td>
+                                <td data-title="ชื่อ-สกุล">{{ teach.prof }}</td>
+                                <td data-title="สถานที่ประกอบการ">{{ teach.prof.shortName }}</td>
+                                <td data-title="สถานะ">{{ teach.subject.subjectID }}</td>
+                                <td data-title="เมนู">
+                                    <a class="btn btn-info btn-xs" >ตรวจสอบสถานะ</a>
+                                    <a class="btn btn-default btn-xs" target = _blank><span class="glyphicon glyphicon-print"></span></a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+{% endblock %}

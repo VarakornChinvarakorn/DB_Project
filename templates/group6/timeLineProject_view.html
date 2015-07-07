@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block title %}ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี - ขั้นตอนการดำเนินงานแนวคิดกับแผนที่วางไว้ - {{ timeLine.project.name_thai }}{% endblock %}
 
@@ -251,8 +251,10 @@
 <br><br><br>
 <table id='bottomleft' align='left'><tr><td>ลงชื่อ</td><td id='bottomleftmid'>...............................................................................</td><td>(ผู้เสนอโครงงาน)</td></tr><tr><td></td><td id='bottomleftmid'>(.............................................................................)</td><td></td></tr><tr><td></td><td id='bottomleftmid'>........................./........................../..........................</td><td></td></tr></table>
 <table id='bottomright' align='right'><tr><td>ลงชื่อ</td><td id='bottomrightmid'>.......................................................................</td><td>(อาจารย์ที่ปรึกษา)</td></tr><tr><td></td><td id='bottomrightmid'>(.....................................................................)</td><td></td></tr><tr><td></td><td id='bottomrightmid'> ....................../......................./.......................</td><td></td></tr></table>
-</div>
+</div><br>
+<a class="btn btn-default" href="{% url 'group6:project_docs_timeLineProject_print' timeLine.id %}" target = _blank><span class="glyphicon glyphicon-print"></span></a> (แถบสี)<br>
+<a class="btn btn-default" href="{% url 'group6:project_docs_timeLineProject_print_check' timeLine.id %}" target = _blank><span class="glyphicon glyphicon-print"></span></a> (ติ๊กถูก)<br>
 <a href="{% url 'group6:project_docs_index' %}"><input class="btn btn-danger" type="button" value="ย้อนกลับ" name = 'cancel' /></a> 
-<a class="btn btn-default" href="{% url 'group6:project_docs_timeLineProject_print' timeLine.id %}" target = _blank><span class="glyphicon glyphicon-print"></span></a>
 </div><br>
 {% endblock %}
+

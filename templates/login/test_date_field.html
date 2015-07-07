@@ -1,0 +1,67 @@
+{% extends "start_base.html" %}
+{% load staticfiles %}
+
+{% block title %}ทดสอบ Date Field{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="container">
+        <div class="page-header">
+            <h2>ทดสอบ <small>Date Field</small></h2>
+        </div>
+
+        <form class="form-horizontal" method="post" action="{% url 'login:testDateField' %}">
+            {% csrf_token %}
+
+            <script>
+                $(function(){
+                    $( "#date" ).datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        dateFormat: 'dd-mm-yy', // รูปแบบการแสดงผล วัน-เดือน-ปี
+                        yearRange: '-100:+0',   // ย้อนหลังไป 100 ปี
+                    });
+                });
+            </script>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">เลือกวัน</label>
+                <div class="col-sm-9">
+                    <input type="text" name="date" id="date">
+                </div>
+            </div>
+
+            <!-- save button -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" class="btn btn-success" value="ตกลง"/>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

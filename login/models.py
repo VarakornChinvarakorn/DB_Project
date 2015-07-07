@@ -36,13 +36,31 @@ class UserProfile(models.Model):
         ('2', 'Officer')
     )
     type            = models.CharField(max_length=1, choices=typeChoices)       # 14. type of user
+
+    prefix_name_choices = (
+        ('0', 'นาย'),       # Mr.
+        ('1', 'นาง'),       # Mrs.
+        ('2', 'นางสาว'),    # Miss.
+        ('3', 'ดร.')        # Dr.
+    )
+    prefix_name  = models.CharField(max_length=1, choices=prefix_name_choices)  # 15. คำนำหน้าชื่อ
     
     # Override the __unicode__() method to return out something meaningful!
     #def __unicode__(self):
     #    return self.user.username
     
     def __unicode__(self):
-        return self.firstname_en + " " + self.lastname_en
+        if self.prefix_name == '0':
+            prefix = 'Mr.'
+        elif self.prefix_name == '1':
+            prefix = 'Mrs.'
+        elif self.prefix_name == '2':
+            prefix = 'Miss.'
+        elif self.prefix_name == '3':
+            prefix = 'Dr.'
+        else:
+            prefix = ''
+        return prefix + self.firstname_en + " " + self.lastname_en
 
 class Student(models.Model):
     userprofile = models.OneToOneField(UserProfile)                 # 1. user profile
@@ -50,7 +68,9 @@ class Student(models.Model):
     schemeChoices = (
         ('0', 'หลักสูตรปรับปรุง Cpr.E 54'),
         ('1', 'หลักสูตรปรับปรุง EE 51'),
-        ('2', 'หลักสูตรปรับปรุง ECE 55')
+        ('2', 'หลักสูตรปรับปรุง ECE 55'),
+        ('3', 'หลักสูตรมหาบัณฑิต 55'),      # ของ ป.โท
+        ('4', 'หลักสูตรดุษฎีบัณฑิต 55')       # ของ ป.เอก
     )
     scheme = models.CharField(max_length=1, choices=schemeChoices)  # 3. scheme หลักสูตร
 
@@ -93,14 +113,34 @@ class Student(models.Model):
 class Teacher(models.Model):
     userprofile = models.OneToOneField(UserProfile) # 1. user profile
     shortname = models.CharField(max_length=3)      # 2. short name ตัวย่อชื่อ
-    position = models.CharField(max_length=100)     # 3. ตำแหน่ง
+    positionChoices = (
+        ('0', 'ข้าราชการ'),
+        ('1', 'ลูกจ้างประจำ'),
+        ('2', 'ข้าราชการบำนาญ'),
+        ('3', 'พนักงานมหาวิทยาลัย')
+    )
+    position = models.CharField(max_length=1, choices=positionChoices)     # 3. ตำแหน่ง
+
+    academic_position_choice = (
+        ('0', ''),
+        ('1', 'ผู้ช่วยศาสตราจารย์'),    # ตัวย่อไทย ผศ.  ตัวย่อแบบอเมริกา  Asst.Prof.   มาจาก Assistant Professor
+        ('2', 'รองศาสตราจารย์'),     # ตัวย่อไทย รศ.  ตัวย่อแบบอเมริกา  Assoc.Prof.  มาจาก Associate Professor
+        ('3', 'ศาสตราจารย์')          # ตัวย่อไทย ศ.   ตัวย่อแบบอเมริกา Prof.         มาจาก Professor
+    )
+    academic_position = models.CharField(max_length=1, choices=academic_position_choice)    # 4. ตำแหน่งทางวิชาการ
     
     def __unicode__(self):
         return self.userprofile.firstname_en + " " + self.userprofile.lastname_en
 
 class Officer(models.Model):
     userprofile = models.OneToOneField(UserProfile) # 1. user profile
-    position = models.CharField(max_length=100)     # 2. ตำแหน่ง
+    positionChoices = (
+        ('0', 'ข้าราชการ'),
+        ('1', 'ลูกจ้างประจำ'),
+        ('2', 'ข้าราชการบำนาญ'),
+        ('3', 'พนักงานมหาวิทยาลัย')
+    )
+    position = models.CharField(max_length=1, choices=positionChoices)     # 2. ตำแหน่ง
     
     def __unicode__(self):
         return self.userprofile.firstname_en + " " + self.userprofile.lastname_en

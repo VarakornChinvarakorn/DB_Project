@@ -1,4 +1,4 @@
-﻿<!DOCTYPE>
+<!DOCTYPE>
 {% extends "base.html" %}
 
 {% block title %}ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี - แบบเสนอขออนุมัติโครงงานปริญญานิพนธ์ - {{ approve.project.name_thai }}{% endblock %}
@@ -228,9 +228,9 @@ body{
         <H>ในวิชา {{ approve.course }}</H><br>
         <H>ชื่อเรื่อง (ภาษาไทย) {{ approve.project.name_thai }}</H><br>
         <H id="nameeng">(ภาษาอังกฤษ) {{ approve.project.name_eng }}</H><br>
-        <H>ชื่ออาจารย์ที่ปรึกษาปริญญานิพนธ์{{ approve.project.teacher.userprofile.firstname_th }} {{ approve.project.teacher.userprofile.lastname_th }} ({{ approve.project.teacher.shortname }})</H><br>
-        <H id="teacheng">(ภาษาอังกฤษ) Please insert DB here!</H><br>
-        <H>หมายเลขโทรศัพท์ที่ทำงานของอาจารย์ที่ปรึกษา โทร {{ approve.project.teacher.userprofile.tel }}</H><H>ต่อ -</H><br>
+        <H>ชื่ออาจารย์ที่ปรึกษาปริญญานิพนธ์ {{ approve.project.teacher.userprofile.firstname_th }} {{ approve.project.teacher.userprofile.lastname_th }} ({{ approve.project.teacher.shortname }})</H><br>
+        <H id="teacheng">(ภาษาอังกฤษ) {{ approve.project.teacher.userprofile.firstname_en }} {{ approve.project.teacher.userprofile.lastname_en }} ({{ approve.project.teacher.shortname }})</H><br>
+        <H>หมายเลขโทรศัพท์ที่ทำงานของอาจารย์ที่ปรึกษา โทร {{ approve.project.teacher.userprofile.tel }}</H><H> ต่อ {{ approve.project.teacher.userprofile.ext }}</H><br>
     </label>
 </div>
 <!-- Cut form -->
@@ -265,3 +265,4 @@ body{
 <a class="btn btn-default" href="{% url 'group6:project_docs_approveProject_print' approve.id %}" target = _blank><span class="glyphicon glyphicon-print"></span></a>
 </div><br>
 {% endblock %}
+

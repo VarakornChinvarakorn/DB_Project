@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Group7{% endblock %}
+
+{% block pageHeader %}
+<h2>กระบวน <small>การเบิกจ่ายค่าวัสดุในการทำโครงงาน</small></h2>
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="/group7Project_Docs/">รายชื่อโครงงาน</a></li>
+    <li><a href="/group7/{{s.id}}/">รายการใบสั่งซื้อวัสดุ</a></li>
+    <li class="active">รายละเอียดใบสั่งซื้อวัสดุ</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<center><h3>รายละเอียดใบสั่งวัสดุภาควิชาวิศวกรรมไฟฟ้าและคอมพิวเตอร์</h3></center>
+{% if object %}
+	<center>
+	<table border ="1"  width="100%"><font color="BLACK">
+		<tr>
+			<th><center>เลขที่ใบสั่งซื้อ</center></th>
+			<th><center>บริษัท</center></th>
+			<th><center>ลำดับที่</center></th>
+			<th><center>รายการวัสดุ</center></th>
+			<th><center>จำนวน</center></th>
+			<th><center>ราคา/หน่วย</center></th>
+			<th><center>ราคารวมทั้งหมด</center></th>
+			<th><center>แก้ไขข้อมูล</center></th>
+			<th><center>ลบข้อมูล</center></th>		
+		</tr>
+	{% for pay in object %}
+		<tr>
+			<td><center>{{ pay.OrderID }}</center></td>
+			<td><center>{{ pay.Company }}</center></td>
+			<td><center>{{ forloop.counter }}</center></td>
+			<td><center>{{ pay.Item_name }}</center></td>
+			<td><center>{{ pay.Amount }}</center></td>
+			<td><center>{{ pay.Cost }}</center></td>
+			<td><center>{{ pay.Cost_total }}</center></td>
+			<td><center><a href="/group7/{{ pay.id }}/orderinfo/edit/" style="text-decoration:none"><input type="button" value="แก้ไข" ></a></center></td>
+			<td><center><a href="/group7/{{ pay.id }}/orderinfo/remove/" style="text-decoration:none"><input type="button" value="ลบข้อมูล" ></a></center></td>
+		</tr>
+	{% endfor %}
+{% else %}
+	<br><font color="red" size = "5"><center>There are no data available.</center></font>
+{% endif %}
+</table>
+&nbsp
+
+<table border ="1"  width="100%"><font color="BLACK">
+	<tr>
+		<td width="50%"><center>ราคาวัสดุรวมทั้งหมด</center></td>
+			<td><center>{{ sum }} (บาท)</center></td> <!-- Not Complete -->
+	</tr>
+</table>
+
+<table border ="0"  width="100%">
+<tr><td><a href="/group7/{{ s.id }}/addorderinfo/" style="text-decoration:none"><input type="button" value="เพิ่มรายการวัสดุ" ></a><a href="/group7/{{ s.id}}/orderinfoview/" style="text-decoration:none" target = _blank><input type="button" value="ดูตัวอย่างใบสั่งวัสดุ" ></a></td></tr>
+</table>
+
+<table border ="0"  width="100%"><font color="BLACK">
+	<tr>
+		<td align="right">
+			<a href="/group7/{{ s.Projectg7_id }}/" style="text-decoration:none"><input type="button" value="ย้อนกลับ" ></a> <!--not complete -->	
+		</form></td>
+		<td align="left">
+			<a href="/group7Project_Docs/" style="text-decoration:none"><input type="button" value="หน้าแรก" ></a>
+		</form></td>
+	</tr>
+</table>
+</center>
+{% endblock %}
+

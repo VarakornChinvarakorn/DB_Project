@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% block title %}Menu เมนู{% endblock %}
 
 {% block pageHeader %}<h1>Menu <small>เมนู</small></h1>{% endblock %}
@@ -62,7 +62,10 @@
                     <h4>App <small>group5</small></h4>
                 </div>
                 <div class="panel-body">
-                    ...
+                    <a href="{% url 'group5:addpet' %}">แบบคำร้องขอหนังสือขอความอนุเคราะห์ฝึกงาน</a><br>
+                    <a href="{% url 'group5:status' %}">ตรวจสอบสถานะการฝึกงาน</a><br>
+                    <a href="{% url 'group5:company' %}">รายชื่อบริษัทฝึกงาน</a><br>
+                    <a href="{% url 'group5:form1' %}">รายชื่อนักศึกษาที่รอการตรวจสอบใบคำร้องขอล่าสุด</a><br>
                 </div>
             </div>
         </div>
@@ -74,7 +77,8 @@
                 </div>
                 <div class="panel-body">
                     <a href="{% url 'group6:project_docs_index' %}">ฟอร์มเสนอโครงงานที่สร้างไว้</a><br>
-                    <a href="{% url 'group6:project_docs_create_3forms' %}">สร้างฟอร์มเสนอโครงงานใหม่</a>
+                    <a href="{% url 'group6:project_docs_create_3forms' %}">สร้างฟอร์มเสนอโครงงานใหม่</a><br/>
+                    <a href="{% static 'group6/template_ECE_.docx' %}">ตัวอย่างรูปเล่มโปรเจค</a>
                 </div>
             </div>
         </div>
@@ -84,10 +88,10 @@
         <div class="col-md-4">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h4>App <small>group7</small></h4>
+                    <h4>ระบบ <small>เบิกจ่ายอุปกรณ์ทำโปรเจ็ค</small></h4>
                 </div>
                 <div class="panel-body">
-                    ...
+                    <a href="{% url 'group7:index' %}">รายชื่อโปรเจ็ค</a><br>
                 </div>
             </div>
         </div>

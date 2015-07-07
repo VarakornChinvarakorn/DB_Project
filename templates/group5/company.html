@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block pageHeader %}
+
+<ol class="breadcrumb">
+    <li><a href="{% url 'login:menu' %}">เมนู</a></li>
+    <li><a href="{% url 'group5:status' %}">ตรวจสอบสถานะการฝึกงาน</a></li>
+    <li class="active">รายชื่อบริษัทฝึกงาน</li>
+</ol>
+		
+{% endblock %}
+{% block content %}
+{% if com %}
+<br><center><table border = '1' width= 80%>
+    <tr>
+	<td>
+	    ชื่อสถานที่ประกอบการ
+	</td>
+	<td>
+                        ที่อยู่
+	</td>
+	<td>
+	    เบอร์โทรศัพท์
+	</td>
+	<td>
+	    Fax
+	</td>
+    </tr>
+    {% for item in com %}
+    <tr>
+	<td>
+	    {{item.name_Internship}}
+	</td>
+	<td>
+	    {{item.add_Internship}}
+	</td>
+	<td>
+	   {{item.Tel}}
+	</td>
+	<td>
+	   {{item.Fax}}
+	</td>
+    </tr>
+    {% endfor %}
+</table></center><br>
+{% else %}    
+หมายเหตุ
+{% endif %}
+{% endblock %}
+

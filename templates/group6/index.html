@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load custom_function %}
+{% load staticfiles %}
 
 {% block title %}ระบบ จัดการโครงงาน สำหรับนักศึกษา ปริญญาตรี{% endblock %}
 
@@ -69,6 +70,7 @@ window.location='{% url 'group6:project_docs_delete' project.id %}';" target="_b
             <div class="col-md-3"></div>
         </div>
     {% endif %}
-    <a class="btn btn-primary" href="{% url 'group6:project_docs_create_3forms' %}">สร้างฟอร์มเสนอโครงงานใหม่</a><br>
+    <a class="btn btn-primary" href="{% url 'group6:project_docs_create_3forms' %}">สร้างฟอร์มเสนอโครงงานใหม่</a> 
+    <a class="btn btn-info" href="{% static "group6/template_ECE_.docx" %}">ตัวอย่างรูปเล่มโปรเจค</a><br>
 </div>
 {% endblock %}

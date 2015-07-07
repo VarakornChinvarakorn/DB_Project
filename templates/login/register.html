@@ -1,4 +1,5 @@
 {% extends "start_base.html" %}
+{% load staticfiles %}
 
 {% block title %}.: ลงทะเบียน สำหรับนักศึกษา :.{% endblock %}
 
@@ -28,6 +29,47 @@
                 </div>
             </div>
 
+            <script>
+                function genPrefix(s1, s2){
+                    var s1 = document.getElementById(s1);
+                    var s2 = document.getElementById(s2);
+                    s2.innerHTML = "";
+                    var newOption = document.createElement("option");
+                    if(s1.value == "0"){
+                        newOption.value = "0";
+                        newOption.text = "Mr.";
+                    }
+                    else if(s1.value == "1"){
+                        newOption.value = "1";
+                        newOption.text = "Mrs.";
+                    }
+                    else if(s1.value == "2"){
+                        newOption.value = "2";
+                        newOption.text = "Miss.";
+                    }
+                    else if(s1.value == "3"){
+                        newOption.value = "3";
+                        newOption.text = "Dr.";
+                    }
+                    s2.options.add(newOption);
+                    console.log(s2);
+                }
+            </script>
+
+            <!-- 23. prefix_name -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><font color="red">*</font> คำนำหน้าชื่อภาษาไทย:</label>
+                <div class="col-sm-9">
+                    <select name="prefix_name" id="prefix_th" class="form-control" title="คำนำหน้าชื่อ" onclick="genPrefix('prefix_th', 'prefix_en')" required>
+                        <option value="">กรุณาเลือก</option>
+                        <option value="0">นาย</option>
+                        <option value="1">นาง</option>
+                        <option value="2">นางสาว</option>
+                        <option value="3">ดร.</option>
+                    </select>
+                </div>
+            </div>
+
             <!-- 3. firstname_th -->
             <!-- 4. lastname_th -->
             <div class="form-group">
@@ -38,6 +80,15 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><font color="red">*</font> คำนำหน้าชื่อภาษาอังกฤษ:</label>
+                <div class="col-sm-9">
+                    <select name="prefix_name_en" id="prefix_en" class="form-control" title="Prefix" disabled>
+
+                    </select>
+                </div>
+            </div>
+
             <!-- 5. firstname_en -->
             <!-- 6. lastname_en -->
             <div class="form-group">
@@ -45,6 +96,64 @@
                 <div class="col-sm-9">
                     <input type="text" name="firstname_en" value="{{firstname_en}}" class="form-control" placeholder="First Name" maxlength="30" title="กรุณากรอกชื่อจริงเป็นภาษาอังกฤษ" required>
                     <input type="text" name="lastname_en" value="{{lastname_en}}" class="form-control" placeholder="Last Name" maxlength="30" title="กรุณากรอกนามสกุลเป็นภาษาอังกฤษ" required>
+                </div>
+            </div>
+
+            <!-- 18. id_number -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><font color="red">*</font> เลขประจำตัวประชาชน:</label>
+                <div class="col-sm-9">
+                    <input type="text" name="id_number" value="{{id_number}}" class="form-control" placeholder="เลขประจำตัวประชาชน" title="เลขประจำตัวประชาชน" required>
+                </div>
+            </div>
+
+            <!-- 19. nationality -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><font color="red">*</font> เชื้อชาตื:</label>
+                <div class="col-sm-9">
+                    <input type="text" name="nationality" value="{{nationality}}" class="form-control" placeholder="เชื้อชาติ" title="เชื้อชาติ" required>
+                </div>
+            </div>
+
+            <!-- 20. religion -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><font color="red">*</font> ศาสนา:</label>
+                <div class="col-sm-9">
+                    <input type="text" name="religion" value="{{religion}}" class="form-control" placeholder="ศาสนา" title="ศาสนา" required>
+                </div>
+            </div>
+
+            <!-- 21. blood_type -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><font color="red">*</font> หมู่เลือด:</label>
+                <div class="col-sm-9">
+                    <select name="blood_type" class="form-control" title="หมู่เลือด" required>
+                        <option value="">กรุณาเลือก</option>
+                        <option value="0">O</option>
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">AB</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 22. birthDate -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><font color="red">*</font> วันเกิด:</label>
+                <div class="col-sm-9">
+                    <input type="date" name="birthDate" value="{{birthDate}}" class="form-control" placeholder="วันเกิด" title="วันเกิด" required>
+                </div>
+            </div>
+
+            <!-- 16. sex -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><font color="red">*</font> เพศ:</label>
+                <div class="col-sm-9">
+                    <select name="sex" class="form-control" title="เพศ" required>
+                        <option value="">กรุณาเลือก</option>
+                        <option value="0">ชาย</option>
+                        <option value="1">หญิง</option>
+                    </select>
                 </div>
             </div>
 
@@ -72,42 +181,60 @@
                 </div>
             </div>
 
-            <!-- 10. tel  -->
+            <!-- 10. tel 11. ext -->
             <div class="form-group">
                 <label class="col-sm-3 control-label"><font color="red">*</font> เบอร์โทรศัพท์:</label>
-                <div class="col-sm-9">
+                <div class="col-sm-7">
                     <input type="text" name="tel" value="{{tel}}" class="form-control" placeholder="เบอร์โทรศัพท์" title="กรุณากรอกเบอร์โทรศัพท์" required>
+                </div>
+                <div class="col-sm-2">
+                    <input type="text" name="ext" value="{{ext}}" class="form-control" placeholder="ต่อ" title="ต่อ">
                 </div>
             </div>
 
-            <!-- 11. scheme  -->
+            <!-- 17. degree -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><font color="red">*</font> ระดับ:</label>
+                <div class="col-sm-9">
+                    <select name="degree" class="form-control" title="ระดับ" required>
+                        <option value="">กรุณาเลือก</option>
+                        <option value="0">ปริญญาตรี</option>
+                        <option value="1">ปริญญาโท</option>
+                        <option value="2">ปริญญาเอก</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 12. scheme  -->
             <div class="form-group">
                 <label class="col-sm-3 control-label"><font color="red">*</font> หลักสูตร:</label>
                 <div class="col-sm-9">
                     <select name="scheme" class="form-control" title="กรุณาเลือกหลักสูตรที่ศึกษา" required>
-                        <option value=""></option>
+                        <option value="">กรุณาเลือก</option>
                         <option value="0">หลักสูตรปรับปรุง Cpr.E 54</option>
                         <option value="1">หลักสูตรปรับปรุง EE 51</option>
                         <option value="2">หลักสูตรปรับปรุง ECE 55</option>
+                        <option value="3">หลักสูตรมหาบัณฑิต 55</option>
+                        <option value="4">หลักสูตรดุษฎีบัณฑิต 55</option>
                     </select>
                 </div>
             </div>
 
-            <!-- 12. main -->
+            <!-- 13. main -->
             <div class="form-group">
                 <label class="col-sm-3 control-label"><font color="red">*</font> สาขา:</label>
                 <div class="col-sm-9">
                     <select name="main" class="form-control" title="กรุณาเลือกสาขาที่ศึกษา" required>
-                        <option value=""></option>
-                        <option value="0">Cpr.E</option>
-                        <option value="1">G</option>
-                        <option value="2">U</option>
-                        <option value="3">C</option>
+                        <option value="">กรุณาเลือก</option>
+                        <option value="0">วิศวกรรมคอมพิวเตอร์</option>
+                        <option value="1">วิศวกรรมไฟฟ้ากำลัง</option>
+                        <option value="2">วิศวกรรมควบคุม</option>
+                        <option value="3">วิศวกรรมไฟฟ้าสื่อสาร</option>
                     </select>
                 </div>
             </div>
 
-            <!-- 13. department -->
+            <!-- 14. department -->
             <div class="form-group">
                 <label class="col-sm-3 control-label"><font color="red">*</font> ภาควิชา:</label>
                 <div class="col-sm-9">
@@ -117,7 +244,7 @@
                 </div>
             </div>
 
-            <!-- 14. faculty -->
+            <!-- 15. faculty -->
             <div class="form-group">
                 <label class="col-sm-3 control-label"><font color="red">*</font> คณะ:</label>
                 <div class="col-sm-9">
@@ -127,7 +254,7 @@
                 </div>
             </div>
 
-            <!-- 15. password -->
+            <!-- 24. password -->
             <div class="form-group">
                 <label class="col-sm-3 control-label"><font color="red">*</font> Password:</label>
                 <div class="col-sm-9">
@@ -135,7 +262,7 @@
                 </div>
             </div>
 
-            <!-- 16. check_password -->
+            <!-- 25. check_password -->
             <div class="form-group">
                 <label class="col-sm-3 control-label"><font color="red">*</font> Re-Password:</label>
                 <div class="col-sm-9">
@@ -191,6 +318,11 @@
                             {% if error == 3 %}
                                 <div class="alert alert-danger" role="alert">
                                     <strong>Error!</strong> รหัสนักศึกษานี้เคยลงทะเบียนแล้ว
+                                </div>
+                            {% endif %}
+                            {% if error == 4 %}
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>Error!</strong> เลขประจำตัวประชาชนนี้เคยลงทะเบียนแล้ว
                                 </div>
                             {% endif %}
                         {% endfor %}
